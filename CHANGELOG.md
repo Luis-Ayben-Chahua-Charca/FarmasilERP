@@ -26,6 +26,7 @@ Categorías: **Added** (nuevo), **Changed** (cambios en algo existente), **Depre
 - Precio y stock siempre por unidad (RF-05, RF-07, RN-05, glosario).
 - HU-09 (reportes gerenciales) se compromete en el Sprint 4 con criterios de aceptación.
 - Replanificación: Sprint 1 acortado a una semana (15–21 oct, solo HT-01); Sprints 2–4 de dos semanas (HU-04/05/08, HU-01/02, HU-06/03/09); HU-07 queda condicional.
+- Columnas del tablero simplificadas a Backlog → Todo → In Progress → Done; se elimina «En revisión» (#1).
 
 ### Removed
 - HU-10 (respaldo desde el sistema): RNF-03 se cubre con un procedimiento manual.

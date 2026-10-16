@@ -18,9 +18,9 @@ Es re-ejecutable: no duplica labels, milestones ni issues (compara por título).
 
 ## Después de ejecutar
 
-1. En el proyecto, crear/ajustar la vista **Board** agrupada por **Status** (Backlog → Por hacer → En progreso → En revisión → Hecho). Si el script avisó que no pudo renombrar las columnas, editar las opciones en *Settings → Status*.
-2. Activar las automatizaciones integradas (Settings → Workflows): *Item added → Backlog* y *Pull request merged → Hecho*.
-3. Límites WIP (4 en progreso, 3 en revisión): GitHub no los fuerza; se respetan por convención.
+1. En el proyecto, crear/ajustar la vista **Board** agrupada por **Status** (Backlog → Todo → In Progress → Done). Si el script avisó que no pudo renombrar las columnas, editar las opciones en *Settings → Status*.
+2. Revisar las automatizaciones integradas (menú `…` → Workflows): *Item added to project → Backlog*, *Item closed → Done*, *Pull request merged → Done* e *Item reopened → In Progress*. Si se cambian las opciones de Status, hay que volver a elegirlas en cada workflow: GitHub no avisa cuando la opción destino desaparece.
+3. Límite WIP (4 en In Progress): GitHub no lo fuerza; se respeta por convención.
 4. Crear la vista **Tabla por sprint** (pestaña *+ New view → Table*):
    - Columnas visibles: Title, Assignees, Rol, Status, Sprint, Puntos, Horas, Labels.
    - *Group by*: **Sprint**. *Sort by*: Rol.
@@ -32,6 +32,6 @@ Es re-ejecutable: no duplica labels, milestones ni issues (compara por título).
 
 - **Sprint = milestone.** Puntos y horas están en campos numéricos del proyecto (`Puntos`, `Horas`).
 - **Rol** es un campo fijo del issue (qué tipo de trabajo es); la **persona** se asigna en cada sprint, porque los roles rotan.
-- Los issues de Sprint 1 entran en **Por hacer**; los demás en **Backlog**.
+- Los issues de Sprint 1 entran en **Todo**; los demás en **Backlog**.
 - Las tareas de Sprints 2–4 se descomponen en el Sprint Planning de cada uno (la historia trae «tareas sugeridas»).
 - `{{CÓDIGO}}` dentro de un cuerpo se reemplaza por `#n` al crear.
