@@ -4,7 +4,7 @@
 
 Farmasil es una farmacia que atiende al público de 9:00 a 21:00. La administra su propietaria, quien autoriza el ingreso de nuevos productos, y en el local atienden hasta dos personas (técnicas farmacéuticas).
 
-- La mayoría de productos requiere receta médica y sus precios están regulados por la DIGEMID.
+- La mayoría de productos requiere receta médica. Los precios los define la farmacia y **todo se cobra por unidad**: una caja de 30 unidades se cobra como 30 unidades (no hay precio por caja ni por conjunto).
 - Los productos se clasifican en **genéricos**, ordenados alfabéticamente, y **comerciales**, organizados por acción terapéutica (digestivos, respiratorios, cardíacos, higiene bucal, entre otros).
 - Cada medicamento se identifica por su nombre comercial y su composición.
 - La mercadería se repone **por lotes**, en promedio cada 15 días.
@@ -48,7 +48,7 @@ La información de ventas e inventario depende de cuadernos y conteos manuales, 
 
 1. Registrar cada venta con fecha, productos, cantidades y monto, y descontar automáticamente el stock.
 2. Registrar el ingreso de cada lote con su número, fecha de vencimiento y cantidad.
-3. Mantener un catálogo de productos con edición simple de precios, clasificado en genéricos y comerciales.
+3. Mantener el catálogo de productos (base del inventario) con edición simple del precio unitario, clasificado en genéricos y comerciales.
 4. Consultar el stock por producto y por lote en cualquier momento.
 5. Generar el reporte diario de ventas y reportes periódicos de ingresos y productos más vendidos.
 6. Operar sin conexión a internet y ser utilizable sin capacitación previa.

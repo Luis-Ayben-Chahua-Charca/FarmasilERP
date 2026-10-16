@@ -12,9 +12,9 @@ Escala de prioridad: **Máxima** (imprescindible) > **Alta** (primera versión) 
 | RF-04 | Reporte diario de ventas | Reportes | Alta | CU-02 | HU-03 |
 | RF-05 | Registrar ingreso de lote | Inventario | Máxima | CU-03 | HU-04 |
 | RF-06 | Validar duplicidad de lote | Inventario | Alta | CU-03 | HU-05 |
-| RF-07 | Registrar y editar producto | Catálogo | Alta | CU-04 | HU-06 |
-| RF-08 | Edición fácil de precios y datos | Catálogo | Alta | CU-04 | HU-06 |
-| RF-09 | Clasificar productos | Catálogo | Alta | CU-04 | HU-07 |
+| RF-07 | Registrar y editar producto | Inventario (catálogo) | Alta | CU-04 | HU-06 |
+| RF-08 | Edición fácil de precios y datos | Inventario (catálogo) | Alta | CU-04 | HU-06 |
+| RF-09 | Clasificar productos | Inventario (catálogo) | Alta | CU-04 | HU-07 |
 | RF-10 | Consultar stock por producto y lote | Inventario | Máxima | CU-05 | HU-08 |
 | RF-11 | Reportes gerenciales | Reportes | Media | CU-06 | HU-09 |
 
@@ -37,7 +37,7 @@ Escala de prioridad: **Máxima** (imprescindible) > **Alta** (primera versión) 
 - **Justificación:** evita que los lotes antiguos permanezcan en estante hasta vencerse.
 - **Criterio de aceptación:** con dos o más lotes disponibles del mismo producto, siempre se descuenta primero del que vence antes.
 - **Prioridad:** Alta
-- **Nota:** supuesto del equipo, **pendiente de validar con la propietaria**.
+- **Nota:** regla **confirmada** el 15/10/2026 (antes era un supuesto del equipo).
 
 ### RF-04 — Reporte diario de ventas
 - **Descripción:** para una fecha seleccionada, el sistema muestra el monto total, la cantidad de productos vendidos, el número de ventas y el detalle por transacción.
@@ -46,7 +46,7 @@ Escala de prioridad: **Máxima** (imprescindible) > **Alta** (primera versión) 
 - **Prioridad:** Alta
 
 ### RF-05 — Registrar ingreso de lote
-- **Descripción:** registrar el ingreso de un lote con número de lote, fecha de vencimiento y cantidad, seleccionando un producto existente o creándolo en el mismo flujo. El ingreso incrementa el stock.
+- **Descripción:** registrar el ingreso de un lote con número de lote, fecha de vencimiento y cantidad **en unidades**, seleccionando un producto existente o creándolo en el mismo flujo. El ingreso incrementa el stock.
 - **Justificación:** es el primer problema que la propietaria quiere resolver; hoy se anota a mano.
 - **Criterio de aceptación:** cualquier lote recibido puede registrarse en un solo flujo, incluida la creación del producto si es nuevo; el stock aumenta en la cantidad registrada.
 - **Prioridad:** Máxima
@@ -59,7 +59,7 @@ Escala de prioridad: **Máxima** (imprescindible) > **Alta** (primera versión) 
 - **Prioridad:** Alta
 
 ### RF-07 — Registrar y editar producto
-- **Descripción:** crear y editar productos exigiendo como mínimo nombre, acción terapéutica y precio.
+- **Descripción:** crear y editar productos exigiendo como mínimo nombre, acción terapéutica y **precio unitario**. No existe precio por caja ni por conjunto: una caja de 30 se cobra como 30 unidades.
 - **Justificación:** son los datos con los que la farmacia identifica y organiza cada medicamento. La fecha de vencimiento se registra por lote (RF-05).
 - **Criterio de aceptación:** no se puede guardar un producto sin esos campos.
 - **Prioridad:** Alta
@@ -69,7 +69,7 @@ Escala de prioridad: **Máxima** (imprescindible) > **Alta** (primera versión) 
 - **Justificación:** necesidad expresa de la propietaria.
 - **Criterio de aceptación:** una usuaria sin capacitación cambia un precio en un máximo de 3 acciones.
 - **Prioridad:** Alta
-- **Conflicto:** limitado por RNF-05 en productos con precio regulado.
+- **Nota:** el nuevo precio rige solo para ventas posteriores; las ventas ya registradas conservan el precio con que se hicieron.
 
 ### RF-09 — Clasificar productos
 - **Descripción:** clasificar cada producto como **Genérico** (listado alfabético) o **Comercial** (agrupado por acción terapéutica).

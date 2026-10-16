@@ -16,7 +16,6 @@ No interactúan con el sistema dentro del alcance definido.
 | Actor / sistema | Relación |
 |---|---|
 | POS (terminal de punto de venta) | Sigue cobrando (tarjeta, Yape, Plin) y emitiendo boletas. Sin integración. |
-| DIGEMID | Regula los precios de medicamentos. Condiciona la edición de precios (RNF-05). |
 | Proveedores (droguerías, distribuidoras) | Entregan los lotes que se registran. Su gestión está fuera de alcance. |
 | Clientes de la farmacia | Compran en mostrador; la técnica registra la venta por ellos. |
 
@@ -28,6 +27,5 @@ No interactúan con el sistema dentro del alcance definido.
 | I-02 | Técnicas farmacéuticas | Bajo | Alto | Mantener informado: pruebas de usabilidad en los sprints 2 a 4 |
 | I-03 | Equipo de desarrollo | Alto | Alto | Gestionar de cerca: eventos Scrum, DoR y DoD |
 | I-04 | Químico(a) farmacéutico(a) responsable | Bajo | Bajo | Monitorear |
-| I-05 | DIGEMID | Alto | Bajo | Mantener satisfecho: respetar la regulación de precios |
 | I-06 | Proveedores | Bajo | Bajo | Monitorear |
 | I-07 | Clientes de la farmacia | Bajo | Bajo | Monitorear |
