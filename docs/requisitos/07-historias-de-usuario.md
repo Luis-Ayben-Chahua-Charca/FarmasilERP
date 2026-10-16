@@ -7,22 +7,22 @@ Estimación en puntos de historia (Fibonacci: 1, 2, 3, 5, 8, 13). Historia de re
 | ID | Historia | Requisitos | MoSCoW | Pts. | Sprint |
 |---|---|---|---|---|---|
 | HT-01 | Como equipo de desarrollo, quiero preparar la estructura base de la aplicación (interfaz, lógica y base de datos local) e instalarla en la laptop, para disponer del entorno sobre el que se construyen las demás historias. | RNF-01, RNF-07, RNF-08 | Must | 5 | 1 |
-| HU-06 | Como propietaria, quiero registrar y editar productos con nombre, acción terapéutica, tipo y precio, para mantener el catálogo actualizado en pocos pasos. | RF-07, RF-08 | Must | 5 | 1 |
-| HU-07 | Como propietaria, quiero clasificar los productos como genéricos o comerciales, para consultarlos con el mismo orden de los estantes. | RF-09 | Should | 3 | 1 |
 | HU-04 | Como propietaria, quiero registrar el ingreso de un lote con número, fecha de vencimiento y cantidad, para que el stock se actualice al recibir la mercadería. | RF-05 | Must | 5 | 2 |
 | HU-05 | Como propietaria, quiero que el sistema impida registrar dos veces el mismo lote de un producto, para evitar errores en el stock. | RF-06 | Must | 2 | 2 |
 | HU-08 | Como técnica farmacéutica, quiero consultar el stock por producto y por lote, para saber qué hay disponible sin revisar los estantes. | RF-10 | Must | 5 | 2 |
 | HU-01 | Como técnica farmacéutica, quiero registrar una venta con sus productos y cantidades, para que quede guardada y el stock se descuente automáticamente. | RF-01, RF-02 | Must | 8 | 3 |
 | HU-02 | Como propietaria, quiero que al vender se descuente primero el lote con vencimiento más próximo, para que los lotes antiguos no se queden hasta vencerse. | RF-03 | Must | 3 | 3 |
+| HU-06 | Como propietaria, quiero registrar y editar productos con nombre, acción terapéutica, tipo y precio, para mantener el catálogo actualizado en pocos pasos. | RF-07, RF-08 | Must | 5 | 4 |
 | HU-03 | Como propietaria, quiero consultar el reporte de ventas de un día, para cuadrar la caja al cierre. | RF-04 | Must | 3 | 4 |
-| HU-10 | Como propietaria, quiero generar y restaurar copias de respaldo de los datos, para no perder la información ante una falla o robo del equipo. | RNF-03 | Should | 3 | 4 |
-| HU-09 | Como propietaria, quiero generar reportes de ingresos y de productos más vendidos por periodo, para revisar los resultados del negocio. | RF-11 | Should | 5 | Condicional (ver plan) |
-| HU-11 | Como propietaria, quiero marcar los productos con precio regulado y que el sistema controle su edición, para cumplir la regulación. | RNF-05 | Could | 3 | Fuera del PMV |
+| HU-09 | Como propietaria, quiero generar reportes de ingresos y de productos más vendidos por periodo, para revisar los resultados del negocio. | RF-11 | Should | 5 | 4 |
+| HU-07 | Como propietaria, quiero clasificar los productos como genéricos o comerciales, para consultarlos con el mismo orden de los estantes. | RF-09 | Should | 3 | Condicional (ver plan) |
 | HU-12 | Como propietaria, quiero recibir alertas de bajo stock y de lotes próximos a vencer. | — | Won't | — | — |
 | HU-13 | Como propietaria, quiero registrar devoluciones de lotes a proveedores. | — | Won't | — | — |
 | HU-14 | Como técnica, quiero registrar clientes y su historial de compras. | — | Won't | — | — |
 | HU-15 | Como técnica, quiero emitir comprobantes desde el sistema. | — | Won't | — | — |
 | HU-16 | Como propietaria, quiero que cada usuaria inicie sesión con permisos según su rol. | — | Won't | — | — |
+| HU-10 | Como propietaria, quiero generar y restaurar copias de respaldo desde el sistema. *(Retirada del PMV el 15/10/2026; RNF-03 se cubre con un procedimiento manual.)* | RNF-03 | Won't | — | — |
+| HU-11 | Como propietaria, quiero controlar la edición de precios regulados. *(Retirada el 15/10/2026: no hay productos con precio regulado.)* | — | Won't | — | — |
 
 ## Criterios de aceptación (Dado-Cuando-Entonces)
 
@@ -70,9 +70,10 @@ Estimación en puntos de historia (Fibonacci: 1, 2, 3, 5, 8, 13). Historia de re
 - **CA2** — DADO QUE no hay ventas en la fecha, CUANDO se consulta, ENTONCES se indica que no hay ventas y los totales son cero.
 - **CA3** — DADO QUE el reporte está en pantalla, ENTONCES no se puede modificar ninguna venta desde ahí.
 
-### HU-10 — Respaldo y restauración
-- **CA1** — DADO QUE hay datos registrados, CUANDO la propietaria genera una copia de respaldo, ENTONCES se crea un archivo de respaldo en la ubicación elegida (por ejemplo, la memoria USB).
-- **CA2** — DADO QUE existe un archivo de respaldo, CUANDO se restaura, ENTONCES los datos quedan como estaban al momento de la copia.
+### HU-09 — Reportes gerenciales
+- **CA1** — DADO QUE hay ventas en un periodo, CUANDO la propietaria elige fecha de inicio y de fin y genera el reporte de ingresos, ENTONCES se muestra el ingreso total por ventas del periodo y su desglose por mes, y coincide con la suma de los reportes diarios.
+- **CA2** — DADO QUE hay ventas en el periodo, CUANDO genera el reporte de productos más vendidos, ENTONCES se listan los productos de mayor a menor según las unidades vendidas, con unidades y monto.
+- **CA3** — DADO QUE no hay ventas en el periodo, CUANDO se genera cualquiera de los dos reportes, ENTONCES se indica que no hay datos y los totales son cero.
 
 ## Bocetos de interfaz
 

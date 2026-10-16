@@ -81,7 +81,8 @@ flowchart LR
 
 **Reglas de negocio**
 
-- **RN-01:** el stock se descuenta primero del lote con fecha de vencimiento más próxima (pendiente de validar).
+- **RN-01:** el stock se descuenta primero del lote con fecha de vencimiento más próxima (confirmado el 15/10/2026).
 - **RN-02:** una venta tiene al menos una línea y cada cantidad es mayor que cero.
 - **RN-03:** monto total = Σ (cantidad × precio unitario vigente).
 - **RN-04:** el cobro y la boleta se hacen en el POS, fuera del sistema.
+- **RN-05:** precios y cantidades son siempre **por unidad**; una caja de 30 se registra y se cobra como 30 unidades.

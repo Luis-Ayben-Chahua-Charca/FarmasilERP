@@ -6,17 +6,17 @@ Sistema para la farmacia **Farmasil** que registra las ventas y lleva el inventa
 
 ## Estado
 
-🚧 En desarrollo — Sprint 1 (15 – 28 de octubre de 2026). Entrega del **PMV: jueves 3 de diciembre de 2026**.
+🚧 En desarrollo — Sprint 1, acortado a una semana (15 – 21 de octubre de 2026). Entrega del **PMV: jueves 3 de diciembre de 2026**.
 
 ## Qué hace (alcance)
 
-- Catálogo de productos: registro, edición de precios y clasificación en genéricos y comerciales.
-- Inventario: ingreso de lotes (número, vencimiento, cantidad), validación de duplicados y consulta de stock por producto y lote.
-- Ventas: registro de ventas con descuento automático de stock, empezando por el lote que vence primero.
-- Reportes: reporte diario de ventas.
-- Respaldo: copia y restauración de los datos.
+- **Inventario:** catálogo de productos (registro, edición del precio unitario y clasificación en genéricos y comerciales), ingreso de lotes (número, vencimiento, cantidad en unidades), validación de duplicados y consulta de stock por producto y lote.
+- **Ventas:** registro de ventas con descuento automático de stock, empezando por el lote que vence primero.
+- **Reportes:** reporte diario de ventas y reportes de ingresos y productos más vendidos por periodo.
 
-Fuera de alcance: proveedores, alertas, devoluciones, comprobantes, clientes e inicio de sesión. Detalle en [`docs/requisitos/02-alcance.md`](docs/requisitos/02-alcance.md).
+Todo precio y stock se maneja **por unidad** (una caja de 30 se cobra como 30 unidades). La copia de los datos a una USB se hace con un procedimiento manual.
+
+Fuera de alcance: proveedores, alertas, devoluciones, comprobantes, clientes, inicio de sesión y respaldo desde el sistema. Detalle en [`docs/requisitos/02-alcance.md`](docs/requisitos/02-alcance.md).
 
 ## Restricciones clave
 
@@ -27,7 +27,7 @@ Fuera de alcance: proveedores, alertas, devoluciones, comprobantes, clientes e i
 | Tecnologías web | Interfaz en HTML, CSS y JavaScript, ejecutada en el navegador de la laptop. |
 | Usuarias sin experiencia en sistemas | Interfaz simple, en español, sin necesidad de capacitación. |
 
-El stack concreto (framework, base de datos local, empaquetado) está **pendiente de definición** por el equipo.
+Stack propuesto en [`docs/arquitectura/adr-001-stack.md`](docs/arquitectura/adr-001-stack.md): Node.js 24 LTS + Express (solo `127.0.0.1`) + SQLite + HTML/CSS/JS sin framework. Queda vigente cuando el equipo aprueba el ADR (HT-01.1).
 
 ## Estructura del repositorio
 
