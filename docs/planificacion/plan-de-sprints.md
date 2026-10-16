@@ -78,11 +78,12 @@ Una tarea o historia está terminada cuando:
 
 ## Flujo de trabajo (Kanban)
 
-`Backlog → Por hacer → En progreso (WIP 4) → En revisión (WIP 3) → Hecho`
+`Backlog → Todo → In Progress (WIP 4) → Done`
 
-- Una tarea pasa a **En progreso** cuando su responsable la inicia y sus dependencias están terminadas.
-- Pasa a **En revisión** cuando se abre el PR.
-- Pasa a **Hecho** cuando el PR se fusiona y se cumple la DoD.
+- **Backlog:** historias y tareas de sprints futuros.
+- **Todo:** comprometidas en el sprint actual (se mueven aquí en el Sprint Planning).
+- **In Progress:** su responsable la inició y sus dependencias están terminadas. Sigue aquí mientras su PR está abierto y en revisión; el PR enlazado se ve en la tarjeta.
+- **Done:** automático al cerrar el issue (lo cierra el PR fusionado con `Closes #n`), cumpliendo la DoD.
 
 ## Versiones
 

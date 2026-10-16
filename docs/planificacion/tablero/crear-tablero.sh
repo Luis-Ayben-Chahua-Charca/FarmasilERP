@@ -101,7 +101,7 @@ mkfield "Horas" --data-type NUMBER
 mkfield "Sprint" --data-type SINGLE_SELECT --single-select-options "Sprint 1,Sprint 2,Sprint 3,Sprint 4,Condicional"
 mkfield "Rol" --data-type SINGLE_SELECT --single-select-options "Scrum Master,QA,Back-end,Front-end,Equipo"
 
-# Columnas del plan: Backlog → Por hacer → En progreso → En revisión → Hecho
+# Columnas del plan: Backlog → Todo → In Progress → Done (nombres de GitHub, para que funcionen sus automatizaciones)
 load_fields() {
   FIDS="$(gh project field-list "$PNUM" --owner "$OWNER" --format json -q '.fields[] | "\(.name)\t\(.id)"')"
   OPTS="$(gh project field-list "$PNUM" --owner "$OWNER" --format json -q '.fields[] | .name as $f | .options[]? | "\($f)\t\(.name)\t\(.id)"')"
@@ -114,9 +114,8 @@ optid() { awk -F'\t' -v n="$1" -v o="$2" '$1==n && $2==o{print $3; exit}' <<<"$O
 STATUS_ID="$(fid Status)"
 gh api graphql -f query='
 mutation($f:ID!){ updateProjectV2Field(input:{fieldId:$f, singleSelectOptions:[
- {name:"Backlog",color:GRAY,description:""},{name:"Por hacer",color:BLUE,description:""},
- {name:"En progreso",color:YELLOW,description:"WIP 4"},{name:"En revisión",color:ORANGE,description:"WIP 3"},
- {name:"Hecho",color:GREEN,description:""}]}){ projectV2Field{ ... on ProjectV2SingleSelectField{ id } } } }' \
+ {name:"Backlog",color:GRAY,description:"Sprints futuros"},{name:"Todo",color:BLUE,description:"Sprint actual"},
+ {name:"In Progress",color:YELLOW,description:"WIP 4"},{name:"Done",color:GREEN,description:""}]}){ projectV2Field{ ... on ProjectV2SingleSelectField{ id } } } }' \
  -f f="$STATUS_ID" >/dev/null 2>&1 \
  && echo "  columnas de Status configuradas" \
  || echo "  AVISO: no se pudieron renombrar las columnas por API; hazlo a mano en Settings > Status (ver README del tablero)."
