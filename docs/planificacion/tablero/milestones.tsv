@@ -1,0 +1,4 @@
+Sprint 1	2026-10-21	15–21 oct 2026 (1 semana, acortado). Incremento: aplicación base instalada en la laptop, con menú y persistencia. Etiqueta v0.1.0.
+Sprint 2	2026-11-04	22 oct–4 nov 2026. Incremento: ingreso de lotes (con alta rápida de producto), validación de duplicidad y consulta de stock. Etiqueta v0.2.0.
+Sprint 3	2026-11-18	5–18 nov 2026. Incremento: registro de ventas con descuento de stock por lote más próximo a vencer. Etiqueta v0.3.0.
+Sprint 4	2026-12-03	19 nov–3 dic 2026. Incremento: catálogo con edición de precios, reporte diario y reportes gerenciales; congelamiento 1/12; entrega del PMV. Etiqueta v1.0.0.
