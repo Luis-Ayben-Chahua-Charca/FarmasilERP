@@ -22,12 +22,14 @@ Categorías: **Added** (nuevo), **Changed** (cambios en algo existente), **Depre
 - `package.json` y servidor Express mínimo en `app/server.js` (solo `127.0.0.1`), base común para HT-01 (#3).
 - Esqueleto de la interfaz en `app/public/`: layout con menú lateral en español (Registrar venta, Consultar stock, Ingreso de lotes, Productos, Reportes), navegación sin recarga y una pantalla vacía por opción (W1–W5) (#4).
 - Módulo común `js/api.js` para las llamadas a la API local (#4).
+- Persistencia local: conexión a SQLite en `app/db/`, migraciones SQL numeradas, esquema inicial (producto, lote, venta y línea de venta) con lote único por producto y diagrama del modelo de datos (#5).
 
 ### Changed
 - Alcance del PMV reducido a **ventas, inventario y reportes**; el catálogo de productos pasa a ser parte de Inventario (`02-alcance.md`).
 - RF-03 (descuento por lote más próximo a vencer) confirmado; deja de ser supuesto.
 - Precio y stock siempre por unidad (RF-05, RF-07, RN-05, glosario).
 - HU-09 (reportes gerenciales) se compromete en el Sprint 4 con criterios de aceptación.
+- `better-sqlite3` baja a la serie 12.11.x, que trae binario precompilado para Windows x64 y no exige compilador de C++ al instalar (#5).
 - Replanificación: Sprint 1 acortado a una semana (15–21 oct, solo HT-01); Sprints 2–4 de dos semanas (HU-04/05/08, HU-01/02, HU-06/03/09); HU-07 queda condicional.
 - Columnas del tablero simplificadas a Backlog → Todo → In Progress → Done; se elimina «En revisión» (#1).
 
