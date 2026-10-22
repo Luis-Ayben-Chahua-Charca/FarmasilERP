@@ -20,6 +20,8 @@ Categorías: **Added** (nuevo), **Changed** (cambios en algo existente), **Depre
 - Plan de sprints en `docs/planificacion/plan-de-sprints.md`.
 - ADR-001 con el stack propuesto, definición del tablero Kanban y asignación de roles por sprint.
 - `package.json` y servidor Express mínimo en `app/server.js` (solo `127.0.0.1`), base común para HT-01 (#3).
+- Esqueleto de la interfaz en `app/public/`: layout con menú lateral en español (Registrar venta, Consultar stock, Ingreso de lotes, Productos, Reportes), navegación sin recarga y una pantalla vacía por opción (W1–W5) (#4).
+- Módulo común `js/api.js` para las llamadas a la API local (#4).
 
 ### Changed
 - Alcance del PMV reducido a **ventas, inventario y reportes**; el catálogo de productos pasa a ser parte de Inventario (`02-alcance.md`).
