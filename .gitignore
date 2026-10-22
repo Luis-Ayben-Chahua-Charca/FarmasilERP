@@ -86,3 +86,6 @@ $RECYCLE.BIN/
 # --- Documentos temporales de Office ---
 ~$*
 /datos/
+
+# --- Node portátil que se agrega solo al armar el paquete de la farmacia ---
+/node/

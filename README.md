@@ -29,14 +29,33 @@ Fuera de alcance: proveedores, alertas, devoluciones, comprobantes, clientes, in
 
 Stack propuesto en [`docs/arquitectura/adr-001-stack.md`](docs/arquitectura/adr-001-stack.md): Node.js 24 LTS + Express (solo `127.0.0.1`) + SQLite + HTML/CSS/JS sin framework. Queda vigente cuando el equipo aprueba el ADR (HT-01.1).
 
+## Instalación y uso
+
+**En la laptop de la farmacia (sin internet):** copiar la carpeta completa del sistema a `C:\Farmasil` y abrir `iniciar.bat`. Se abre una ventana negra (no cerrarla) y el navegador con el sistema; para salir, cerrar la ventana. Detalle, armado del paquete, copia de datos y pruebas en [`docs/instalacion.md`](docs/instalacion.md).
+
+**Para desarrollar** (Node.js 24 o superior; internet solo para instalar):
+
+```
+npm ci
+npm start
+```
+
+Abrir `http://localhost:3000`. Pruebas: `npm test`.
+
 ## Estructura del repositorio
 
 ```
 FarmasilERP/
+├── app/                   # Servidor Express, base de datos e interfaz
+├── scripts/               # Utilidades (prueba de persistencia)
+├── test/                  # Pruebas automáticas
 ├── docs/
 │   ├── requisitos/        # Requisitos elicitados, alcance, casos de uso, historias
 │   ├── planificacion/     # Plan de sprints, DoR, DoD, versiones
-│   └── diseno/            # Bocetos de pantallas (W1–W5)
+│   ├── diseno/            # Bocetos de pantallas (W1–W5)
+│   └── instalacion.md     # Instalación en la laptop y copia de datos
+├── iniciar.bat            # Arranque en la laptop de la farmacia
+├── empaquetar.bat         # Arma la carpeta que se copia a la laptop
 ├── CHANGELOG.md           # Registro de cambios
 ├── CONTRIBUTING.md        # Flujo de trabajo, ramas, commits y PR
 └── README.md

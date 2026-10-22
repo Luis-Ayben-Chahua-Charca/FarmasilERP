@@ -22,6 +22,8 @@ Categorías: **Added** (nuevo), **Changed** (cambios en algo existente), **Depre
 - `package.json` y servidor Express mínimo en `app/server.js` (solo `127.0.0.1`), base común para HT-01 (#3).
 - Esqueleto de la interfaz en `app/public/`: layout con menú lateral en español (Registrar venta, Consultar stock, Ingreso de lotes, Productos, Reportes), navegación sin recarga y una pantalla vacía por opción (W1–W5) (#4).
 - Módulo común `js/api.js` para las llamadas a la API local (#4).
+- `iniciar.bat` para abrir el sistema en la laptop, `empaquetar.bat` para armar la carpeta de instalación sin internet, `docs/instalacion.md` (instalación, copia de datos y pruebas) y sección de instalación en el `README.md` (#6).
+- `scripts/prueba-persistencia.js` (`npm run prueba-persistencia`) para comprobar que un dato sobrevive al reinicio de la laptop (#6).
 - Persistencia local: conexión a SQLite en `app/db/`, migraciones SQL numeradas, esquema inicial (producto, lote, venta y línea de venta) con lote único por producto y diagrama del modelo de datos (#5).
 - Boceto W3 Consultar stock en `docs/diseno/w3-consultar-stock.html` (#9).
 - Boceto W2 Ingreso de lotes en `docs/diseno/w2-ingreso-lote.html`, con alta rápida de producto y mensajes de error (#9).
