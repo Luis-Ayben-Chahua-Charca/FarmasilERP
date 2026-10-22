@@ -52,6 +52,7 @@ FarmasilERP/
 ├── docs/
 │   ├── requisitos/        # Requisitos elicitados, alcance, casos de uso, historias
 │   ├── planificacion/     # Plan de sprints, DoR, DoD, versiones
+│   ├── diseno/            # Bocetos de pantallas (W1–W5)
 │   └── instalacion.md     # Instalación en la laptop y copia de datos
 ├── iniciar.bat            # Arranque en la laptop de la farmacia
 ├── empaquetar.bat         # Arma la carpeta que se copia a la laptop
@@ -64,6 +65,7 @@ FarmasilERP/
 
 - [Requisitos](docs/requisitos/README.md)
 - [Plan de sprints](docs/planificacion/plan-de-sprints.md)
+- [Bocetos de pantallas](docs/diseno/)
 - [Cómo contribuir](CONTRIBUTING.md)
 - [Registro de cambios](CHANGELOG.md)
 
