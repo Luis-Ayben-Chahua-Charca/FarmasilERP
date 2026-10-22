@@ -6,7 +6,8 @@
   "main": "app/server.js",
   "scripts": {
     "start": "node app/server.js",
-    "test": "node --test"
+    "test": "node --test",
+    "prueba-persistencia": "node scripts/prueba-persistencia.js"
   },
   "engines": {
     "node": ">=24"
