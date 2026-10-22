@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Farmasil</title>
+  <!-- Ícono vacío: evita que el navegador pida /favicon.ico -->
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="menu-lateral">
+      <div class="marca">Farmasil</div>
+      <nav aria-label="Menú principal">
+        <ul class="menu" id="menu">
+          <li><a href="#/registrar-venta" data-ruta="registrar-venta">Registrar venta</a></li>
+          <li><a href="#/consultar-stock" data-ruta="consultar-stock">Consultar stock</a></li>
+          <li><a href="#/ingreso-lotes" data-ruta="ingreso-lotes">Ingreso de lotes</a></li>
+          <li><a href="#/productos" data-ruta="productos">Productos</a></li>
+          <li><a href="#/reportes" data-ruta="reportes">Reportes</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main class="contenido">
+      <h1 id="titulo-pantalla" tabindex="-1"></h1>
+      <section id="pantalla" aria-live="polite"></section>
+    </main>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
