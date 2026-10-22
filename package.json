@@ -1,0 +1,31 @@
+{
+  "name": "farmasil-erp",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Sistema de control de ventas e inventario de la farmacia Farmasil",
+  "main": "app/server.js",
+  "scripts": {
+    "start": "node app/server.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Luis-Ayben-Chahua-Charca/FarmasilERP.git"
+  },
+  "license": "UNLICENSED",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Luis-Ayben-Chahua-Charca/FarmasilERP/issues"
+  },
+  "homepage": "https://github.com/Luis-Ayben-Chahua-Charca/FarmasilERP#readme",
+  "dependencies": {
+    "better-sqlite3": "^13.0.3",
+    "express": "^5.3.0"
+  },
+  "devDependencies": {
+    "supertest": "^7.3.1"
+  }
+}
