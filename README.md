@@ -35,7 +35,8 @@ Stack propuesto en [`docs/arquitectura/adr-001-stack.md`](docs/arquitectura/adr-
 FarmasilERP/
 ├── docs/
 │   ├── requisitos/        # Requisitos elicitados, alcance, casos de uso, historias
-│   └── planificacion/     # Plan de sprints, DoR, DoD, versiones
+│   ├── planificacion/     # Plan de sprints, DoR, DoD, versiones
+│   └── diseno/            # Bocetos de pantallas (W1–W5)
 ├── CHANGELOG.md           # Registro de cambios
 ├── CONTRIBUTING.md        # Flujo de trabajo, ramas, commits y PR
 └── README.md
@@ -45,6 +46,7 @@ FarmasilERP/
 
 - [Requisitos](docs/requisitos/README.md)
 - [Plan de sprints](docs/planificacion/plan-de-sprints.md)
+- [Bocetos de pantallas](docs/diseno/)
 - [Cómo contribuir](CONTRIBUTING.md)
 - [Registro de cambios](CHANGELOG.md)
 

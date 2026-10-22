@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Boceto W2 - Ingreso de lotes</title>
+    <style>
+        /* Mismos colores y medidas que app/public/css/estilos.css (HT-01.2) */
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+            display: flex;
+            min-height: 100vh;
+            color: #1f2a30;
+            background: #f5f7f8
+        }
+
+        aside {
+            width: 230px;
+            flex-shrink: 0;
+            background: #14532d;
+            color: #e8f5ec
+        }
+
+        aside h2 {
+            margin: 0;
+            font-size: 1.4rem;
+            padding: 20px 20px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15)
+        }
+
+        aside a {
+            display: block;
+            padding: 12px 20px;
+            color: #e8f5ec;
+            text-decoration: none;
+            border-left: 4px solid transparent
+        }
+
+        aside a.activo {
+            background: #1d6b3c;
+            color: #fff;
+            font-weight: 600;
+            border-left-color: #16a34a
+        }
+
+        main {
+            flex: 1;
+            padding: 24px 32px;
+            max-width: 720px
+        }
+
+        h1 {
+            margin: 0 0 16px;
+            font-size: 1.6rem
+        }
+
+        h3 {
+            margin: 28px 0 8px;
+            font-size: 15px;
+            color: #555;
+            text-transform: uppercase
+        }
+
+        .campo {
+            margin-bottom: 12px
+        }
+
+        .campo label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 4px
+        }
+
+        .fila {
+            display: flex;
+            gap: 12px
+        }
+
+        .fila .campo {
+            flex: 1
+        }
+
+        input,
+        select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 8px;
+            border: 1px solid #dde3e6;
+            border-radius: 4px;
+            background: #fff
+        }
+
+        .alta {
+            border: 1px dashed #16a34a;
+            background: #fff;
+            border-radius: 8px;
+            padding: 12px;
+            margin: 0 0 12px
+        }
+
+        .alta p {
+            margin: 0 0 8px;
+            font-weight: bold
+        }
+
+        button {
+            padding: 10px 16px;
+            border: 1px solid #14532d;
+            border-radius: 4px;
+            background: #14532d;
+            color: #fff;
+            font-size: 15px
+        }
+
+        button.sec {
+            background: #fff;
+            color: #14532d
+        }
+
+        .error {
+            border-color: #b42318
+        }
+
+        .msj-campo {
+            color: #b42318;
+            font-size: 13px;
+            margin-top: 4px
+        }
+
+        .aviso {
+            padding: 10px 12px;
+            border-radius: 4px;
+            margin-bottom: 8px
+        }
+
+        .aviso.ok {
+            background: #e7f6ec;
+            border: 1px solid #2e7d32
+        }
+
+        .aviso.mal {
+            background: #fdecea;
+            border: 1px solid #b42318
+        }
+
+        .nota {
+            color: #5b6b73;
+            font-size: 13px;
+            margin-top: 12px
+        }
+    </style>
+</head>
+
+<body>
+    <aside>
+        <h2>Farmasil</h2>
+        <a href="#">Registrar venta</a>
+        <a href="#">Consultar stock</a>
+        <a href="#" class="activo">Ingreso de lotes</a>
+        <a href="#">Productos</a>
+        <a href="#">Reportes</a>
+    </aside>
+    <main>
+        <h1>Ingreso de lotes</h1>
+
+        <h3>1. Formulario</h3>
+        <div class="campo">
+            <label>Producto</label>
+            <select>
+                <option>Elegir producto...</option>
+                <option>Paracetamol 500 mg</option>
+                <option>Amoxicilina 500 mg</option>
+                <option>+ Nuevo producto</option>
+            </select>
+        </div>
+
+        <div class="alta">
+            <p>Nuevo producto (se muestra al elegir «+ Nuevo producto»)</p>
+            <div class="campo"><label>Nombre</label><input type="text" placeholder="Ej.: Ibuprofeno 400 mg"></div>
+            <div class="fila">
+                <div class="campo"><label>Acción terapéutica</label><input type="text" placeholder="Ej.: Analgésico">
+                </div>
+                <div class="campo"><label>Precio por unidad (S/)</label><input type="text" placeholder="0.00"></div>
+            </div>
+            <button>Guardar producto</button> <button class="sec">Cancelar</button>
+        </div>
+
+        <div class="fila">
+            <div class="campo"><label>Número de lote</label><input type="text" placeholder="Ej.: L-2309"></div>
+            <div class="campo"><label>Fecha de vencimiento</label><input type="date"></div>
+            <div class="campo"><label>Cantidad (unidades)</label><input type="number" min="1" placeholder="0"></div>
+        </div>
+        <button>Registrar ingreso</button>
+        <p class="nota">La cantidad va siempre en unidades: una caja de 30 se registra como 30.</p>
+
+        <h3>2. Mensajes</h3>
+        <div class="aviso ok">Ingreso registrado: lote L-2309 de Paracetamol 500 mg, 100 unidades.</div>
+        <div class="aviso ok">Producto «Ibuprofeno 400 mg» guardado y seleccionado.</div>
+        <div class="aviso mal">Falta completar: fecha de vencimiento.</div>
+        <div class="aviso mal">La cantidad debe ser mayor que cero.</div>
+        <div class="aviso mal">El lote L-2309 ya está registrado para Paracetamol 500 mg. No se modificó el stock.</div>
+
+        <h3>3. Error junto al campo</h3>
+        <div class="fila">
+            <div class="campo"><label>Número de lote</label><input type="text" value="L-2309"></div>
+            <div class="campo"><label>Fecha de vencimiento</label><input type="date" class="error">
+                <div class="msj-campo">Ingrese la fecha de vencimiento.</div>
+            </div>
+            <div class="campo"><label>Cantidad (unidades)</label><input type="number" value="0" class="error">
+                <div class="msj-campo">Debe ser mayor que cero.</div>
+            </div>
+        </div>
+
+        <p class="nota">Al registrar con éxito el formulario se limpia y queda listo para el siguiente lote. El mismo
+            número de lote se acepta si es de otro producto (HU-05 CA2).</p>
+    </main>
+</body>
+
+</html>
