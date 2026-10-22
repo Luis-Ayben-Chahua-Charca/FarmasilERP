@@ -20,6 +20,7 @@ Categorías: **Added** (nuevo), **Changed** (cambios en algo existente), **Depre
 - Plan de sprints en `docs/planificacion/plan-de-sprints.md`.
 - ADR-001 con el stack propuesto, definición del tablero Kanban y asignación de roles por sprint.
 - `package.json` y servidor Express mínimo en `app/server.js` (solo `127.0.0.1`), base común para HT-01 (#3).
+- Persistencia local: conexión a SQLite en `app/db/`, migraciones SQL numeradas, esquema inicial (producto, lote, venta y línea de venta) con lote único por producto y diagrama del modelo de datos (#5).
 
 ### Changed
 - Alcance del PMV reducido a **ventas, inventario y reportes**; el catálogo de productos pasa a ser parte de Inventario (`02-alcance.md`).
