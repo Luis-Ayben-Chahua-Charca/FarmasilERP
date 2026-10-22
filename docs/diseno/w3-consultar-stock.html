@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Boceto W3 - Consultar stock</title>
+<style>
+body{margin:0;font-family:Arial,sans-serif;display:flex;min-height:100vh;color:#222}
+aside{width:200px;background:#1f4e5f;color:#fff;padding:16px}
+aside h2{margin:0 0 16px}
+aside a{display:block;padding:8px;color:#fff;text-decoration:none;border-radius:4px}
+aside a.activo{background:#2f7a8f;font-weight:bold}
+main{flex:1;padding:24px}
+.barra{display:flex;gap:8px;margin-bottom:16px}
+input,select{padding:8px;border:1px solid #888;border-radius:4px}
+input{flex:1}
+table{width:100%;border-collapse:collapse}
+th,td{border:1px solid #ccc;padding:8px;text-align:left}
+th{background:#eee}
+.lotes{background:#f7f7f7;margin:8px 0 8px 16px}
+.nota{color:#666;font-size:13px;margin-top:12px}
+.vacio{border:1px dashed #999;padding:12px;margin-top:16px;color:#666}
+</style>
+</head>
+<body>
+<aside>
+<h2>Farmasil</h2>
+<a href="#">Registrar venta</a>
+<a href="#" class="activo">Consultar stock</a>
+<a href="#">Ingreso de lotes</a>
+<a href="#">Productos</a>
+<a href="#">Reportes</a>
+</aside>
+<main>
+<h1>Consultar stock</h1>
+<div class="barra">
+<input type="text" placeholder="Buscar producto por nombre">
+<select>
+<option>Todas las categorias</option>
+<option>Analgesico</option>
+<option>Antibiotico</option>
+</select>
+<select>
+<option>Todos los tipos</option>
+<option>Generico</option>
+<option>Comercial</option>
+</select>
+</div>
+<table>
+<tr><th>Producto</th><th>Precio por unidad</th><th>Stock total (unidades)</th></tr>
+<tr><td>Paracetamol 500 mg</td><td>S/ 0.50</td><td>104</td></tr>
+<tr><td colspan="3">
+<details open><summary>Ver lotes de Paracetamol 500 mg</summary>
+<table class="lotes">
+<tr><th>Lote</th><th>Vencimiento</th><th>Cantidad (unidades)</th></tr>
+<tr><td>L-2309</td><td>03/2027</td><td>4</td></tr>
+<tr><td>L-2411</td><td>11/2027</td><td>100</td></tr>
+</table>
+</details>
+</td></tr>
+<tr><td>Amoxicilina 500 mg</td><td>S/ 1.20</td><td>60</td></tr>
+<tr><td colspan="3">
+<details><summary>Ver lotes de Amoxicilina 500 mg</summary>
+<table class="lotes">
+<tr><th>Lote</th><th>Vencimiento</th><th>Cantidad (unidades)</th></tr>
+<tr><td>A-1002</td><td>08/2027</td><td>60</td></tr>
+</table>
+</details>
+</td></tr>
+</table>
+<p class="nota">Los lotes se listan del vencimiento mas proximo al mas lejano. Precios y cantidades siempre por unidad.</p>
+<div class="vacio">Mensaje cuando no hay resultados: No se encontraron productos con esa busqueda.</div>
+</main>
+</body>
+</html>

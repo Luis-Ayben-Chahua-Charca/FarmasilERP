@@ -23,6 +23,7 @@ Categorías: **Added** (nuevo), **Changed** (cambios en algo existente), **Depre
 - Esqueleto de la interfaz en `app/public/`: layout con menú lateral en español (Registrar venta, Consultar stock, Ingreso de lotes, Productos, Reportes), navegación sin recarga y una pantalla vacía por opción (W1–W5) (#4).
 - Módulo común `js/api.js` para las llamadas a la API local (#4).
 - Persistencia local: conexión a SQLite en `app/db/`, migraciones SQL numeradas, esquema inicial (producto, lote, venta y línea de venta) con lote único por producto y diagrama del modelo de datos (#5).
+- Boceto W3 Consultar stock en `docs/diseno/w3-consultar-stock.html` (#9).
 
 ### Changed
 - Alcance del PMV reducido a **ventas, inventario y reportes**; el catálogo de productos pasa a ser parte de Inventario (`02-alcance.md`).
