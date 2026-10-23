@@ -30,6 +30,7 @@ Categorías: **Added** (nuevo), **Changed** (cambios en algo existente), **Depre
 - Plan de pruebas en `docs/pruebas/plan-de-pruebas.md`: niveles, entorno, criterios para pasar a «Done», plantillas de caso de prueba y de defecto, y trazabilidad de las historias del PMV (#7).
 - HT-01 verificada: aplicación base instalable sin internet, con menú principal de cinco opciones, persistencia local y empaquetado para la laptop; integra las tareas #4, #5 y #6 (#3).
 - Resultados de las pruebas de aceptación del Sprint 1 en `docs/pruebas/resultados-sprint-1.md`: HT-01 cumple CA1, CA2 y CA3 sin internet, con evidencias (#8).
+- Rotación de roles para el Sprint 2 en la tabla «Equipo Sprint 2» del `README.md`, según `docs/planificacion/asignacion-roles.md` (#33).
 
 ### Changed
 - Alcance del PMV reducido a **ventas, inventario y reportes**; el catálogo de productos pasa a ser parte de Inventario (`02-alcance.md`).
