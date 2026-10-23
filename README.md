@@ -66,6 +66,7 @@ FarmasilERP/
 - [Requisitos](docs/requisitos/README.md)
 - [Plan de sprints](docs/planificacion/plan-de-sprints.md)
 - [Bocetos de pantallas](docs/diseno/)
+- [Plan de pruebas](docs/pruebas/plan-de-pruebas.md)
 - [Cómo contribuir](CONTRIBUTING.md)
 - [Registro de cambios](CHANGELOG.md)
 
