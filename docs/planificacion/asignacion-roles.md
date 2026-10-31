@@ -49,7 +49,36 @@ La **historia** (HU/HT) se asigna a la persona del rol indicado en su campo Rol,
 
 Carga aproximada en la semana: Luis ~6 h, Oscar ~7 h, Jose ~6 h, Kevin ~6 h, frente a 6 h nominales por persona. Jose hace el boceto W3 porque en el Sprint 2 será el front-end de HU-08 (Consultar stock).
 
-## 4. Sprints 2–4 — asignación por historia
+## 4. Sprint 2 (2 semanas) — asignación detallada
+
+Tareas creadas en el Sprint Planning del 22/10, con la carga equilibrada: el Scrum Master toma tareas de desarrollo para que back-end no supere su capacidad, y QA queda con holgura para corregir los defectos que salgan de TQ-S2. En este sprint **las tareas se asignan con esta tabla**, no filtrando por el campo Rol, porque Kevin hace trabajo de back-end y front-end.
+
+| Issue | Rol (tipo de trabajo) | Persona | Horas |
+|---|---|---|---|
+| #10 HU-04 Ingreso de lote (dueña) | Back-end | Oscar | — |
+| #36 HU-04.1 API de ingreso de lote | Back-end | Oscar | 3 |
+| #37 HU-04.2 API de productos | Back-end | Oscar | 2 |
+| #38 HU-04.3 Validaciones del servidor | Back-end | **Kevin** (apoyo) | 1.5 |
+| #39 HU-04.4 Pantalla W2 | Front-end | Jose | 3 |
+| #40 HU-04.5 Alta rápida de producto | Front-end | Jose | 2 |
+| #41 HU-04.6 Mensajes de error en W2 (HU-04 y HU-05) | Front-end | **Kevin** (apoyo) | 2 |
+| #11 HU-05 Lote duplicado (dueña) | Back-end | Oscar | — |
+| #42 HU-05.1 Rechazo de duplicado en la API | Back-end | Oscar | 2 |
+| #43 HU-05.2 Pruebas automatizadas de duplicado | QA | Luis | 2 |
+| #12 HU-08 Consultar stock (dueña) | Front-end | Jose | — |
+| #44 HU-08.1 API de consulta de stock | Back-end | Oscar | 3 |
+| #45 HU-08.2 Pantalla W3 | Front-end | Jose | 3 |
+| #46 HU-08.3 Detalle por lote | Front-end | Jose | 2 |
+| #47 HU-08.4 Filtros por categoría y tipo | Front-end | **Kevin** (apoyo) | 2 |
+| #48 HU-08.5 Datos de prueba y medición < 2 s | Front-end | **Kevin** (apoyo) | 2 |
+| #13 TQ-S2 Pruebas de aceptación | QA | Luis | 7 |
+| #49 SM-S2 Facilitación y cierre del sprint | Scrum Master | Kevin | 3 |
+
+Carga: Oscar 10 h, Jose 10 h, Kevin 10.5 h, Luis 9 h (más holgura para defectos), frente a 9.6 h netas por persona.
+
+**Orden de trabajo:** HU-04.1 y HU-04.2 no dependen de nada y desbloquean al resto; la ruta crítica es #36 → #44 → #45 → #48 → #13. HU-04.4 se integra antes que HU-04.5 y HU-04.6, que tocan el mismo archivo. Las dependencias de cada tarea están en su issue.
+
+## 5. Sprints 2–4 — asignación por historia
 
 Las tareas de estos sprints se crean en su Sprint Planning. Aquí va la dueña de cada historia según la rotación.
 
@@ -71,7 +100,7 @@ Las tareas de estos sprints se crean en su Sprint Planning. Aquí va la dueña d
 | 4 | TQ-S4 Pruebas S4 y finales (1–2 dic) | QA | Jose (con todo el equipo) |
 | 4 | Scrum Master (apoya HU-03) | Scrum Master | Oscar |
 
-## 5. Cómo aplicarlo en GitHub
+## 6. Cómo aplicarlo en GitHub
 
 1. Abrir la vista **Tabla por sprint** del proyecto (creación descrita en `tablero/README.md`).
 2. Filtrar `sprint:"Sprint N" rol:Back-end`, seleccionar las filas y asignar (*Assignees*) a la persona de la tabla 1. Repetir con cada rol.

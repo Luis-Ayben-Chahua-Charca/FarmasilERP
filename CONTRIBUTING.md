@@ -87,26 +87,12 @@ Cambio incompatible: agregar `!` tras el tipo (`feat(db)!: ...`) y explicar en e
 
 ## 4. Pull Requests
 
-- **Título** en formato Conventional Commits: `feat(catalogo): registro y edición de productos`.
-- **Descripción** con esta estructura:
-
-```markdown
-## Resumen
-Qué cambia y por qué.
-
-## Cambios
-- ...
-
-## Cómo probar
-1. ...
-
-## Criterios de aceptación verificados
-- [ ] CA1 ...
-- [ ] CA2 ...
-
-Closes #<n>
-```
-
+- **Título** en formato Conventional Commits (`feat(inventario): agrega API de ingreso de lote`), nunca el nombre de la rama: con *Squash and merge* el título queda como mensaje del commit en `main`.
+- **Descripción:** GitHub la llena con la plantilla [`.github/pull_request_template.md`](.github/pull_request_template.md). Completar cada sección y borrar las opcionales que no apliquen.
+- **Criterios de aceptación:** copiar todos los del issue y marcar los que se probaron.
+- **Evidencia (todo PR):** si cambia una pantalla, comprobaciones de F12 (consola sin errores, red sin peticiones externas, menos de 2 s), que prueba quien revisa antes de aprobar; si no cambia pantallas (API, base de datos, scripts, documentos), el resultado de `npm test`, de la API o del script.
+- **Cierre del issue:** `Closes #n` cuando el PR completa el issue; `Refs #n` cuando aporta a un issue que completa otro PR (por ejemplo, una parte de una tarea compartida).
+- **Cierre de una historia (HU/HT):** cuando sus tareas están fusionadas y QA verificó sus criterios de aceptación, la dueña de la historia abre un PR corto con la línea de cierre en `CHANGELOG.md`, la lista de tareas integradas y `Closes #<historia>` (como el PR #31 cerró HT-01).
 - Actualizar `CHANGELOG.md` en **[Unreleased]**.
 - Requiere **1 aprobación** de otra integrante.
 - Se fusiona con **Squash and merge**, usando el título del PR como mensaje.

@@ -31,6 +31,8 @@ Categorías: **Added** (nuevo), **Changed** (cambios en algo existente), **Depre
 - HT-01 verificada: aplicación base instalable sin internet, con menú principal de cinco opciones, persistencia local y empaquetado para la laptop; integra las tareas #4, #5 y #6 (#3).
 - Resultados de las pruebas de aceptación del Sprint 1 en `docs/pruebas/resultados-sprint-1.md`: HT-01 cumple CA1, CA2 y CA3 sin internet, con evidencias (#8).
 - Rotación de roles para el Sprint 2 en la tabla «Equipo Sprint 2» del `README.md`, según `docs/planificacion/asignacion-roles.md` (#33).
+- Tareas del Sprint 2 en `docs/planificacion/tablero/issues/` (HU-04.1 a HU-04.6, HU-05.1, HU-05.2, HU-08.1 a HU-08.5 y SM-S2), con dependencias, responsable y estimación; asignación detallada del Sprint 2 en `asignacion-roles.md` (#50).
+- Plantilla de pull request en `.github/pull_request_template.md` y reglas de título, cierre de issues y cierre de historias en `CONTRIBUTING.md` (#50).
 
 ### Changed
 - Alcance del PMV reducido a **ventas, inventario y reportes**; el catálogo de productos pasa a ser parte de Inventario (`02-alcance.md`).
@@ -44,3 +46,7 @@ Categorías: **Added** (nuevo), **Changed** (cambios en algo existente), **Depre
 ### Removed
 - HU-10 (respaldo desde el sistema): RNF-03 se cubre con un procedimiento manual.
 - RNF-05 y HU-11 (precios regulados por DIGEMID): no hay productos con precio regulado.
+
+### Fixed
+- `crear-tablero.sh` ya no reescribe el cuerpo ni los campos del tablero de los issues que ya existen al volver a ejecutarse; la opción `--actualizar=COD,...` reescribe solo el cuerpo de los indicados (#50).
+- `crear-tablero.sh` ya no reescribe las columnas de Status de un proyecto existente: hacerlo dejaba todos los items en «No Status» y las automatizaciones sin columna destino. Se agrega `reparar-estados.sh` para devolver cada item a su columna, y las decisiones del tablero quedan registradas en `docs/planificacion/tablero/README.md` (#50).
