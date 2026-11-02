@@ -106,3 +106,65 @@ html, body {
   .menu a.activo { border-bottom-color: var(--color-acento); }
   .contenido { padding: 16px; }
 }
+
+/* ---- Consultar stock (W3) ---- */
+.buscador {
+  max-width: 520px;
+  margin-bottom: 20px;
+}
+
+.buscador label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.buscador input {
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 12px;
+  font-family: inherit;
+  font-size: 1.1rem;
+  color: var(--color-texto);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: 6px;
+}
+
+.buscador input:focus {
+  outline: 3px solid var(--color-acento);
+  outline-offset: 1px;
+}
+
+.estado-stock {
+  min-height: 1.4em;
+  color: var(--color-texto-suave);
+  font-weight: 600;
+}
+
+.lista-stock {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.producto-stock {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 16px;
+  align-items: center;
+  padding: 14px 16px;
+  margin-bottom: 8px;
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: 8px;
+}
+
+.producto-nombre { font-weight: 600; }
+.producto-precio { color: var(--color-texto-suave); }
+.producto-stock-total { font-weight: 600; }
+.sin-stock { color: #b91c1c; }
+
+@media (max-width: 700px) {
+  .producto-stock { grid-template-columns: 1fr; gap: 4px; }
+}
