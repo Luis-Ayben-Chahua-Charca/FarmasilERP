@@ -106,3 +106,73 @@ html, body {
   .menu a.activo { border-bottom-color: var(--color-acento); }
   .contenido { padding: 16px; }
 }
+
+/* ---- Formularios (W2 Ingreso de lotes) ---- */
+.formulario-lote {
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: 8px;
+  padding: 24px;
+  max-width: 520px;
+}
+
+.campo {
+  margin-bottom: 18px;
+}
+
+.campo label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.campo input,
+.campo select {
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 12px;
+  font-family: inherit;
+  font-size: 1.1rem;
+  color: var(--color-texto);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: 6px;
+}
+
+.campo input:focus,
+.campo select:focus {
+  outline: 3px solid var(--color-acento);
+  outline-offset: 1px;
+}
+
+.boton-principal {
+  width: 100%;
+  min-height: 52px;
+  font-family: inherit;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #ffffff;
+  background: var(--color-menu);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.boton-principal:hover:not(:disabled),
+.boton-principal:focus-visible {
+  background: var(--color-menu-hover);
+}
+
+.boton-principal:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.mensaje {
+  margin: 16px 0 0;
+  min-height: 1.4em;
+  font-weight: 600;
+}
+
+.mensaje-ok { color: var(--color-menu); }
+.mensaje-error { color: #b91c1c; }
