@@ -33,6 +33,7 @@ Categorías: **Added** (nuevo), **Changed** (cambios en algo existente), **Depre
 - Rotación de roles para el Sprint 2 en la tabla «Equipo Sprint 2» del `README.md`, según `docs/planificacion/asignacion-roles.md` (#33).
 - Tareas del Sprint 2 en `docs/planificacion/tablero/issues/` (HU-04.1 a HU-04.6, HU-05.1, HU-05.2, HU-08.1 a HU-08.5 y SM-S2), con dependencias, responsable y estimación; asignación detallada del Sprint 2 en `asignacion-roles.md` (#50).
 - Plantilla de pull request en `.github/pull_request_template.md` y reglas de título, cierre de issues y cierre de historias en `CONTRIBUTING.md` (#50).
+- `scripts/datos-prueba-stock.js` (`npm run datos-prueba-stock`): crea `datos/prueba-stock.db` con 300 productos y 2 a 4 lotes cada uno para medir la búsqueda de W3, sin tocar la base real (#48).
 
 ### Changed
 - Alcance del PMV reducido a **ventas, inventario y reportes**; el catálogo de productos pasa a ser parte de Inventario (`02-alcance.md`).
