@@ -63,4 +63,16 @@ test('precio negativo o que no es número: responde 400', async () => {
   await rechaza({ precio: 'abc' }, 'precio');
 });
 
+test('precio absurdo: responde 400 y no llega a la base', async () => {
+  await rechaza({ precio: 1e20 }, 'precio');
+  await rechaza({ precio: '1e308' }, 'precio');
+  await rechaza({ precio: '10000.01' }, 'precio');
+});
+
+test('nombre o acción terapéutica que no son texto: responde 400', async () => {
+  await rechaza({ nombre: { a: 1 } }, 'nombre');
+  await rechaza({ nombre: 123 }, 'nombre');
+  await rechaza({ accion_terapeutica: ['Analgésico'] }, 'accion_terapeutica');
+});
+
 test('tipo distinto de genérico o comercial: responde 400', () => rechaza({ tipo: 'otro' }, 'tipo'));

@@ -8,6 +8,9 @@ const vacio = (valor) => valor === undefined || valor === null || String(valor).
 
 const TIPOS = ['generico', 'comercial'];
 
+// Tope por unidad para frenar precios absurdos (1e20, 1e308); ajustable si la farmacia lo pide
+const PRECIO_MAXIMO_CENTIMOS = 1_000_000; // S/ 10 000
+
 // El precio llega en soles («1.50», «1,50» o 1.5) y se guarda en céntimos enteros
 function aCentimos(precio) {
   const soles = typeof precio === 'string' ? Number(precio.trim().replace(',', '.')) : precio;
@@ -20,14 +23,21 @@ function validarProducto(datos) {
   const { nombre, accion_terapeutica, precio, tipo } = datos;
 
   if (vacio(nombre)) return { error: 'Ingrese el nombre del producto.', campo: 'nombre' };
+  if (typeof nombre !== 'string') return { error: 'El nombre debe ser un texto.', campo: 'nombre' };
   if (vacio(accion_terapeutica)) {
     return { error: 'Ingrese la acción terapéutica.', campo: 'accion_terapeutica' };
+  }
+  if (typeof accion_terapeutica !== 'string') {
+    return { error: 'La acción terapéutica debe ser un texto.', campo: 'accion_terapeutica' };
   }
   if (vacio(precio)) return { error: 'Ingrese el precio unitario.', campo: 'precio' };
 
   const centimos = aCentimos(precio);
   if (centimos === null) return { error: 'El precio debe ser un número.', campo: 'precio' };
   if (centimos < 0) return { error: 'El precio no puede ser negativo.', campo: 'precio' };
+  if (centimos > PRECIO_MAXIMO_CENTIMOS) {
+    return { error: 'El precio no puede superar S/ 10 000 por unidad.', campo: 'precio' };
+  }
 
   if (!vacio(tipo) && !TIPOS.includes(tipo)) {
     return { error: 'El tipo debe ser genérico o comercial.', campo: 'tipo' };
