@@ -34,3 +34,22 @@ test('responde 400 en JSON si el producto no existe', async () => {
   assert.strictEqual(res.status, 400);
   assert.strictEqual(res.body.error, 'El producto indicado no existe.');
 });
+
+const lote = { producto_id: 1, numero_lote: 'L-2309', fecha_vencimiento: '2027-03-01', cantidad_recibida: 20 };
+
+test('rechaza con 409 el mismo lote en el mismo producto y el stock no cambia (HU-05 CA1)', async () => {
+  await request(app).post('/api/lotes').send(lote).expect(201);
+  const res = await request(app).post('/api/lotes').send({ ...lote, cantidad_recibida: 7 });
+  assert.strictEqual(res.status, 409);
+  assert.strictEqual(res.body.error, 'El lote L-2309 ya está registrado para este producto.');
+  assert.strictEqual(res.body.campo, 'numero_lote');
+  assert.strictEqual(stock(), 20);
+});
+
+test('acepta el mismo número de lote en otro producto (HU-05 CA2)', async () => {
+  app.locals.db.prepare("INSERT INTO producto (id, nombre, accion_terapeutica, precio_centimos) VALUES (2, 'Ibuprofeno 400 mg', 'Antiinflamatorio', 120)").run();
+  await request(app).post('/api/lotes').send(lote).expect(201);
+  const res = await request(app).post('/api/lotes').send({ ...lote, producto_id: 2 });
+  assert.strictEqual(res.status, 201);
+  assert.strictEqual(res.body.producto_id, 2);
+});
