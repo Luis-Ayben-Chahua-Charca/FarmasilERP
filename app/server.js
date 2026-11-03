@@ -12,6 +12,7 @@ const app = express();
 // API local: recibe JSON y usa la base guardada en app.locals.db
 app.use(express.json());
 app.use('/api/lotes', require('./rutas/lotes'));
+app.use('/api/stock', require('./rutas/stock'));
 
 // La interfaz son archivos estáticos locales (sin CDN ni recursos externos)
 app.use(express.static(path.join(__dirname, 'public')));
