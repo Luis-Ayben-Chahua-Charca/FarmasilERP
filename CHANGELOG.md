@@ -33,6 +33,7 @@ Categorías: **Added** (nuevo), **Changed** (cambios en algo existente), **Depre
 - Rotación de roles para el Sprint 2 en la tabla «Equipo Sprint 2» del `README.md`, según `docs/planificacion/asignacion-roles.md` (#33).
 - Tareas del Sprint 2 en `docs/planificacion/tablero/issues/` (HU-04.1 a HU-04.6, HU-05.1, HU-05.2, HU-08.1 a HU-08.5 y SM-S2), con dependencias, responsable y estimación; asignación detallada del Sprint 2 en `asignacion-roles.md` (#50).
 - Plantilla de pull request en `.github/pull_request_template.md` y reglas de título, cierre de issues y cierre de historias en `CONTRIBUTING.md` (#50).
+- API de ingreso de lote `POST /api/lotes` en `app/rutas/lotes.js`: guarda el lote, responde `201` y el stock aumenta en la cantidad recibida; el servidor acepta JSON y monta la API bajo `/api` (#36).
 
 ### Changed
 - Alcance del PMV reducido a **ventas, inventario y reportes**; el catálogo de productos pasa a ser parte de Inventario (`02-alcance.md`).
