@@ -1,5 +1,5 @@
 // W3 — Consultar stock (HU-08)
-// Búsqueda por nombre, con precio por unidad y stock total de cada producto.
+// Búsqueda por nombre; tabla con precio por unidad y stock total de cada producto.
 
 import { api } from '../api.js';
 
@@ -11,61 +11,63 @@ function formatearPrecio(centimos) {
   return 'S/ ' + (centimos / 100).toFixed(2);
 }
 
+function celda(tipo, texto) {
+  const c = document.createElement(tipo);
+  c.textContent = texto;
+  return c;
+}
+
 export function render(contenedor) {
-  // Caja de búsqueda
   const buscador = document.createElement('div');
   buscador.className = 'buscador';
 
-  const etiqueta = document.createElement('label');
-  etiqueta.htmlFor = 'w3-buscar';
-  etiqueta.textContent = 'Buscar producto por nombre';
-
   const caja = document.createElement('input');
   caja.type = 'search';
-  caja.id = 'w3-buscar';
-  caja.placeholder = 'Escriba el nombre del producto';
+  caja.setAttribute('aria-label', 'Buscar producto por nombre');
+  caja.placeholder = 'Buscar producto por nombre';
   caja.autocomplete = 'off';
+  buscador.append(caja);
 
-  buscador.append(etiqueta, caja);
-
-  // Resultados
   const estado = document.createElement('p');
   estado.className = 'estado-stock';
   estado.setAttribute('role', 'status');
 
-  const lista = document.createElement('ul');
-  lista.className = 'lista-stock';
+  const tabla = document.createElement('table');
+  tabla.className = 'tabla-stock';
+  const cabecera = document.createElement('thead');
+  const filaCabecera = document.createElement('tr');
+  filaCabecera.append(
+    celda('th', 'Producto'),
+    celda('th', 'Precio por unidad'),
+    celda('th', 'Stock total (unidades)')
+  );
+  cabecera.append(filaCabecera);
+  const cuerpo = document.createElement('tbody');
+  tabla.append(cabecera, cuerpo);
 
-  contenedor.append(buscador, estado, lista);
+  const nota = document.createElement('p');
+  nota.className = 'nota-stock';
+  nota.textContent = 'Precios y cantidades siempre por unidad.';
+
+  contenedor.append(buscador, estado, tabla, nota);
 
   function dibujar(productos) {
-    lista.replaceChildren();
+    cuerpo.replaceChildren();
 
     if (productos.length === 0) {
-      estado.textContent = 'No se encontraron productos con ese nombre.';
+      tabla.hidden = true;
+      estado.textContent = 'No se encontraron productos con esa búsqueda.';
       return;
     }
+    tabla.hidden = false;
     estado.textContent = '';
 
     for (const p of productos) {
-      const fila = document.createElement('li');
-      fila.className = 'producto-stock';
-
-      const nombre = document.createElement('span');
-      nombre.className = 'producto-nombre';
-      nombre.textContent = p.nombre;
-
-      const precio = document.createElement('span');
-      precio.className = 'producto-precio';
-      precio.textContent = formatearPrecio(p.precio_centimos) + ' por unidad';
-
-      const stock = document.createElement('span');
-      stock.className = 'producto-stock-total';
-      stock.textContent = 'Stock: ' + p.stock_total + ' unidades';
+      const fila = document.createElement('tr');
+      const stock = celda('td', String(p.stock_total));
       if (p.stock_total === 0) stock.classList.add('sin-stock');
-
-      fila.append(nombre, precio, stock);
-      lista.append(fila);
+      fila.append(celda('td', p.nombre), celda('td', formatearPrecio(p.precio_centimos)), stock);
+      cuerpo.append(fila);
     }
   }
 
@@ -81,7 +83,8 @@ export function render(contenedor) {
       dibujar(productos);
     } catch (error) {
       if (actual !== numeroBusqueda) return;
-      lista.replaceChildren();
+      cuerpo.replaceChildren();
+      tabla.hidden = true;
       estado.textContent = error.message;
     }
   }

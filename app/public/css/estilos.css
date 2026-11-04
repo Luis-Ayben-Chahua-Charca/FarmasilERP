@@ -107,13 +107,6 @@ html, body {
   .contenido { padding: 16px; }
 }
 
-/* ---- Consultar stock (W3) ---- */
-.buscador {
-  max-width: 520px;
-  margin-bottom: 20px;
-}
-
-.buscador label {
 /* ---- Formularios (W2 Ingreso de lotes) ---- */
 .formulario-lote {
   background: var(--color-superficie);
@@ -133,7 +126,6 @@ html, body {
   font-weight: 600;
 }
 
-.buscador input {
 .campo input,
 .campo select {
   width: 100%;
@@ -147,45 +139,12 @@ html, body {
   border-radius: 6px;
 }
 
-.buscador input:focus {
 .campo input:focus,
 .campo select:focus {
   outline: 3px solid var(--color-acento);
   outline-offset: 1px;
 }
 
-.estado-stock {
-  min-height: 1.4em;
-  color: var(--color-texto-suave);
-  font-weight: 600;
-}
-
-.lista-stock {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.producto-stock {
-  display: grid;
-  grid-template-columns: 1fr auto auto;
-  gap: 16px;
-  align-items: center;
-  padding: 14px 16px;
-  margin-bottom: 8px;
-  background: var(--color-superficie);
-  border: 1px solid var(--color-borde);
-  border-radius: 8px;
-}
-
-.producto-nombre { font-weight: 600; }
-.producto-precio { color: var(--color-texto-suave); }
-.producto-stock-total { font-weight: 600; }
-.sin-stock { color: #b91c1c; }
-
-@media (max-width: 700px) {
-  .producto-stock { grid-template-columns: 1fr; gap: 4px; }
-}
 .boton-principal {
   width: 100%;
   min-height: 52px;
@@ -217,3 +176,60 @@ html, body {
 
 .mensaje-ok { color: var(--color-menu); }
 .mensaje-error { color: #b91c1c; }
+
+/* ---- Consultar stock (W3) ---- */
+.buscador {
+  margin-bottom: 20px;
+}
+
+.buscador input {
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 12px;
+  font-family: inherit;
+  font-size: 1.1rem;
+  color: var(--color-texto);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: 6px;
+}
+
+.buscador input:focus {
+  outline: 3px solid var(--color-acento);
+  outline-offset: 1px;
+}
+
+.estado-stock {
+  min-height: 1.4em;
+  color: var(--color-texto-suave);
+  font-weight: 600;
+}
+
+.estado-stock:not(:empty) {
+  border: 1px dashed var(--color-borde);
+  border-radius: 6px;
+  padding: 12px;
+}
+
+.tabla-stock {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--color-superficie);
+}
+
+.tabla-stock th,
+.tabla-stock td {
+  border: 1px solid var(--color-borde);
+  padding: 10px 12px;
+  text-align: left;
+}
+
+.tabla-stock th { background: #eef2f3; }
+
+.sin-stock { color: #b91c1c; }
+
+.nota-stock {
+  margin: 12px 0 0;
+  color: var(--color-texto-suave);
+  font-size: 0.85rem;
+}
