@@ -9,12 +9,19 @@ const PORT = 3000;
 
 const app = express();
 
+// API local: recibe JSON y usa la base guardada en app.locals.db
+app.use(express.json());
+app.use('/api/lotes', require('./rutas/lotes'));
+app.use('/api/stock', require('./rutas/stock'));
+app.use('/api/productos', require('./rutas/productos'));
+
 // La interfaz son archivos estáticos locales (sin CDN ni recursos externos)
 app.use(express.static(path.join(__dirname, 'public')));
 
 if (require.main === module) {
   // Crea datos/farmasil.db y aplica las migraciones pendientes al iniciar
   const db = abrir();
+  app.locals.db = db; // las pruebas ponen aquí una base en memoria
   process.on('exit', () => db.close());
   process.on('SIGINT', () => process.exit(0));
   app.listen(PORT, HOST, () => {

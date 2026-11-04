@@ -7,7 +7,8 @@
   "scripts": {
     "start": "node app/server.js",
     "test": "node --test",
-    "prueba-persistencia": "node scripts/prueba-persistencia.js"
+    "prueba-persistencia": "node scripts/prueba-persistencia.js",
+    "datos-prueba-stock": "node scripts/datos-prueba-stock.js"
   },
   "engines": {
     "node": ">=24"
