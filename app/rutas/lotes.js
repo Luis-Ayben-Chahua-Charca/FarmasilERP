@@ -60,6 +60,13 @@ router.post('/', (req, res) => {
     info = db.prepare(`INSERT INTO lote (producto_id, numero_lote, fecha_vencimiento, cantidad_recibida)
       VALUES (?, ?, ?, ?)`).run(producto_id, numero_lote, fecha_vencimiento, cantidad_recibida);
   } catch (err) {
+    // UNIQUE (producto_id, numero_lote): el mismo lote no se registra dos veces (HU-05)
+    if (err.code === 'SQLITE_CONSTRAINT_UNIQUE') {
+      return res.status(409).json({
+        error: `El lote ${numero_lote} ya está registrado para este producto.`,
+        campo: 'numero_lote',
+      });
+    }
     if (err.code === 'SQLITE_CONSTRAINT_FOREIGNKEY') {
       return res.status(400).json({ error: 'El producto indicado no existe.' });
     }
