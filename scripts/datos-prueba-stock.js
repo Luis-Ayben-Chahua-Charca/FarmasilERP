@@ -1,13 +1,14 @@
 'use strict';
 
-// Crea una base de prueba con unos 300 productos y 2 a 4 lotes cada uno,
-// para medir la búsqueda de W3 Consultar stock (HU-08 CA1, RNF-07).
-// Usa datos/prueba-stock.db, nunca la base real. Uso:
+// Crea una base de prueba con unos 300 productos y 2 a 4 lotes cada uno
+// y mide el tiempo de respuesta de GET /api/stock con ese volumen
+// (HU-08 CA1, RNF-07: menos de 2 s). Usa datos/prueba-stock.db, nunca la base real. Uso:
 //   npm run datos-prueba-stock
 
 const fs = require('node:fs');
 const path = require('node:path');
 const { abrir } = require('../app/db');
+const app = require('../app/server');
 
 const RUTA = path.join(__dirname, '..', 'datos', 'prueba-stock.db');
 
@@ -74,5 +75,52 @@ db.transaction(() => {
 })();
 
 const productos = db.prepare('SELECT COUNT(*) n FROM producto').get().n;
-db.close();
 console.log(`Base de prueba creada en datos/prueba-stock.db: ${productos} productos y ${lotes} lotes.`);
+
+// ---- Medición de la búsqueda de stock ----
+const LIMITE_MS = 2000;
+const REPETICIONES = 5;
+const BUSQUEDAS = [
+  ['Listado completo (al abrir W3)', ''],
+  ['Nombre «para»', '?nombre=para'],
+  ['Categoría Antibiótico', '?categoria=Antibi%C3%B3tico'],
+  ['Tipo genérico', '?tipo=generico'],
+  ['Nombre + categoría + tipo', '?nombre=amoxi&categoria=Antibi%C3%B3tico&tipo=generico'],
+  ['Sin resultados', '?nombre=zzz'],
+];
+
+async function medir() {
+  // La app real de Express con la base de prueba, en un puerto libre de 127.0.0.1
+  app.locals.db = db;
+  const servidor = app.listen(0, '127.0.0.1');
+  await new Promise((listo) => servidor.once('listening', listo));
+  const base = `http://127.0.0.1:${servidor.address().port}/api/stock`;
+
+  console.log(`\nMedición de GET /api/stock (peor de ${REPETICIONES} intentos por búsqueda):`);
+  let peor = 0;
+  for (const [nombre, consulta] of BUSQUEDAS) {
+    let maximo = 0;
+    let cantidad = 0;
+    for (let i = 0; i < REPETICIONES; i++) {
+      const inicio = performance.now();
+      const respuesta = await fetch(base + consulta);
+      const datos = await respuesta.json();
+      maximo = Math.max(maximo, performance.now() - inicio);
+      cantidad = datos.length;
+    }
+    peor = Math.max(peor, maximo);
+    console.log(`  ${nombre.padEnd(32)} ${String(cantidad).padStart(3)} productos  ${maximo.toFixed(1).padStart(7)} ms`);
+  }
+
+  servidor.close();
+  db.close();
+  console.log(`\nPeor tiempo: ${peor.toFixed(1)} ms (límite ${LIMITE_MS} ms).`);
+  if (peor < LIMITE_MS) {
+    console.log('CORRECTO: la búsqueda responde en menos de 2 s con este volumen.');
+  } else {
+    console.log('FALLO: la búsqueda tarda 2 s o más.');
+    process.exitCode = 1;
+  }
+}
+
+medir();

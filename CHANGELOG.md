@@ -37,9 +37,11 @@ Categorías: **Added** (nuevo), **Changed** (cambios en algo existente), **Depre
 - API de ingreso de lote `POST /api/lotes` en `app/rutas/lotes.js`: guarda el lote, responde `201` y el stock aumenta en la cantidad recibida; el servidor acepta JSON y monta la API bajo `/api` (#36).
 - Validaciones del servidor en `POST /api/lotes`: responde `400` con `error` y `campo` si falta un dato, la cantidad no es un entero mayor que cero, la fecha no tiene formato `AAAA-MM-DD` o no existe, o el producto no existe; ningún dato inválido llega a la base (#38).
 - `scripts/datos-prueba-stock.js` (`npm run datos-prueba-stock`): crea `datos/prueba-stock.db` con 300 productos y 2 a 4 lotes cada uno para medir la búsqueda de W3, sin tocar la base real (#48).
+- Medición de `GET /api/stock` en `npm run datos-prueba-stock`: con 300 productos y 904 lotes cada búsqueda responde en menos de 2 s (peor caso medido: 38 ms) (#48).
 - API de consulta de stock `GET /api/stock?nombre=&categoria=&tipo=` en `app/rutas/stock.js`: devuelve por producto el precio, el stock total (ingresos − ventas) y los lotes ordenados por vencimiento; busca por nombre sin distinguir mayúsculas y filtra por acción terapéutica y tipo (#44).
 - API de productos en `app/rutas/productos.js`: `POST /api/productos` crea un producto con nombre, acción terapéutica y precio unitario obligatorios (el precio llega en soles y se guarda en céntimos; `tipo` opcional) y responde `400` con `error` y `campo` si falta un dato o el precio es negativo; `GET /api/productos` lista los productos ordenados por nombre para el selector de W2 (#37).
 - Pantalla W3 de consulta de stock: búsqueda por nombre con precio por unidad y stock total de cada producto (#45).
+- Rechazo de lote duplicado en `POST /api/lotes`: el mismo número de lote para el mismo producto responde `409` con `error` y `campo` («El lote L-2309 ya está registrado para este producto.») y el stock no cambia; el mismo número en otro producto se acepta (#42).
 
 ### Changed
 - Alcance del PMV reducido a **ventas, inventario y reportes**; el catálogo de productos pasa a ser parte de Inventario (`02-alcance.md`).
