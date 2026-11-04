@@ -30,9 +30,15 @@ Categorías: **Added** (nuevo), **Changed** (cambios en algo existente), **Depre
 - Plan de pruebas en `docs/pruebas/plan-de-pruebas.md`: niveles, entorno, criterios para pasar a «Done», plantillas de caso de prueba y de defecto, y trazabilidad de las historias del PMV (#7).
 - HT-01 verificada: aplicación base instalable sin internet, con menú principal de cinco opciones, persistencia local y empaquetado para la laptop; integra las tareas #4, #5 y #6 (#3).
 - Resultados de las pruebas de aceptación del Sprint 1 en `docs/pruebas/resultados-sprint-1.md`: HT-01 cumple CA1, CA2 y CA3 sin internet, con evidencias (#8).
+- Casos de prueba del Sprint 2 en `docs/pruebas/casos-sprint-2.md` (CP-HU04-1 a CP-HU08-3) y plantilla de resultados en `docs/pruebas/resultados-sprint-2.md`, a completar al ejecutar cada historia (#13).
 - Rotación de roles para el Sprint 2 en la tabla «Equipo Sprint 2» del `README.md`, según `docs/planificacion/asignacion-roles.md` (#33).
 - Tareas del Sprint 2 en `docs/planificacion/tablero/issues/` (HU-04.1 a HU-04.6, HU-05.1, HU-05.2, HU-08.1 a HU-08.5 y SM-S2), con dependencias, responsable y estimación; asignación detallada del Sprint 2 en `asignacion-roles.md` (#50).
 - Plantilla de pull request en `.github/pull_request_template.md` y reglas de título, cierre de issues y cierre de historias en `CONTRIBUTING.md` (#50).
+- API de ingreso de lote `POST /api/lotes` en `app/rutas/lotes.js`: guarda el lote, responde `201` y el stock aumenta en la cantidad recibida; el servidor acepta JSON y monta la API bajo `/api` (#36).
+- Validaciones del servidor en `POST /api/lotes`: responde `400` con `error` y `campo` si falta un dato, la cantidad no es un entero mayor que cero, la fecha no tiene formato `AAAA-MM-DD` o no existe, o el producto no existe; ningún dato inválido llega a la base (#38).
+- `scripts/datos-prueba-stock.js` (`npm run datos-prueba-stock`): crea `datos/prueba-stock.db` con 300 productos y 2 a 4 lotes cada uno para medir la búsqueda de W3, sin tocar la base real (#48).
+- API de consulta de stock `GET /api/stock?nombre=&categoria=&tipo=` en `app/rutas/stock.js`: devuelve por producto el precio, el stock total (ingresos − ventas) y los lotes ordenados por vencimiento; busca por nombre sin distinguir mayúsculas y filtra por acción terapéutica y tipo (#44).
+- API de productos en `app/rutas/productos.js`: `POST /api/productos` crea un producto con nombre, acción terapéutica y precio unitario obligatorios (el precio llega en soles y se guarda en céntimos; `tipo` opcional) y responde `400` con `error` y `campo` si falta un dato o el precio es negativo; `GET /api/productos` lista los productos ordenados por nombre para el selector de W2 (#37).
 
 ### Changed
 - Alcance del PMV reducido a **ventas, inventario y reportes**; el catálogo de productos pasa a ser parte de Inventario (`02-alcance.md`).
