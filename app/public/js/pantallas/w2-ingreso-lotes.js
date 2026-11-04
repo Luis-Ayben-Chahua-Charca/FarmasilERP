@@ -1,10 +1,13 @@
 // W2 — Ingreso de lotes (HU-04, HU-05)
 // Formulario para registrar un lote: producto, número, vencimiento y cantidad.
 // Los datos inválidos y el lote duplicado se avisan junto al campo afectado.
+// Si el producto no existe, «+ Nuevo producto» permite crearlo sin salir de la pantalla.
 
 import { api } from '../api.js';
 
 export const titulo = 'Ingreso de lotes';
+
+const OPCION_NUEVO = '__nuevo__';
 
 function crearCampo(id, etiqueta, entrada) {
   const grupo = document.createElement('div');
@@ -40,6 +43,20 @@ function validar(datos) {
   return errores;
 }
 
+// Reglas del alta rápida (mismas que POST /api/productos, #37)
+function validarProducto(datos) {
+  const errores = {};
+  if (!datos.nombre) errores.nombre = 'Ingrese el nombre del producto.';
+  if (!datos.accion_terapeutica) errores.accion_terapeutica = 'Ingrese la acción terapéutica.';
+  if (!datos.precio) {
+    errores.precio = 'Ingrese el precio por unidad.';
+  } else {
+    const n = Number(datos.precio.replace(',', '.'));
+    if (!Number.isFinite(n) || n < 0) errores.precio = 'El precio debe ser un número, no negativo.';
+  }
+  return errores;
+}
+
 export function render(contenedor) {
   const formulario = document.createElement('form');
   formulario.className = 'formulario-lote';
@@ -54,10 +71,64 @@ export function render(contenedor) {
   cargando.textContent = 'Cargando productos…';
   selector.append(cargando);
 
+  // Alta rápida de producto (#40): se muestra al elegir «+ Nuevo producto»
+  const nuevoNombre = document.createElement('input');
+  nuevoNombre.type = 'text';
+  nuevoNombre.name = 'nombre';
+  nuevoNombre.placeholder = 'Ej.: Ibuprofeno 400 mg';
+  nuevoNombre.autocomplete = 'off';
+
+  const nuevoAccion = document.createElement('input');
+  nuevoAccion.type = 'text';
+  nuevoAccion.name = 'accion_terapeutica';
+  nuevoAccion.placeholder = 'Ej.: Analgésico';
+  nuevoAccion.autocomplete = 'off';
+
+  const nuevoPrecio = document.createElement('input');
+  nuevoPrecio.type = 'text';
+  nuevoPrecio.name = 'precio';
+  nuevoPrecio.placeholder = '0.00';
+  nuevoPrecio.inputMode = 'decimal';
+  nuevoPrecio.autocomplete = 'off';
+
+  const alta = document.createElement('div');
+  alta.className = 'alta-producto';
+  alta.hidden = true;
+
+  const tituloAlta = document.createElement('p');
+  tituloAlta.className = 'alta-titulo';
+  tituloAlta.textContent = 'Nuevo producto';
+
+  const filaAlta = document.createElement('div');
+  filaAlta.className = 'fila-campos';
+  filaAlta.append(
+    crearCampo('w2-nuevo-accion', 'Acción terapéutica', nuevoAccion),
+    crearCampo('w2-nuevo-precio', 'Precio por unidad (S/)', nuevoPrecio)
+  );
+
+  const guardarProductoBoton = document.createElement('button');
+  guardarProductoBoton.type = 'button';
+  guardarProductoBoton.className = 'boton-principal';
+  guardarProductoBoton.textContent = 'Guardar producto';
+
+  const cancelarBoton = document.createElement('button');
+  cancelarBoton.type = 'button';
+  cancelarBoton.className = 'boton-secundario';
+  cancelarBoton.textContent = 'Cancelar';
+
+  alta.append(
+    tituloAlta,
+    crearCampo('w2-nuevo-nombre', 'Nombre', nuevoNombre),
+    filaAlta,
+    guardarProductoBoton,
+    cancelarBoton
+  );
+
   // Campos del lote
   const numero = document.createElement('input');
   numero.type = 'text';
   numero.name = 'numero_lote';
+  numero.placeholder = 'Ej.: L-2309';
   numero.autocomplete = 'off';
 
   const vencimiento = document.createElement('input');
@@ -67,9 +138,18 @@ export function render(contenedor) {
   const cantidad = document.createElement('input');
   cantidad.type = 'number';
   cantidad.name = 'cantidad_recibida';
+  cantidad.placeholder = '0';
   cantidad.min = '1';
   cantidad.step = '1';
   cantidad.inputMode = 'numeric';
+
+  const filaLote = document.createElement('div');
+  filaLote.className = 'fila-campos';
+  filaLote.append(
+    crearCampo('w2-lote', 'Número de lote', numero),
+    crearCampo('w2-vencimiento', 'Fecha de vencimiento', vencimiento),
+    crearCampo('w2-cantidad', 'Cantidad (unidades)', cantidad)
+  );
 
   // Mensaje de resultado (confirmación o error)
   const mensaje = document.createElement('p');
@@ -81,13 +161,17 @@ export function render(contenedor) {
   boton.className = 'boton-principal';
   boton.textContent = 'Registrar ingreso';
 
+  const nota = document.createElement('p');
+  nota.className = 'nota-unidades';
+  nota.textContent = 'La cantidad va siempre en unidades: una caja de 30 se registra como 30.';
+
   formulario.append(
     crearCampo('w2-producto', 'Producto', selector),
-    crearCampo('w2-lote', 'Número de lote', numero),
-    crearCampo('w2-vencimiento', 'Fecha de vencimiento', vencimiento),
-    crearCampo('w2-cantidad', 'Cantidad (unidades)', cantidad),
+    alta,
+    filaLote,
     boton,
-    mensaje
+    mensaje,
+    nota
   );
   contenedor.append(formulario);
 
@@ -105,6 +189,12 @@ export function render(contenedor) {
     cantidad_recibida: cantidad,
   };
 
+  const camposAlta = {
+    nombre: nuevoNombre,
+    accion_terapeutica: nuevoAccion,
+    precio: nuevoPrecio,
+  };
+
   function marcarError(entrada, texto) {
     document.getElementById(entrada.id + '-error').textContent = texto;
     entrada.classList.add('campo-invalido');
@@ -118,9 +208,17 @@ export function render(contenedor) {
   }
 
   // Al corregir un campo desaparece su aviso
-  for (const entrada of Object.values(campos)) {
+  for (const entrada of [...Object.values(campos), ...Object.values(camposAlta)]) {
     entrada.addEventListener('input', () => limpiarError(entrada));
     entrada.addEventListener('change', () => limpiarError(entrada));
+  }
+
+  function cerrarAlta() {
+    alta.hidden = true;
+    for (const entrada of Object.values(camposAlta)) {
+      entrada.value = '';
+      limpiarError(entrada);
+    }
   }
 
   async function cargarProductos() {
@@ -130,7 +228,7 @@ export function render(contenedor) {
 
       const placeholder = document.createElement('option');
       placeholder.value = '';
-      placeholder.textContent = 'Seleccione un producto';
+      placeholder.textContent = 'Elegir producto...';
       selector.append(placeholder);
 
       for (const p of productos) {
@@ -139,16 +237,94 @@ export function render(contenedor) {
         opcion.textContent = p.nombre;
         selector.append(opcion);
       }
+
+      const nuevo = document.createElement('option');
+      nuevo.value = OPCION_NUEVO;
+      nuevo.textContent = '+ Nuevo producto';
+      selector.append(nuevo);
+
       selector.disabled = false;
     } catch (error) {
       mostrar(error.message, true);
     }
   }
 
+  // Elegir «+ Nuevo producto» despliega el alta; elegir otro producto la cierra
+  selector.addEventListener('change', () => {
+    if (selector.value === OPCION_NUEVO) {
+      alta.hidden = false;
+      nuevoNombre.focus();
+    } else if (!alta.hidden) {
+      cerrarAlta();
+    }
+  });
+
+  cancelarBoton.addEventListener('click', () => {
+    cerrarAlta();
+    selector.value = '';
+    selector.focus();
+  });
+
+  async function guardarProducto() {
+    mostrar('', false);
+    for (const entrada of Object.values(camposAlta)) limpiarError(entrada);
+
+    const datos = {
+      nombre: nuevoNombre.value.trim(),
+      accion_terapeutica: nuevoAccion.value.trim(),
+      precio: nuevoPrecio.value.trim(),
+    };
+
+    const errores = validarProducto(datos);
+    const invalidos = Object.keys(errores);
+    if (invalidos.length) {
+      for (const clave of invalidos) marcarError(camposAlta[clave], errores[clave]);
+      camposAlta[invalidos[0]].focus();
+      return;
+    }
+
+    guardarProductoBoton.disabled = true;
+    try {
+      const creado = await api.post('/productos', datos);
+      await cargarProductos();
+      selector.value = String(creado.id); // queda seleccionado (CA2)
+      cerrarAlta();
+      mostrar(`Producto «${creado.nombre}» guardado y seleccionado.`, false);
+      numero.focus();
+    } catch (error) {
+      const entrada = camposAlta[error.campo];
+      if (entrada) {
+        marcarError(entrada, error.message);
+        entrada.focus();
+      } else {
+        mostrar(error.message, true);
+      }
+    } finally {
+      guardarProductoBoton.disabled = false;
+    }
+  }
+
+  guardarProductoBoton.addEventListener('click', guardarProducto);
+
+  // Enter dentro del alta guarda el producto, no registra el lote
+  alta.addEventListener('keydown', (evento) => {
+    if (evento.key === 'Enter') {
+      evento.preventDefault();
+      guardarProducto();
+    }
+  });
+
   formulario.addEventListener('submit', async (evento) => {
     evento.preventDefault();
     mostrar('', false);
     for (const entrada of Object.values(campos)) limpiarError(entrada);
+
+    // Con «+ Nuevo producto» elegido, primero hay que guardar el producto
+    if (selector.value === OPCION_NUEVO) {
+      marcarError(selector, 'Guarde el producto nuevo o elija otro.');
+      selector.focus();
+      return;
+    }
 
     // Se envían tal cual: el servidor distingue «falta el dato» de «dato inválido»
     const datos = {
@@ -167,10 +343,15 @@ export function render(contenedor) {
       return;
     }
 
+    const nombreProducto = selector.selectedOptions[0].textContent;
+
     boton.disabled = true;
     try {
       await api.post('/lotes', datos);
-      mostrar('Ingreso registrado correctamente.', false);
+      mostrar(
+        `Ingreso registrado: lote ${datos.numero_lote} de ${nombreProducto}, ${datos.cantidad_recibida} unidades.`,
+        false
+      );
       numero.value = '';
       vencimiento.value = '';
       cantidad.value = '';
