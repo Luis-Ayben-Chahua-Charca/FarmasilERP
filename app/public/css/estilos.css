@@ -234,6 +234,28 @@ html, body {
   font-size: 0.85rem;
 }
 
+/* ---- Detalle por lote (W3, #46) ---- */
+.boton-lotes {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+.boton-lotes::before { content: '▸ '; }
+.boton-lotes[aria-expanded='true']::before { content: '▾ '; }
+
+.boton-lotes:focus-visible {
+  outline: 2px solid #0f766e;
+  outline-offset: 2px;
+}
+
+.detalle-lotes { padding: 0.25rem 0 0.25rem 1.25rem; }
+.tabla-lotes { border-collapse: collapse; width: 100%; }
+.sin-lotes { margin: 0; font-style: italic; }
 /* ---- Avisos junto al campo (W2, #41) ---- */
 .error-campo {
   margin: 6px 0 0;

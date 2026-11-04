@@ -17,6 +17,51 @@ function celda(tipo, texto) {
   return c;
 }
 
+function formatearFecha(iso) {
+  // AAAA-MM-DD -> DD/MM/AAAA (sin Date, para evitar desfases de zona horaria)
+  const [anio, mes, dia] = iso.split('-');
+  return `${dia}/${mes}/${anio}`;
+}
+
+function crearDetalle(lotes) {
+  const caja = document.createElement('div');
+  caja.className = 'detalle-lotes';
+
+  if (lotes.length === 0) {
+    const vacio = document.createElement('p');
+    vacio.className = 'sin-lotes';
+    vacio.textContent = 'Sin lotes registrados.';
+    caja.append(vacio);
+    return caja;
+  }
+
+  const tabla = document.createElement('table');
+  tabla.className = 'tabla-lotes';
+  const cabecera = document.createElement('thead');
+  const filaCabecera = document.createElement('tr');
+  filaCabecera.append(
+    celda('th', 'Lote'),
+    celda('th', 'Vencimiento'),
+    celda('th', 'Cantidad (unidades)')
+  );
+  cabecera.append(filaCabecera);
+
+  const cuerpo = document.createElement('tbody');
+  for (const l of lotes) {
+    const fila = document.createElement('tr');
+    fila.append(
+      celda('td', l.numero_lote),
+      celda('td', formatearFecha(l.fecha_vencimiento)),
+      celda('td', String(l.cantidad))
+    );
+    cuerpo.append(fila);
+  }
+
+  tabla.append(cabecera, cuerpo);
+  caja.append(tabla);
+  return caja;
+}
+
 export function render(contenedor) {
   const buscador = document.createElement('div');
   buscador.className = 'buscador';
@@ -64,10 +109,34 @@ export function render(contenedor) {
 
     for (const p of productos) {
       const fila = document.createElement('tr');
+
+      const filaDetalle = document.createElement('tr');
+      filaDetalle.id = 'lotes-' + p.id;
+      filaDetalle.hidden = true;
+      const celdaDetalle = document.createElement('td');
+      celdaDetalle.colSpan = 3;
+      celdaDetalle.append(crearDetalle(p.lotes || []));
+      filaDetalle.append(celdaDetalle);
+
+      const boton = document.createElement('button');
+      boton.type = 'button';
+      boton.className = 'boton-lotes';
+      boton.textContent = p.nombre;
+      boton.setAttribute('aria-expanded', 'false');
+      boton.setAttribute('aria-controls', filaDetalle.id);
+      boton.addEventListener('click', () => {
+        const abrir = filaDetalle.hidden;
+        filaDetalle.hidden = !abrir;
+        boton.setAttribute('aria-expanded', String(abrir));
+      });
+      const celdaNombre = document.createElement('td');
+      celdaNombre.append(boton);
+
       const stock = celda('td', String(p.stock_total));
       if (p.stock_total === 0) stock.classList.add('sin-stock');
-      fila.append(celda('td', p.nombre), celda('td', formatearPrecio(p.precio_centimos)), stock);
-      cuerpo.append(fila);
+      fila.append(celdaNombre, celda('td', formatearPrecio(p.precio_centimos)), stock);
+
+      cuerpo.append(fila, filaDetalle);
     }
   }
 
