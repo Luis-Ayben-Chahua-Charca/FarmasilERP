@@ -1,5 +1,6 @@
 // W3 — Consultar stock (HU-08)
-// Búsqueda por nombre; tabla con precio por unidad y stock total de cada producto.
+// Búsqueda por nombre y filtros por categoría y tipo; tabla con precio por unidad
+// y stock total de cada producto.
 
 import { api } from '../api.js';
 
@@ -15,6 +16,24 @@ function celda(tipo, texto) {
   const c = document.createElement(tipo);
   c.textContent = texto;
   return c;
+}
+
+// Selector con la opción «Todos» (valor vacío = sin filtro)
+function crearFiltro(id, texto, opciones) {
+  const grupo = document.createElement('div');
+  grupo.className = 'filtro';
+
+  const etiqueta = document.createElement('label');
+  etiqueta.htmlFor = id;
+  etiqueta.textContent = texto;
+
+  const selector = document.createElement('select');
+  selector.id = id;
+  selector.append(new Option('Todos', ''));
+  for (const [valor, nombre] of opciones) selector.append(new Option(nombre, valor));
+
+  grupo.append(etiqueta, selector);
+  return { grupo, selector };
 }
 
 function formatearFecha(iso) {
@@ -73,6 +92,14 @@ export function render(contenedor) {
   caja.autocomplete = 'off';
   buscador.append(caja);
 
+  // Filtros por categoría (acción terapéutica) y tipo (#47, HU-08 CA3)
+  const categoria = crearFiltro('w3-categoria', 'Categoría', []);
+  const tipo = crearFiltro('w3-tipo', 'Tipo', [['generico', 'Genérico'], ['comercial', 'Comercial']]);
+
+  const filtros = document.createElement('div');
+  filtros.className = 'filtros-stock';
+  filtros.append(categoria.grupo, tipo.grupo);
+
   const estado = document.createElement('p');
   estado.className = 'estado-stock';
   estado.setAttribute('role', 'status');
@@ -94,7 +121,18 @@ export function render(contenedor) {
   nota.className = 'nota-stock';
   nota.textContent = 'Precios y cantidades siempre por unidad.';
 
-  contenedor.append(buscador, estado, tabla, nota);
+  contenedor.append(buscador, filtros, estado, tabla, nota);
+
+  // Las categorías salen del primer listado sin filtros, para que la lista
+  // no se achique al filtrar
+  let categoriasCargadas = false;
+
+  function cargarCategorias(productos) {
+    const nombres = [...new Set(productos.map((p) => p.accion_terapeutica))]
+      .sort((a, b) => a.localeCompare(b, 'es'));
+    for (const nombre of nombres) categoria.selector.append(new Option(nombre, nombre));
+    categoriasCargadas = true;
+  }
 
   function dibujar(productos) {
     cuerpo.replaceChildren();
@@ -145,10 +183,22 @@ export function render(contenedor) {
 
   async function buscar() {
     const actual = ++numeroBusqueda;
-    const consulta = '?nombre=' + encodeURIComponent(caja.value.trim());
+    // Solo se envían los filtros que tienen valor; «Todos» no se envía
+    const parametros = new URLSearchParams();
+    const valores = {
+      nombre: caja.value.trim(),
+      categoria: categoria.selector.value,
+      tipo: tipo.selector.value,
+    };
+    for (const [clave, valor] of Object.entries(valores)) {
+      if (valor) parametros.set(clave, valor);
+    }
+    const texto = parametros.toString();
+    const consulta = texto ? '?' + texto : '';
     try {
       const productos = await api.get('/stock' + consulta);
       if (actual !== numeroBusqueda) return;
+      if (!categoriasCargadas && !consulta) cargarCategorias(productos);
       dibujar(productos);
     } catch (error) {
       if (actual !== numeroBusqueda) return;
@@ -163,6 +213,14 @@ export function render(contenedor) {
     clearTimeout(temporizador);
     temporizador = setTimeout(buscar, ESPERA_BUSQUEDA_MS);
   });
+
+  // Al cambiar un filtro se busca de inmediato
+  for (const { selector } of [categoria, tipo]) {
+    selector.addEventListener('change', () => {
+      clearTimeout(temporizador);
+      buscar();
+    });
+  }
 
   buscar(); // al abrir la pantalla se muestra el listado completo
 }
