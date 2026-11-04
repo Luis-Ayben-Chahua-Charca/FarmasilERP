@@ -53,3 +53,43 @@ test('acepta el mismo número de lote en otro producto (HU-05 CA2)', async () =>
   assert.strictEqual(res.status, 201);
   assert.strictEqual(res.body.producto_id, 2);
 });
+
+const cuenta = (productoId) => app.locals.db
+  .prepare('SELECT COUNT(*) n FROM lote WHERE producto_id = ?').get(productoId).n;
+
+const stockDe = (productoId) => app.locals.db
+  .prepare('SELECT COALESCE(SUM(cantidad_recibida), 0) n FROM lote WHERE producto_id = ?').get(productoId).n;
+
+test('el lote duplicado responde JSON y no crea un segundo registro (HU-05 CA1)', async () => {
+  await request(app).post('/api/lotes').send(lote).expect(201);
+  const res = await request(app).post('/api/lotes').send(lote);
+  assert.strictEqual(res.status, 409);
+  assert.match(res.headers['content-type'], /application\/json/);
+  assert.strictEqual(cuenta(1), 1);
+});
+
+test('rechaza con 409 el duplicado aunque el número lleve espacios (HU-05 CA1)', async () => {
+  await request(app).post('/api/lotes').send(lote).expect(201);
+  const res = await request(app).post('/api/lotes').send({ ...lote, numero_lote: '  L-2309  ' });
+  assert.strictEqual(res.status, 409);
+  assert.strictEqual(res.body.campo, 'numero_lote');
+  assert.strictEqual(cuenta(1), 1);
+  assert.strictEqual(stockDe(1), 20);
+});
+
+test('el mismo número en otro producto suma stock solo a ese producto (HU-05 CA2)', async () => {
+  app.locals.db.prepare("INSERT INTO producto (id, nombre, accion_terapeutica, precio_centimos) VALUES (2, 'Amoxicilina 500 mg', 'Antibiótico', 120)").run();
+  await request(app).post('/api/lotes').send(lote).expect(201);
+  await request(app).post('/api/lotes').send({ ...lote, producto_id: 2, cantidad_recibida: 7 }).expect(201);
+  assert.strictEqual(stockDe(1), 20);
+  assert.strictEqual(stockDe(2), 7);
+  assert.strictEqual(cuenta(1), 1);
+  assert.strictEqual(cuenta(2), 1);
+});
+
+test('tras un duplicado rechazado se puede registrar otro lote del mismo producto (HU-05)', async () => {
+  await request(app).post('/api/lotes').send(lote).expect(201);
+  await request(app).post('/api/lotes').send(lote).expect(409);
+  await request(app).post('/api/lotes').send({ ...lote, numero_lote: 'L-2411', cantidad_recibida: 5 }).expect(201);
+  assert.strictEqual(stockDe(1), 25);
+});

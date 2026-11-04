@@ -44,6 +44,7 @@ Categorías: **Added** (nuevo), **Changed** (cambios en algo existente), **Depre
 - Detalle por lote desplegable en W3: al hacer clic en el nombre de un producto se abren sus lotes con número, vencimiento y cantidad; si no tiene lotes muestra «Sin lotes registrados» (#46).
 - Pantalla W3 de consulta de stock: búsqueda por nombre con precio por unidad y stock total de cada producto (#45).
 - Pantalla W2 de ingreso de lote: selector de producto, número de lote, vencimiento y cantidad (#39).
+- Pruebas de la API para lote duplicado en `test/lotes.test.js`: el segundo ingreso del mismo lote responde `409` en JSON sin crear otro registro ni cambiar el stock, también con espacios en el número; el mismo número en otro producto responde `201` y suma solo a ese producto (#43).
 - Rechazo de lote duplicado en `POST /api/lotes`: el mismo número de lote para el mismo producto responde `409` con `error` y `campo` («El lote L-2309 ya está registrado para este producto.») y el stock no cambia; el mismo número en otro producto se acepta (#42).
 - Avisos junto al campo en W2: `api.js` conserva `status` y `campo` del error; dato faltante, cantidad menor o igual a cero y lote duplicado (`400` y `409`) se muestran bajo el campo afectado sin borrar lo escrito, y el formulario no se envía si falta un dato o la cantidad no es válida (#41).
 
