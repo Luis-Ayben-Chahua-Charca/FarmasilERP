@@ -256,3 +256,15 @@ html, body {
 .detalle-lotes { padding: 0.25rem 0 0.25rem 1.25rem; }
 .tabla-lotes { border-collapse: collapse; width: 100%; }
 .sin-lotes { margin: 0; font-style: italic; }
+/* ---- Avisos junto al campo (W2, #41) ---- */
+.error-campo {
+  margin: 6px 0 0;
+  color: #b91c1c;
+  font-weight: 600;
+}
+
+.error-campo:empty { display: none; }
+
+.campo .campo-invalido {
+  border: 2px solid #b91c1c;
+}
