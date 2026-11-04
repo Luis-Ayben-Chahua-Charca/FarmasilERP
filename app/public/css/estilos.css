@@ -233,3 +233,16 @@ html, body {
   color: var(--color-texto-suave);
   font-size: 0.85rem;
 }
+
+/* ---- Avisos junto al campo (W2, #41) ---- */
+.error-campo {
+  margin: 6px 0 0;
+  color: #b91c1c;
+  font-weight: 600;
+}
+
+.error-campo:empty { display: none; }
+
+.campo .campo-invalido {
+  border: 2px solid #b91c1c;
+}

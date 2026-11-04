@@ -43,6 +43,7 @@ Categorías: **Added** (nuevo), **Changed** (cambios en algo existente), **Depre
 - Pantalla W3 de consulta de stock: búsqueda por nombre con precio por unidad y stock total de cada producto (#45).
 - Pantalla W2 de ingreso de lote: selector de producto, número de lote, vencimiento y cantidad (#39).
 - Rechazo de lote duplicado en `POST /api/lotes`: el mismo número de lote para el mismo producto responde `409` con `error` y `campo` («El lote L-2309 ya está registrado para este producto.») y el stock no cambia; el mismo número en otro producto se acepta (#42).
+- Avisos junto al campo en W2: `api.js` conserva `status` y `campo` del error; dato faltante, cantidad menor o igual a cero y lote duplicado (`400` y `409`) se muestran bajo el campo afectado sin borrar lo escrito, y el formulario no se envía si falta un dato o la cantidad no es válida (#41).
 
 ### Changed
 - Alcance del PMV reducido a **ventas, inventario y reportes**; el catálogo de productos pasa a ser parte de Inventario (`02-alcance.md`).
