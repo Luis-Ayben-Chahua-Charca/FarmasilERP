@@ -1,5 +1,6 @@
-// W2 — Ingreso de lotes (HU-04)
+// W2 — Ingreso de lotes (HU-04, HU-05)
 // Formulario para registrar un lote: producto, número, vencimiento y cantidad.
+// Los datos inválidos y el lote duplicado se avisan junto al campo afectado.
 
 import { api } from '../api.js';
 
@@ -13,9 +14,30 @@ function crearCampo(id, etiqueta, entrada) {
   label.htmlFor = id;
   label.textContent = etiqueta;
 
+  // Aviso del campo (#41): vacío hasta que el dato sea inválido
+  const aviso = document.createElement('p');
+  aviso.className = 'error-campo';
+  aviso.id = id + '-error';
+
   entrada.id = id;
-  grupo.append(label, entrada);
+  entrada.setAttribute('aria-describedby', aviso.id);
+  grupo.append(label, entrada, aviso);
   return grupo;
+}
+
+// Mismas reglas que el servidor (#38), para avisar sin enviar el formulario
+function validar(datos) {
+  const errores = {};
+  if (!datos.producto_id) errores.producto_id = 'Elija un producto.';
+  if (!datos.numero_lote) errores.numero_lote = 'Ingrese el número de lote.';
+  if (!datos.fecha_vencimiento) errores.fecha_vencimiento = 'Ingrese la fecha de vencimiento.';
+  if (!datos.cantidad_recibida) {
+    errores.cantidad_recibida = 'Ingrese la cantidad.';
+  } else {
+    const n = Number(datos.cantidad_recibida);
+    if (!Number.isInteger(n) || n <= 0) errores.cantidad_recibida = 'La cantidad debe ser mayor que cero.';
+  }
+  return errores;
 }
 
 export function render(contenedor) {
@@ -75,6 +97,32 @@ export function render(contenedor) {
     mensaje.classList.toggle('mensaje-ok', !esError);
   }
 
+  // Campo de la API → elemento del formulario
+  const campos = {
+    producto_id: selector,
+    numero_lote: numero,
+    fecha_vencimiento: vencimiento,
+    cantidad_recibida: cantidad,
+  };
+
+  function marcarError(entrada, texto) {
+    document.getElementById(entrada.id + '-error').textContent = texto;
+    entrada.classList.add('campo-invalido');
+    entrada.setAttribute('aria-invalid', 'true');
+  }
+
+  function limpiarError(entrada) {
+    document.getElementById(entrada.id + '-error').textContent = '';
+    entrada.classList.remove('campo-invalido');
+    entrada.removeAttribute('aria-invalid');
+  }
+
+  // Al corregir un campo desaparece su aviso
+  for (const entrada of Object.values(campos)) {
+    entrada.addEventListener('input', () => limpiarError(entrada));
+    entrada.addEventListener('change', () => limpiarError(entrada));
+  }
+
   async function cargarProductos() {
     try {
       const productos = await api.get('/productos');
@@ -99,22 +147,43 @@ export function render(contenedor) {
 
   formulario.addEventListener('submit', async (evento) => {
     evento.preventDefault();
+    mostrar('', false);
+    for (const entrada of Object.values(campos)) limpiarError(entrada);
+
+    // Se envían tal cual: el servidor distingue «falta el dato» de «dato inválido»
+    const datos = {
+      producto_id: selector.value,
+      numero_lote: numero.value.trim(),
+      fecha_vencimiento: vencimiento.value,
+      cantidad_recibida: cantidad.value,
+    };
+
+    // Con datos faltantes o cantidad ≤ 0 no se envía; se marca cada campo
+    const errores = validar(datos);
+    const invalidos = Object.keys(errores);
+    if (invalidos.length) {
+      for (const clave of invalidos) marcarError(campos[clave], errores[clave]);
+      campos[invalidos[0]].focus();
+      return;
+    }
+
     boton.disabled = true;
     try {
-      await api.post('/lotes', {
-        producto_id: Number(selector.value),
-        numero_lote: numero.value.trim(),
-        fecha_vencimiento: vencimiento.value,
-        cantidad_recibida: Number(cantidad.value),
-      });
+      await api.post('/lotes', datos);
       mostrar('Ingreso registrado correctamente.', false);
       numero.value = '';
       vencimiento.value = '';
       cantidad.value = '';
       selector.value = '';
     } catch (error) {
-      // Los datos escritos se conservan; el aviso junto a cada campo es de #41.
-      mostrar(error.message, true);
+      // 400 o 409 con campo: aviso junto a ese campo. Los datos escritos se conservan.
+      const entrada = campos[error.campo];
+      if (entrada) {
+        marcarError(entrada, error.message);
+        entrada.focus();
+      } else {
+        mostrar(error.message, true);
+      }
     } finally {
       boton.disabled = false;
     }

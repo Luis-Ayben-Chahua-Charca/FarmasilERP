@@ -20,7 +20,11 @@ async function solicitar(metodo, ruta, cuerpo) {
 
   if (!respuesta.ok) {
     const mensaje = (datos && datos.error) || 'No se pudo completar la operación.';
-    throw new Error(mensaje);
+    // status y campo permiten mostrar el mensaje junto al dato que hay que corregir
+    const error = new Error(mensaje);
+    error.status = respuesta.status;
+    error.campo = (datos && datos.campo) || null;
+    throw error;
   }
   return datos;
 }
