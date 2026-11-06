@@ -21,6 +21,14 @@ Los textos de pantalla, avisos y datos de ejemplo salen de los bocetos [W2](../d
 
 Para HU-08 se usa esta carga (el issue #48 prepara los datos de prueba). Para HU-04 y HU-05 se parte de una base con solo los productos, sin lotes, y los lotes se ingresan durante las pruebas.
 
+## Diferencias aceptadas entre el boceto y la pantalla final
+
+La pantalla final difiere del boceto en estos textos, con el mismo sentido; el caso pasa y la diferencia se anota en las observaciones del resultado:
+
+- El aviso de lote duplicado dice «El lote L-2309 ya está registrado para este producto.» (el boceto añade «No se modificó el stock»).
+- La confirmación del ingreso dice «Ingreso registrado: lote L-xxxx de <producto>, <n> unidades.».
+- En F12 → Consola, el `409` esperado del lote duplicado aparece como «Failed to load resource: … 409 (Conflict)»; lo escribe el navegador y no es un fallo del código.
+
 ## HU-04 — Registrar ingreso de lote
 
 ### CP-HU04-1 — Ingreso de un lote de un producto existente (HU-04 CA1)
@@ -29,7 +37,7 @@ Para HU-08 se usa esta carga (el issue #48 prepara los datos de prueba). Para HU
 |---|---|
 | Precondición | Existe «Paracetamol 500 mg» sin lotes (stock 0). La pantalla *Ingreso de lotes* está abierta |
 | Pasos | 1. Elegir el producto «Paracetamol 500 mg». 2. Número de lote `L-2411`, vencimiento `30/11/2027`, cantidad `100`. 3. Presionar **Registrar ingreso**. 4. Ir a *Consultar stock* y buscar el producto |
-| Resultado esperado | Aparece un aviso de ingreso registrado. El formulario se limpia. En *Consultar stock* el stock del producto es **100** (0 + 100) y el lote L-2411 figura con vencimiento 11/2027 y 100 unidades |
+| Resultado esperado | Aparece un aviso de ingreso registrado. El formulario se limpia. En *Consultar stock* el stock del producto es **100** (0 + 100) y el lote L-2411 figura con vencimiento 30/11/2027 y 100 unidades |
 
 ### CP-HU04-2 — Alta rápida de un producto nuevo dentro del flujo (HU-04 CA2)
 
@@ -55,7 +63,7 @@ Para HU-08 se usa esta carga (el issue #48 prepara los datos de prueba). Para HU
 |---|---|
 | Precondición | «Paracetamol 500 mg» tiene registrado el lote `L-2309` con 4 unidades (stock 4) |
 | Pasos | 1. En *Ingreso de lotes* elegir «Paracetamol 500 mg». 2. Número de lote `L-2309`, vencimiento `31/03/2027`, cantidad `10`. 3. Presionar **Registrar ingreso**. 4. Revisar el stock en *Consultar stock* |
-| Resultado esperado | Se **rechaza** con un aviso de que el lote ya está registrado para ese producto (por ejemplo «El lote L-2309 ya está registrado para Paracetamol 500 mg. No se modificó el stock»). El stock sigue en **4** y no aparece un segundo lote L-2309 |
+| Resultado esperado | Se **rechaza** con un aviso de que el lote ya está registrado para ese producto (la pantalla final dice «El lote L-2309 ya está registrado para este producto.»). El stock sigue en **4** y no aparece un segundo lote L-2309 |
 
 ### CP-HU05-2 — Mismo número de lote en otro producto (HU-05 CA2)
 
