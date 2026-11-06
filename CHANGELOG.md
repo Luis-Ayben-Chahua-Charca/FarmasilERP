@@ -13,6 +13,10 @@ Categorías: **Added** (nuevo), **Changed** (cambios en algo existente), **Depre
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-11-06
+
+Cierre del Sprint 2: HU-04 (registrar ingreso de lote), HU-05 (validar duplicidad de lote) y HU-08 (consultar stock). Incluye también lo del Sprint 1 (HT-01, estructura base e instalación), porque al cerrarlo no se publicó `v0.1.0` (#49).
+
 ### Added
 - Configuración inicial del repositorio: `.gitignore`, `.gitattributes`, `.editorconfig`.
 - `README.md`, `CONTRIBUTING.md` y este `CHANGELOG.md`.
