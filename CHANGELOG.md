@@ -48,6 +48,8 @@ Categorías: **Added** (nuevo), **Changed** (cambios en algo existente), **Depre
 - Pruebas de la API para lote duplicado en `test/lotes.test.js`: el segundo ingreso del mismo lote responde `409` en JSON sin crear otro registro ni cambiar el stock, también con espacios en el número; el mismo número en otro producto responde `201` y suma solo a ese producto (#43).
 - Rechazo de lote duplicado en `POST /api/lotes`: el mismo número de lote para el mismo producto responde `409` con `error` y `campo` («El lote L-2309 ya está registrado para este producto.») y el stock no cambia; el mismo número en otro producto se acepta (#42).
 - Avisos junto al campo en W2: `api.js` conserva `status` y `campo` del error; dato faltante, cantidad menor o igual a cero y lote duplicado (`400` y `409`) se muestran bajo el campo afectado sin borrar lo escrito, y el formulario no se envía si falta un dato o la cantidad no es válida (#41).
+- HU-04 Registrar ingreso de lote completa: la propietaria registra un lote con número, vencimiento y cantidad y el stock aumenta en esa cantidad, da de alta un producto sin salir de W2 y el sistema indica el dato inválido sin registrar; integra las tareas #36, #37, #38, #39, #40 y #41 (#10).
+- HU-05 Validar duplicidad de lote completa: el mismo número de lote en el mismo producto se rechaza con aviso y sin cambiar el stock, y en otro producto se acepta; integra las tareas #41, #42 y #43 (#11).
 
 ### Changed
 - Alcance del PMV reducido a **ventas, inventario y reportes**; el catálogo de productos pasa a ser parte de Inventario (`02-alcance.md`).
