@@ -67,6 +67,7 @@ FarmasilERP/
 - [Plan de sprints](docs/planificacion/plan-de-sprints.md)
 - [Bocetos de pantallas](docs/diseno/)
 - [Plan de pruebas](docs/pruebas/plan-de-pruebas.md)
+- [Resultados de las pruebas del Sprint 2](docs/pruebas/resultados-sprint-2.md)
 - [Cómo contribuir](CONTRIBUTING.md)
 - [Registro de cambios](CHANGELOG.md)
 
