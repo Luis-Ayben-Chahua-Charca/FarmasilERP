@@ -19,7 +19,26 @@ Los textos de pantalla, avisos y datos de ejemplo salen de los bocetos [W2](../d
 | Paracetamol 500 mg | S/ 0.50 | Analgésico | Genérico | L-2309 (03/2027, 4 u.) y L-2411 (11/2027, 100 u.) |
 | Amoxicilina 500 mg | S/ 1.20 | Antibiótico | Genérico | A-1002 (08/2027, 60 u.) |
 
-Para HU-08 se usa esta carga (el issue #48 prepara los datos de prueba). Para HU-04 y HU-05 se parte de una base con solo los productos, sin lotes, y los lotes se ingresan durante las pruebas.
+Para HU-08 se usa la base que crea `npm run datos-prueba-stock` (issue #48, `datos/prueba-stock.db`, 300 productos y 904 lotes). No trae los datos del boceto: los productos de referencia son estos.
+
+| Producto | Precio por unidad | Categoría | Tipo | Lotes |
+|---|---|---|---|---|
+| Paracetamol 500 mg | S/ 8.15 | Analgésico | Comercial | L-3-2 (06/06/2027, 115 u.) y L-3-1 (16/05/2028, 16 u.): stock 131 |
+| Amoxicilina 500 mg | S/ 33.59 | Antibiótico | Genérico | L-63-2 (12/08/2028, 49 u.) y L-63-1 (23/11/2029, 151 u.): stock 200 |
+
+Para HU-04 y HU-05 se parte de una base con solo los productos, sin lotes, y los lotes se ingresan durante las pruebas.
+
+## Diferencias aceptadas entre el boceto y la pantalla final
+
+La pantalla final difiere del boceto en estos textos, con el mismo sentido; el caso pasa y la diferencia se anota en las observaciones del resultado:
+
+- El aviso de lote duplicado dice «El lote L-2309 ya está registrado para este producto.» (el boceto añade «No se modificó el stock»).
+- La confirmación del ingreso dice «Ingreso registrado: lote L-xxxx de <producto>, <n> unidades.».
+- En W3, el **nombre del producto es el botón** que despliega los lotes (no hay botón «Ver lotes de …»).
+- En W3 los lotes muestran la fecha como `DD/MM/AAAA` (por ejemplo `06/06/2027`), no `MM/AAAA`.
+- Los filtros se llaman «Categoría» y «Tipo» y su opción para quitar el filtro es «Todos» (no «Todas las categorías» ni «Todos los tipos»).
+- Los lotes agotados (cantidad 0) se listan; no es un defecto del sprint.
+- En F12 → Consola, el `409` esperado del lote duplicado aparece como «Failed to load resource: … 409 (Conflict)»; lo escribe el navegador y no es un fallo del código.
 
 ## HU-04 — Registrar ingreso de lote
 
@@ -29,7 +48,7 @@ Para HU-08 se usa esta carga (el issue #48 prepara los datos de prueba). Para HU
 |---|---|
 | Precondición | Existe «Paracetamol 500 mg» sin lotes (stock 0). La pantalla *Ingreso de lotes* está abierta |
 | Pasos | 1. Elegir el producto «Paracetamol 500 mg». 2. Número de lote `L-2411`, vencimiento `30/11/2027`, cantidad `100`. 3. Presionar **Registrar ingreso**. 4. Ir a *Consultar stock* y buscar el producto |
-| Resultado esperado | Aparece un aviso de ingreso registrado. El formulario se limpia. En *Consultar stock* el stock del producto es **100** (0 + 100) y el lote L-2411 figura con vencimiento 11/2027 y 100 unidades |
+| Resultado esperado | Aparece un aviso de ingreso registrado. El formulario se limpia. En *Consultar stock* el stock del producto es **100** (0 + 100) y el lote L-2411 figura con vencimiento 30/11/2027 y 100 unidades |
 
 ### CP-HU04-2 — Alta rápida de un producto nuevo dentro del flujo (HU-04 CA2)
 
@@ -55,7 +74,7 @@ Para HU-08 se usa esta carga (el issue #48 prepara los datos de prueba). Para HU
 |---|---|
 | Precondición | «Paracetamol 500 mg» tiene registrado el lote `L-2309` con 4 unidades (stock 4) |
 | Pasos | 1. En *Ingreso de lotes* elegir «Paracetamol 500 mg». 2. Número de lote `L-2309`, vencimiento `31/03/2027`, cantidad `10`. 3. Presionar **Registrar ingreso**. 4. Revisar el stock en *Consultar stock* |
-| Resultado esperado | Se **rechaza** con un aviso de que el lote ya está registrado para ese producto (por ejemplo «El lote L-2309 ya está registrado para Paracetamol 500 mg. No se modificó el stock»). El stock sigue en **4** y no aparece un segundo lote L-2309 |
+| Resultado esperado | Se **rechaza** con un aviso de que el lote ya está registrado para ese producto (la pantalla final dice «El lote L-2309 ya está registrado para este producto.»). El stock sigue en **4** y no aparece un segundo lote L-2309 |
 
 ### CP-HU05-2 — Mismo número de lote en otro producto (HU-05 CA2)
 
@@ -71,29 +90,29 @@ Para HU-08 se usa esta carga (el issue #48 prepara los datos de prueba). Para HU
 
 | Campo | Contenido |
 |---|---|
-| Precondición | Carga de datos de prueba: Paracetamol 500 mg (lotes de 4 y 100 unidades) y Amoxicilina 500 mg (60 unidades). F12 → Red abierto |
+| Precondición | Base de `npm run datos-prueba-stock`: Paracetamol 500 mg (lotes de 115 y 16 unidades) y Amoxicilina 500 mg (lotes de 49 y 151 unidades). F12 → Red abierto |
 | Pasos | 1. Abrir *Consultar stock*. 2. Escribir `Paracetamol` en el buscador. 3. Anotar el tiempo de la petición y de la pantalla. 4. Buscar un nombre inexistente (por ejemplo `zzz`) |
-| Resultado esperado | Se muestra «Paracetamol 500 mg» con precio **S/ 0.50** y stock total **104** unidades (4 + 100), y solo ese producto. Resultado en **menos de 2 segundos**. Con `zzz` aparece el mensaje de que no se encontraron productos |
+| Resultado esperado | Se muestra «Paracetamol 500 mg» con precio **S/ 8.15** y stock total **131** unidades (115 + 16). Como en esta base hay otros 11 productos que empiezan con «Paracetamol», la búsqueda devuelve 12 productos; al escribir `Paracetamol 500 mg` queda solo ese. Resultado en **menos de 2 segundos**. Con `zzz` aparece el mensaje de que no se encontraron productos |
 
 ### CP-HU08-2 — Detalle por lote ordenado por vencimiento (HU-08 CA2)
 
 | Campo | Contenido |
 |---|---|
-| Precondición | La misma carga de datos. Paracetamol 500 mg tiene dos lotes |
-| Pasos | 1. Buscar «Paracetamol». 2. Desplegar **Ver lotes** de «Paracetamol 500 mg». 3. Hacer lo mismo con «Amoxicilina 500 mg» |
-| Resultado esperado | Paracetamol lista **L-2309 (03/2027, 4 u.)** primero y **L-2411 (11/2027, 100 u.)** después, del vencimiento más próximo al más lejano; las cantidades suman el stock total (104). Amoxicilina lista A-1002 (08/2027, 60 u.) |
+| Precondición | La misma base de datos de prueba. Paracetamol 500 mg tiene dos lotes |
+| Pasos | 1. Buscar «Paracetamol 500 mg». 2. Hacer clic en el nombre del producto para desplegar sus lotes. 3. Hacer lo mismo con «Amoxicilina 500 mg» |
+| Resultado esperado | Paracetamol lista **L-3-2 (06/06/2027, 115 u.)** primero y **L-3-1 (16/05/2028, 16 u.)** después, del vencimiento más próximo al más lejano; las cantidades suman el stock total (131). Amoxicilina lista L-63-2 (12/08/2028, 49 u.) y L-63-1 (23/11/2029, 151 u.), que suman 200 |
 
 ### CP-HU08-3 — Filtros por categoría y tipo (HU-08 CA3)
 
 | Campo | Contenido |
 |---|---|
-| Precondición | La misma carga de datos: Paracetamol (Analgésico, Genérico) y Amoxicilina (Antibiótico, Genérico) |
-| Pasos | 1. Filtrar por categoría **Analgésico**. 2. Filtrar por categoría **Antibiótico**. 3. Filtrar por tipo **Comercial**. 4. Volver a **Todas las categorías** y **Todos los tipos** |
-| Resultado esperado | Con Analgésico solo aparece Paracetamol; con Antibiótico solo Amoxicilina; con tipo Comercial no aparece ninguno (no hay productos comerciales en los datos). Al quitar los filtros vuelven a verse los dos productos |
+| Precondición | La misma base de datos de prueba: 300 productos en 12 categorías, 150 genéricos y 150 comerciales (24 analgésicos y 48 antibióticos) |
+| Pasos | 1. Filtrar por categoría **Analgésico**. 2. Filtrar por categoría **Antibiótico**. 3. Filtrar por tipo **Comercial**. 4. Filtrar por tipo **Genérico**. 5. Combinar categoría **Analgésico** con tipo **Comercial**. 6. Volver a **Todos** en categoría y en tipo |
+| Resultado esperado | Con Analgésico aparecen solo los **24** analgésicos; con Antibiótico solo los **48** antibióticos; con Comercial solo los **150** comerciales; con Genérico los **150** genéricos; con Analgésico y Comercial a la vez, **11** productos. Al volver a Todos aparecen los **300** productos |
 
 ## Verificación transversal: stock = ingresos − ventas
 
-En este sprint no hay ventas, así que lo que se comprueba es que **el stock mostrado sea siempre la suma exacta de los ingresos de lotes**, en todos los casos de arriba: CP-HU04-1 (0 + 100), CP-HU04-2 (50), CP-HU05-1 (4, sin cambio), CP-HU05-2 (A + 20) y CP-HU08-1/2 (4 + 100 = 104). Cualquier diferencia se registra como `bug`. La parte «− ventas» se comprueba en el Sprint 3 con HU-01 y HU-02.
+En este sprint no hay ventas, así que lo que se comprueba es que **el stock mostrado sea siempre la suma exacta de los ingresos de lotes**, en todos los casos de arriba: CP-HU04-1 (0 + 100), CP-HU04-2 (50), CP-HU05-1 (4, sin cambio), CP-HU05-2 (A + 20) y CP-HU08-1/2 (115 + 16 = 131). Cualquier diferencia se registra como `bug`. La parte «− ventas» se comprueba en el Sprint 3 con HU-01 y HU-02.
 
 ## Defectos
 
