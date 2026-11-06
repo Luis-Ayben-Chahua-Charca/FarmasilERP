@@ -10,13 +10,13 @@ Se completa al ejecutar cada historia. Las pruebas de HU-04 y HU-05 las ejecutó
 
 | Campo | HU-04 | HU-05 | HU-08 |
 |---|---|---|---|
-| Fecha | 06/11/2026 | 06/11/2026 | Pendiente |
-| Probado por | Agente de QA (revisado por Luis) | Agente de QA (revisado por Luis) | Pendiente |
-| Rama o commit probado | `main` en el commit `aff993b` (con #36 a #48 y #64 a #66 fusionados) | `main` en el commit `aff993b` | Pendiente |
-| Equipo y sistema operativo | Equipo de desarrollo, Windows 11 Pro (10.0.26200) | Igual que HU-04 | Pendiente |
-| Node.js portátil | v24.18.0 instalado en el equipo (no se usó el Node portátil) | Igual que HU-04 | Pendiente |
-| Navegador | Navegador integrado de la app de escritorio de Claude (versión no registrada) | Igual que HU-04 | Pendiente |
-| Internet | Conectado: no se probó sin internet. Todo el tráfico fue a `localhost` | Igual que HU-04 | Pendiente |
+| Fecha | 06/11/2026 | 06/11/2026 | 06/11/2026 |
+| Probado por | Agente de QA (revisado por Luis) | Agente de QA (revisado por Luis) | Agente de QA (revisado por Luis) |
+| Rama o commit probado | `main` en el commit `aff993b` (con #36 a #48 y #64 a #66 fusionados) | `main` en el commit `aff993b` | `main` en el commit `aff993b` |
+| Equipo y sistema operativo | Equipo de desarrollo, Windows 11 Pro (10.0.26200) | Igual que HU-04 | Igual que HU-04 |
+| Node.js portátil | v24.18.0 instalado en el equipo (no se usó el Node portátil) | Igual que HU-04 | Igual que HU-04 |
+| Navegador | Navegador integrado de la app de escritorio de Claude (versión no registrada) | Igual que HU-04 | Igual que HU-04 |
+| Internet | Conectado: no se probó sin internet. Todo el tráfico fue a `localhost` | Igual que HU-04 | Igual que HU-04 |
 
 ## Resultados por criterio de aceptación
 
@@ -43,31 +43,37 @@ Se completa al ejecutar cada historia. Las pruebas de HU-04 y HU-05 las ejecutó
 
 | Caso | Criterio | Resultado esperado | Resultado obtenido | Estado | Evidencia |
 |---|---|---|---|---|---|
-| CP-HU08-1 | CA1 — Búsqueda por nombre | Precio y stock total en menos de 2 segundos | Pendiente | Pendiente | Pendiente |
-| CP-HU08-2 | CA2 — Detalle por lote | Lotes con vencimiento y cantidad, del más próximo al más lejano | Pendiente | Pendiente | Pendiente |
-| CP-HU08-3 | CA3 — Filtros de categoría y tipo | Solo se muestran los productos que cumplen el filtro | Pendiente | Pendiente | Pendiente |
+| CP-HU08-1 | CA1 — Búsqueda por nombre | Precio y stock total en menos de 2 segundos | Buscar `Paracetamol` devuelve 12 productos. «Paracetamol 500 mg» figura a S/ 8.15 con stock total 131 (115 + 16); al escribir `Paracetamol 500 mg` queda solo ese. Con `zzz`: «No se encontraron productos con esa búsqueda.» La lista tardó unos 314 ms en cambiar, incluida la espera del buscador | **Pasa** | Pendiente de confirmar por Luis |
+| CP-HU08-2 | CA2 — Detalle por lote | Lotes con vencimiento y cantidad, del más próximo al más lejano | Paracetamol 500 mg: L-3-2 (06/06/2027, 115) y luego L-3-1 (16/05/2028, 16), suman 131. Amoxicilina 500 mg: L-63-2 (12/08/2028, 49) y luego L-63-1 (23/11/2029, 151), suman 200. Los lotes se despliegan al hacer clic en el nombre | **Pasa** | Pendiente de confirmar por Luis |
+| CP-HU08-3 | CA3 — Filtros de categoría y tipo | Solo se muestran los productos que cumplen el filtro | Analgésico: 24 productos; Antibiótico: 48; Comercial: 150; Genérico: 150; Analgésico y Comercial: 11; con «Todos» en ambos: 300. Los conteos coinciden con `GET /api/stock` y con el recuento de la base de prueba | **Pasa** | Pendiente de confirmar por Luis |
 
 ### Tiempo de respuesta de la búsqueda (HU-08 CA1)
 
-Se mide con F12 → Red al buscar por nombre.
+La medición en pantalla se hace con F12 → Red al buscar por nombre y la completa Luis en la laptop. Mientras tanto, `npm run datos-prueba-stock` midió la API (`GET /api/stock`) con 300 productos y 904 lotes, el peor de 5 intentos por búsqueda:
 
 | Búsqueda | Tiempo | ¿Menos de 2 s? | Evidencia |
 |---|---|---|---|
-| `Paracetamol` | Pendiente | Pendiente | Pendiente |
+| `Paracetamol` en pantalla (F12 → Red) | Sin medir | **No verificado**: la medición en pantalla con F12 es manual | Pendiente de confirmar por Luis |
+| API: listado completo (300 productos) | 52.7 ms | Sí | Salida de `npm run datos-prueba-stock` |
+| API: nombre «para» (12 productos) | 16.1 ms | Sí | Ídem |
+| API: categoría Antibiótico (48 productos) | 19.6 ms | Sí | Ídem |
+| API: nombre, categoría y tipo a la vez (4 productos) | 16.5 ms | Sí | Ídem |
+
+El tiempo en que la lista cambió en pantalla fue de unos 314 ms, medido con un script de la página; no sustituye la medición con F12.
 
 ### Stock = ingresos − ventas
 
 | Comprobación | Resultado | Estado |
 |---|---|---|
-| El stock mostrado es la suma exacta de los ingresos de lotes en todos los casos (en este sprint no hay ventas) | Pendiente | Pendiente |
+| El stock mostrado es la suma exacta de los ingresos de lotes en todos los casos (en este sprint no hay ventas) | 0 + 100 = 100 (CP-HU04-1), 50 (CP-HU04-2), 4 sin cambio (CP-HU05-1), 0 + 20 = 20 y 4 (CP-HU05-2), 115 + 16 = 131 (CP-HU08-1/2). Sin diferencias. La parte «− ventas» se comprueba en el Sprint 3 | **Pasa** |
 
 ## Defectos encontrados
 
-Pendiente. Cada defecto se registra como issue `bug` y se lista aquí con su número, severidad y el caso donde apareció.
+En los 8 casos ejecutados por el agente no apareció ningún defecto. Si Luis encuentra alguno al repetir las pruebas en la laptop, se registra como issue `bug` y se lista aquí con su número, severidad y el caso donde apareció.
 
 | Issue | Caso | Severidad | Descripción | Estado |
 |---|---|---|---|---|
-| — | — | — | Sin defectos registrados todavía | — |
+| — | — | — | Sin defectos en los casos ejecutados hasta ahora | — |
 
 ## Revisión de los PR del sprint
 
@@ -84,7 +90,12 @@ Cada PR se revisa contra los criterios de aceptación de su historia.
 | #58 Rechazo de lote duplicado | HU-05 | Luis-Ayben-Chahua-Charca (aprobó) | Fusionado. Cubierto por CP-HU05-1 y CP-HU05-2 |
 | #65 Pruebas de la API de lote duplicado | HU-05 | kevinPedroYare (aprobó) | Fusionado. `npm test`: 35 pruebas, 35 pasan |
 | #67 Cierre de HU-04 y HU-05 en el changelog | HU-04 y HU-05 | Pendiente | Abierto, sin aprobación |
-| Pendiente | HU-08 | Pendiente | Pendiente |
+| #55 Datos de prueba de la búsqueda | HU-08 | Luis-Ayben-Chahua-Charca (aprobó) | Fusionado. Su script generó la base de CP-HU08-1 a 3 |
+| #56 API de consulta de stock | HU-08 | Luis-Ayben-Chahua-Charca (aprobó) | Fusionado. Cubierto por CP-HU08-1 a 3 |
+| #59 Medición de la búsqueda con la base de prueba | HU-08 | Luis-Ayben-Chahua-Charca (aprobó) | Fusionado. Repetida: peor caso 52.7 ms |
+| #61 Pantalla W3 de consulta de stock | HU-08 | Luis-Ayben-Chahua-Charca (aprobó) | Fusionado. Cubierto por CP-HU08-1 |
+| #63 Detalle por lote desplegable en W3 | HU-08 | Luis-Ayben-Chahua-Charca (aprobó) | Fusionado. Cubierto por CP-HU08-2 |
+| #66 Filtros por categoría y tipo en W3 | HU-08 | Luis-Ayben-Chahua-Charca (aprobó) | Fusionado. Cubierto por CP-HU08-3 |
 
 ## Conclusión
 
