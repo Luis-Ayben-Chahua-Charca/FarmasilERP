@@ -6,7 +6,7 @@ Sistema para la farmacia **Farmasil** que registra las ventas y lleva el inventa
 
 ## Estado
 
-🚧 En desarrollo — Sprint 1, acortado a una semana (15 – 21 de octubre de 2026). Entrega del **PMV: jueves 3 de diciembre de 2026**.
+🚧 En desarrollo — Sprint 3 (5 – 18 de noviembre de 2026): registro de ventas. Versión actual: **`v0.2.0`** (ingreso de lotes, validación de lote duplicado y consulta de stock). Entrega del **PMV: jueves 3 de diciembre de 2026**.
 
 ## Qué hace (alcance)
 
@@ -88,5 +88,14 @@ FarmasilERP/
 | [Chilo Huillca, Oscar Raul] | Desarrollador back-end |
 | [Jaita Chura, Jose Manuel] | Diseñador front-end |
 | [Yare Chulunquia, Kevin Pedro] | Scrum Master |
+
+## Equipo Sprint 3 (5 – 18 de noviembre)
+
+| Integrante | Rol |
+|---|---|
+| [Chahua Charca, Luis Ayben] | Desarrollador back-end |
+| [Chilo Huillca, Oscar Raul] | Diseñador front-end |
+| [Jaita Chura, Jose Manuel] | Scrum Master |
+| [Yare Chulunquia, Kevin Pedro] | QA |
 
 > Los roles rotan en cada sprint; esta tabla se actualiza al inicio de cada uno.
