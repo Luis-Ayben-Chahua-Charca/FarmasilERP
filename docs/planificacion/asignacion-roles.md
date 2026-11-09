@@ -78,7 +78,59 @@ Carga: Oscar 10 h, Jose 10 h, Kevin 10.5 h, Luis 9 h (más holgura para defectos
 
 **Orden de trabajo:** HU-04.1 y HU-04.2 no dependen de nada y desbloquean al resto; la ruta crítica es #36 → #44 → #45 → #48 → #13. HU-04.4 se integra antes que HU-04.5 y HU-04.6, que tocan el mismo archivo. Las dependencias de cada tarea están en su issue.
 
-## 5. Sprints 2–4 — asignación por historia
+## 5. Sprint 3 (2 semanas) — asignación detallada
+
+Tareas creadas en el Sprint Planning del 06/11. El Scrum Master (Jose) toma tareas de apoyo en back-end y front-end, y QA (Kevin) escribe pruebas automáticas de la API además de las de aceptación. Igual que en el Sprint 2, **las tareas se asignan con esta tabla**, no filtrando por el campo Rol. HU-07 entra porque el Sprint 2 cumplió su velocidad (12 de 12 pts) y es lo primero que se recorta. El contrato de la API de ventas está en [`../arquitectura/api-ventas.md`](../arquitectura/api-ventas.md).
+
+| Issue | Rol (tipo de trabajo) | Persona | Horas |
+|---|---|---|---|
+| #14 HU-01 Registrar venta (dueño) | Back-end | Luis | — |
+| HU-01.1 Boceto W1 Registrar venta | Front-end | Oscar | 2 |
+| HU-01.2 API de registro de venta | Back-end | Luis | 3 |
+| HU-01.3 Rechazo por stock insuficiente en la API | Back-end | Luis | 1.5 |
+| HU-01.4 Pantalla W1: búsqueda, carrito y total | Front-end | Oscar | 3 |
+| HU-01.5 W1: aviso de cantidad mayor que el stock | Front-end | **Jose** (apoyo) | 1.5 |
+| HU-01.6 W1: confirmar y cancelar la venta | Front-end | Oscar | 2 |
+| HU-01.7 Pruebas automatizadas de la API de ventas | QA | Kevin | 2 |
+| #15 HU-02 Lote más próximo a vencer (dueño) | Back-end | Luis | — |
+| HU-02.1 Asignación de lotes por vencimiento | Back-end | Luis | 2 |
+| HU-02.2 Pruebas de integración del descuento en la venta | Back-end | **Jose** (apoyo) | 1.5 |
+| #21 HU-07 Clasificar productos (dueño) | Front-end | Oscar | — |
+| HU-07.1 W2: tipo en el alta rápida | Front-end | Oscar | 1 |
+| HU-07.2 Tipo obligatorio en la API | Back-end | **Jose** (apoyo) | 1 |
+| HU-07.3 W3: orden por tipo | Front-end | **Jose** (apoyo) | 2 |
+| #16 TQ-S3 Pruebas de aceptación | QA | Kevin | 7 |
+| SM-S3 Facilitación y cierre del sprint | Scrum Master | Jose | 3 |
+| CH-04 Preparar el entorno del Sprint 3 | Back-end | Luis | 2 |
+
+Carga: Luis 8.5 h (más el cierre de HU-01 y HU-02), Oscar 8 h, Jose 9 h, Kevin 9 h, frente a 9.6 h netas por persona. Quedan unas 4 h del equipo para corregir los defectos que salgan de TQ-S3.
+
+### 5.1 Dependencias del Sprint 3
+
+| Tarea | Depende de | Desbloquea | Notas |
+|---|---|---|---|
+| HU-01.1 Boceto W1 | — | HU-01.4 | Completa la DoR de HU-01 |
+| HU-02.1 Asignación de lotes | — | HU-01.2 | Inicio de la ruta crítica |
+| HU-01.2 API de venta | HU-02.1 | HU-01.3, HU-02.2 | Bloqueante |
+| HU-01.3 Stock insuficiente | HU-01.2 | HU-01.6, HU-01.7 | |
+| HU-01.4 Pantalla W1 | HU-01.1 | HU-01.5, HU-01.6 | No necesita la API de venta: usa `GET /api/stock` |
+| HU-01.5 Aviso de stock en W1 | HU-01.4 | — | Mismo archivo que HU-01.4 y HU-01.6 |
+| HU-01.6 Confirmar y cancelar | HU-01.4, HU-01.3 | TQ-S3 | Integrar después de HU-01.5 |
+| HU-01.7 Pruebas API de ventas | HU-01.3 | TQ-S3 | |
+| HU-02.2 Pruebas de integración | HU-01.2 | TQ-S3 | |
+| HU-07.1 Tipo en W2 | — | HU-07.2 | |
+| HU-07.2 Tipo obligatorio en la API | HU-07.1 | — | Se fusiona **después** de HU-07.1, o W2 deja de crear productos |
+| HU-07.3 Orden por tipo en W3 | — | — | Primera en recortarse |
+| TQ-S3 Pruebas de aceptación | PR de HU-01, HU-02 y HU-07 | SM-S3 | Los casos se redactan desde el día 1 |
+| SM-S3 Cierre del sprint | TQ-S3 | Sprint 4 | |
+| CH-04 Entorno del Sprint 3 | — | Todas | |
+
+**Orden de trabajo:**
+- **Ruta crítica:** HU-02.1 → HU-01.2 → HU-01.3 → HU-01.6 → TQ-S3.
+- **En paralelo desde el primer día:** HU-01.1 → HU-01.4 (Oscar), HU-07.1 y HU-07.3 (Jose), y la redacción de casos de TQ-S3 (Kevin).
+- **Mismo archivo:** HU-01.4, HU-01.5 y HU-01.6 cambian `w1-registrar-venta.js` y se integran en ese orden.
+
+## 6. Sprints 2–4 — asignación por historia
 
 Las tareas de estos sprints se crean en su Sprint Planning. Aquí va la dueña de cada historia según la rotación.
 
@@ -91,16 +143,16 @@ Las tareas de estos sprints se crean en su Sprint Planning. Aquí va la dueña d
 | 2 | Scrum Master (apoya tareas de HU-04) | Scrum Master | Kevin |
 | 3 | HU-01 Registrar venta | Back-end | Luis (pantalla W1: Oscar) |
 | 3 | HU-02 Lote más próximo a vencer | Back-end | Luis |
-| 3 | HU-07 Clasificación (solo si entra) | Front-end | Oscar |
+| 3 | HU-07 Clasificación (entró el 06/11) | Front-end | Oscar |
 | 3 | TQ-S3 Pruebas S3 | QA | Kevin |
-| 3 | Scrum Master (apoya HU-02) | Scrum Master | Jose |
+| 3 | Scrum Master (apoya HU-01, HU-02 y HU-07) | Scrum Master | Jose |
 | 4 | HU-06 Catálogo y edición de precios | Front-end | Luis |
 | 4 | HU-03 Reporte diario | Front-end | Luis (consulta: Kevin) |
 | 4 | HU-09 Reportes gerenciales | Back-end | Kevin |
 | 4 | TQ-S4 Pruebas S4 y finales (1–2 dic) | QA | Jose (con todo el equipo) |
 | 4 | Scrum Master (apoya HU-03) | Scrum Master | Oscar |
 
-## 6. Cómo aplicarlo en GitHub
+## 7. Cómo aplicarlo en GitHub
 
 1. Abrir la vista **Tabla por sprint** del proyecto (creación descrita en `tablero/README.md`).
 2. Filtrar `sprint:"Sprint N" rol:Back-end`, seleccionar las filas y asignar (*Assignees*) a la persona de la tabla 1. Repetir con cada rol.
