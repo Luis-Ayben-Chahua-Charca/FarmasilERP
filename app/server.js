@@ -14,6 +14,7 @@ app.use(express.json());
 app.use('/api/lotes', require('./rutas/lotes'));
 app.use('/api/stock', require('./rutas/stock'));
 app.use('/api/productos', require('./rutas/productos'));
+app.use('/api/ventas', require('./rutas/ventas'));
 
 // La interfaz son archivos estáticos locales (sin CDN ni recursos externos)
 app.use(express.static(path.join(__dirname, 'public')));
