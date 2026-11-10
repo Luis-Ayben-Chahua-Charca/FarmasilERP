@@ -338,3 +338,21 @@ html, body {
   outline: 3px solid var(--color-acento);
   outline-offset: 1px;
 }
+
+/* ---- Consultar stock: orden por tipo (#82) ---- */
+.fila-grupo th {
+  background: #eef2f3;
+  text-align: left;
+  font-weight: 700;
+  padding: 10px 12px;
+  border: 1px solid var(--color-borde);
+}
+
+.etiqueta-sin-tipo {
+  margin-left: 8px;
+  padding: 2px 8px;
+  font-size: 0.8rem;
+  color: var(--color-texto-suave);
+  border: 1px solid var(--color-borde);
+  border-radius: 10px;
+}

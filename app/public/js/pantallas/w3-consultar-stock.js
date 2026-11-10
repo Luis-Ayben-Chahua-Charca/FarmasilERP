@@ -1,6 +1,7 @@
-// W3 — Consultar stock (HU-08)
+// W3 — Consultar stock (HU-08, HU-07)
 // Búsqueda por nombre y filtros por categoría y tipo; tabla con precio por unidad
-// y stock total de cada producto.
+// y stock total de cada producto. Con Tipo = Genérico se ordena de la A a la Z y con
+// Tipo = Comercial se agrupa por acción terapéutica (#82).
 
 import { api } from '../api.js';
 
@@ -16,6 +17,23 @@ function celda(tipo, texto) {
   const c = document.createElement(tipo);
   c.textContent = texto;
   return c;
+}
+
+// Orden alfabético en español: «Antiácido» va antes que «Antibiótico»
+function ordenarPorNombre(productos) {
+  return [...productos].sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
+}
+
+// Devuelve [[acción terapéutica, productos], ...] con grupos y productos en orden alfabético
+function agruparPorAccion(productos) {
+  const grupos = new Map();
+  for (const p of productos) {
+    if (!grupos.has(p.accion_terapeutica)) grupos.set(p.accion_terapeutica, []);
+    grupos.get(p.accion_terapeutica).push(p);
+  }
+  return [...grupos.entries()]
+    .sort(([a], [b]) => a.localeCompare(b, 'es'))
+    .map(([accion, lista]) => [accion, ordenarPorNombre(lista)]);
 }
 
 // Selector con la opción «Todos» (valor vacío = sin filtro)
@@ -81,6 +99,59 @@ function crearDetalle(lotes) {
   return caja;
 }
 
+// Fila del producto y su fila desplegable con el detalle por lote (#46)
+function crearFilasProducto(p) {
+  const fila = document.createElement('tr');
+
+  const filaDetalle = document.createElement('tr');
+  filaDetalle.id = 'lotes-' + p.id;
+  filaDetalle.hidden = true;
+  const celdaDetalle = document.createElement('td');
+  celdaDetalle.colSpan = 3;
+  celdaDetalle.append(crearDetalle(p.lotes || []));
+  filaDetalle.append(celdaDetalle);
+
+  const boton = document.createElement('button');
+  boton.type = 'button';
+  boton.className = 'boton-lotes';
+  boton.textContent = p.nombre;
+  boton.setAttribute('aria-expanded', 'false');
+  boton.setAttribute('aria-controls', filaDetalle.id);
+  boton.addEventListener('click', () => {
+    const abrir = filaDetalle.hidden;
+    filaDetalle.hidden = !abrir;
+    boton.setAttribute('aria-expanded', String(abrir));
+  });
+  const celdaNombre = document.createElement('td');
+  celdaNombre.append(boton);
+
+  // Productos creados antes de que el tipo fuera obligatorio (#81)
+  if (!p.tipo) {
+    const sinTipo = document.createElement('span');
+    sinTipo.className = 'etiqueta-sin-tipo';
+    sinTipo.textContent = 'Sin tipo';
+    celdaNombre.append(sinTipo);
+  }
+
+  const stock = celda('td', String(p.stock_total));
+  if (p.stock_total === 0) stock.classList.add('sin-stock');
+  fila.append(celdaNombre, celda('td', formatearPrecio(p.precio_centimos)), stock);
+
+  return [fila, filaDetalle];
+}
+
+// Fila de título de un grupo de comerciales («Analgésico»)
+function crearFilaGrupo(nombre) {
+  const fila = document.createElement('tr');
+  fila.className = 'fila-grupo';
+  const titulo = document.createElement('th');
+  titulo.colSpan = 3;
+  titulo.scope = 'colgroup';
+  titulo.textContent = nombre;
+  fila.append(titulo);
+  return fila;
+}
+
 export function render(contenedor) {
   const buscador = document.createElement('div');
   buscador.className = 'buscador';
@@ -134,7 +205,8 @@ export function render(contenedor) {
     categoriasCargadas = true;
   }
 
-  function dibujar(productos) {
+  // tipoFiltrado: '' (Todos), 'generico' o 'comercial'
+  function dibujar(productos, tipoFiltrado) {
     cuerpo.replaceChildren();
 
     if (productos.length === 0) {
@@ -145,37 +217,18 @@ export function render(contenedor) {
     tabla.hidden = false;
     estado.textContent = '';
 
-    for (const p of productos) {
-      const fila = document.createElement('tr');
-
-      const filaDetalle = document.createElement('tr');
-      filaDetalle.id = 'lotes-' + p.id;
-      filaDetalle.hidden = true;
-      const celdaDetalle = document.createElement('td');
-      celdaDetalle.colSpan = 3;
-      celdaDetalle.append(crearDetalle(p.lotes || []));
-      filaDetalle.append(celdaDetalle);
-
-      const boton = document.createElement('button');
-      boton.type = 'button';
-      boton.className = 'boton-lotes';
-      boton.textContent = p.nombre;
-      boton.setAttribute('aria-expanded', 'false');
-      boton.setAttribute('aria-controls', filaDetalle.id);
-      boton.addEventListener('click', () => {
-        const abrir = filaDetalle.hidden;
-        filaDetalle.hidden = !abrir;
-        boton.setAttribute('aria-expanded', String(abrir));
-      });
-      const celdaNombre = document.createElement('td');
-      celdaNombre.append(boton);
-
-      const stock = celda('td', String(p.stock_total));
-      if (p.stock_total === 0) stock.classList.add('sin-stock');
-      fila.append(celdaNombre, celda('td', formatearPrecio(p.precio_centimos)), stock);
-
-      cuerpo.append(fila, filaDetalle);
+    if (tipoFiltrado === 'comercial') {
+      // Un título por acción terapéutica y sus productos de la A a la Z
+      for (const [accion, lista] of agruparPorAccion(productos)) {
+        cuerpo.append(crearFilaGrupo(accion));
+        for (const p of lista) cuerpo.append(...crearFilasProducto(p));
+      }
+      return;
     }
+
+    // Genérico: de la A a la Z. Todos: el orden que entrega la API
+    const lista = tipoFiltrado === 'generico' ? ordenarPorNombre(productos) : productos;
+    for (const p of lista) cuerpo.append(...crearFilasProducto(p));
   }
 
   // Evita que una respuesta lenta pise a una búsqueda más reciente
@@ -199,7 +252,7 @@ export function render(contenedor) {
       const productos = await api.get('/stock' + consulta);
       if (actual !== numeroBusqueda) return;
       if (!categoriasCargadas && !consulta) cargarCategorias(productos);
-      dibujar(productos);
+      dibujar(productos, valores.tipo);
     } catch (error) {
       if (actual !== numeroBusqueda) return;
       cuerpo.replaceChildren();
