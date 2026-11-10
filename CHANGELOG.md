@@ -17,6 +17,7 @@ Categorías: **Added** (nuevo), **Changed** (cambios en algo existente), **Depre
 - API de registro de ventas en una sola transacción, con precios del servidor, agrupación de productos repetidos, fecha y hora local y descuento por lote; validaciones y pruebas de rollback (#73).
 - Asignación pura de lotes para ventas por vencimiento más próximo y menor id en empate, sin modificar la entrada y con pruebas unitarias (HU-02 CA1 y CA2) (#72).
 - Preparación del Sprint 3: tareas de HU-01, HU-02 y HU-07 en `docs/planificacion/tablero/issues/`, asignación detallada con dependencias, contrato de `POST /api/ventas` en `docs/arquitectura/api-ventas.md` y decisiones del sprint en el README del tablero (#84).
+- Casos de prueba del Sprint 3 en `docs/pruebas/casos-sprint-3.md` (CP-HU01-1 a CP-HU07-3, regresión R-1 a R-5 y orden de ejecución con el stock esperado) y plantilla de resultados en `docs/pruebas/resultados-sprint-3.md` (#16).
 
 ## [0.2.0] - 2026-11-06
 
