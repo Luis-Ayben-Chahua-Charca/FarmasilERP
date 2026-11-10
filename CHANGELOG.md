@@ -14,6 +14,7 @@ Categorías: **Added** (nuevo), **Changed** (cambios en algo existente), **Depre
 ## [Unreleased]
 
 ### Added
+- Asignación pura de lotes para ventas por vencimiento más próximo y menor id en empate, sin modificar la entrada y con pruebas unitarias (HU-02 CA1 y CA2) (#72).
 - Preparación del Sprint 3: tareas de HU-01, HU-02 y HU-07 en `docs/planificacion/tablero/issues/`, asignación detallada con dependencias, contrato de `POST /api/ventas` en `docs/arquitectura/api-ventas.md` y decisiones del sprint en el README del tablero (#84).
 
 ## [0.2.0] - 2026-11-06
