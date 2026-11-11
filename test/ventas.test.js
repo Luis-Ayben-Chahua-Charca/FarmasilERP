@@ -136,17 +136,78 @@ test('una línea nula o sin producto se rechaza sin error interno ni escrituras'
   }
 });
 
-test('stock insuficiente responde 409 genérico sin guardar una venta parcial', async () => {
+test('stock insuficiente responde 409 con producto y disponible sin guardar una venta parcial', async () => {
   const res = await vender([linea(2, 1), linea(1, 105)]);
   assert.equal(res.status, 409);
-  assert.deepEqual(res.body, { error: 'Stock insuficiente.', campo: 'cantidad' });
+  assert.deepEqual(res.body, {
+    error: 'Solo hay 104 unidades disponibles de Paracetamol.',
+    campo: 'cantidad', producto_id: 1, disponible: 104,
+  });
   sinVentas();
 });
 
 test('las cantidades repetidas se acumulan antes de comprobar el stock', async () => {
   const res = await vender([linea(1, 100), linea(1, 5)]);
   assert.equal(res.status, 409);
+  assert.deepEqual(res.body, {
+    error: 'Solo hay 104 unidades disponibles de Paracetamol.',
+    campo: 'cantidad', producto_id: 1, disponible: 104,
+  });
   sinVentas();
+});
+
+test('con 4 unidades, vender 5 informa el stock restante después de ventas previas (HU-01 CA2)', async () => {
+  assert.equal((await vender([linea(1, 100)])).status, 201);
+  const ventasAntes = db.prepare('SELECT * FROM venta ORDER BY id').all();
+  const lineasAntes = db.prepare('SELECT * FROM linea_venta ORDER BY id').all();
+  const stockAntes = await request(app).get('/api/stock');
+  assert.equal(stockAntes.status, 200);
+
+  const res = await vender([linea(2, 1), linea(1, 5)]);
+  assert.equal(res.status, 409);
+  assert.deepEqual(res.body, {
+    error: 'Solo hay 4 unidades disponibles de Paracetamol.',
+    campo: 'cantidad', producto_id: 1, disponible: 4,
+  });
+  assert.deepEqual(db.prepare('SELECT * FROM venta ORDER BY id').all(), ventasAntes);
+  assert.deepEqual(db.prepare('SELECT * FROM linea_venta ORDER BY id').all(), lineasAntes);
+  const stockDespues = await request(app).get('/api/stock');
+  assert.equal(stockDespues.status, 200);
+  assert.deepEqual(stockDespues.body, stockAntes.body);
+});
+
+test('un producto sin lotes responde 409 con disponible cero', async () => {
+  db.prepare(`INSERT INTO producto (id, nombre, accion_terapeutica, precio_centimos)
+    VALUES (3, 'Amoxicilina', 'Antibiótico', 100)`).run();
+  const res = await vender([linea(3, 1)]);
+  assert.equal(res.status, 409);
+  assert.deepEqual(res.body, {
+    error: 'Solo hay 0 unidades disponibles de Amoxicilina.',
+    campo: 'cantidad', producto_id: 3, disponible: 0,
+  });
+  sinVentas();
+});
+
+test('un producto con todos sus lotes agotados responde 409 sin modificar las ventas', async () => {
+  assert.equal((await vender([linea(1, 104)])).status, 201);
+  const ventasAntes = db.prepare('SELECT * FROM venta ORDER BY id').all();
+  const lineasAntes = db.prepare('SELECT * FROM linea_venta ORDER BY id').all();
+  const res = await vender([linea(1, 1)]);
+  assert.equal(res.status, 409);
+  assert.deepEqual(res.body, {
+    error: 'Solo hay 0 unidades disponibles de Paracetamol.',
+    campo: 'cantidad', producto_id: 1, disponible: 0,
+  });
+  assert.deepEqual(db.prepare('SELECT * FROM venta ORDER BY id').all(), ventasAntes);
+  assert.deepEqual(db.prepare('SELECT * FROM linea_venta ORDER BY id').all(), lineasAntes);
+});
+
+test('permite vender exactamente el stock disponible y lo deja en cero', async () => {
+  const res = await vender([linea(1, 104)]);
+  assert.equal(res.status, 201);
+  const stock = await request(app).get('/api/stock');
+  assert.equal(stock.status, 200);
+  assert.equal(stock.body.find((p) => p.id === 1).stock_total, 0);
 });
 
 test('un fallo de inserción revierte la cabecera y las líneas ya insertadas', async () => {

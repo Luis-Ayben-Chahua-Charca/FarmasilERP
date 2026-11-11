@@ -46,7 +46,7 @@ router.post('/', (req, res, next) => {
     const detalle = [];
     let monto_total_centimos = 0;
     for (const [producto_id, cantidad] of cantidades) {
-      const producto = db.prepare('SELECT precio_centimos FROM producto WHERE id = ?').get(producto_id);
+      const producto = db.prepare('SELECT nombre, precio_centimos FROM producto WHERE id = ?').get(producto_id);
       const lotes = db.prepare(`
         SELECT l.id, l.numero_lote, l.fecha_vencimiento,
           l.cantidad_recibida - COALESCE(
@@ -55,8 +55,11 @@ router.post('/', (req, res, next) => {
       `).all(producto_id);
       const asignaciones = asignarLotes(lotes, cantidad);
       if (asignaciones === null) {
-        // #74 sustituye este rechazo provisional por el detalle del stock disponible.
-        rechazar(409, { error: 'Stock insuficiente.', campo: 'cantidad' });
+        const disponible = lotes.reduce((total, lote) => total + lote.disponible, 0);
+        rechazar(409, {
+          error: `Solo hay ${disponible} unidades disponibles de ${producto.nombre}.`,
+          campo: 'cantidad', producto_id, disponible,
+        });
       }
       for (const asignacion of asignaciones) {
         detalle.push({ producto_id, ...asignacion, precio_unitario_centimos: producto.precio_centimos });
