@@ -61,6 +61,7 @@ Cierre del Sprint 2: HU-04 (registrar ingreso de lote), HU-05 (validar duplicida
 - HU-04 Registrar ingreso de lote completa: la propietaria registra un lote con número, vencimiento y cantidad y el stock aumenta en esa cantidad, da de alta un producto sin salir de W2 y el sistema indica el dato inválido sin registrar; integra las tareas #36, #37, #38, #39, #40 y #41 (#10).
 - HU-05 Validar duplicidad de lote completa: el mismo número de lote en el mismo producto se rechaza con aviso y sin cambiar el stock, y en otro producto se acepta; integra las tareas #41, #42 y #43 (#11).
 - Orden por tipo en Consultar stock: genéricos de la A a la Z y comerciales agrupados por acción terapéutica, con «Sin tipo» para los productos antiguos (HU-07 CA1 y CA2) (#82).
+- Pruebas de integración del descuento por vencimiento dentro de la venta: reparto entre lotes, lote en cero, lote registrado después que vence antes y venta de dos productos (HU-02 CA1 y CA2) (#79).
 
 ### Changed
 - Alcance del PMV reducido a **ventas, inventario y reportes**; el catálogo de productos pasa a ser parte de Inventario (`02-alcance.md`).
