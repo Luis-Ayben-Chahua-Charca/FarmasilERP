@@ -14,6 +14,7 @@ Categorías: **Added** (nuevo), **Changed** (cambios en algo existente), **Depre
 ## [Unreleased]
 
 ### Added
+- Pruebas de aceptación de la API de ventas en `test/ventas-aceptacion.test.js`: venta válida guardada completa (CA1), `409` con lo disponible (CA2), total de S/ 9.80 (CA3), transacción sin ventas parciales, precio inventado ignorado y la secuencia de `casos-sprint-3.md` paso a paso (#78).
 - Rechazo de ventas por stock insuficiente con mensaje en español, producto y cantidad disponible, sin alterar ventas ni stock; incluye pruebas de cantidades repetidas y límites (#74).
 - API de registro de ventas en una sola transacción, con precios del servidor, agrupación de productos repetidos, fecha y hora local y descuento por lote; validaciones y pruebas de rollback (#73).
 - Asignación pura de lotes para ventas por vencimiento más próximo y menor id en empate, sin modificar la entrada y con pruebas unitarias (HU-02 CA1 y CA2) (#72).
