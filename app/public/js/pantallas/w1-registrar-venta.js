@@ -1,6 +1,7 @@
 // W1 — Registrar venta (HU-01.4)
 // Búsqueda de producto por nombre, carrito con cantidad, precio y total.
-// No llama a POST /api/ventas (HU-01.6) ni valida stock insuficiente (HU-01.5).
+// Valida la cantidad y el stock disponible al agregar (HU-01.5).
+// No llama a POST /api/ventas (HU-01.6).
 
 import { api } from '../api.js';
 
@@ -69,6 +70,27 @@ export function render(contenedor) {
   inputCantidad.placeholder = '0';
   inputCantidad.inputMode = 'numeric';
   campoCantidad.append(etiquetaCantidad, inputCantidad);
+
+  const avisoCantidad = document.createElement('p');
+  avisoCantidad.className = 'error-campo';
+  avisoCantidad.id = 'w1-cantidad-error';
+  avisoCantidad.setAttribute('role', 'alert');
+  inputCantidad.setAttribute('aria-describedby', avisoCantidad.id);
+  campoCantidad.append(avisoCantidad);
+
+  function marcarError(texto) {
+    avisoCantidad.textContent = texto;
+    inputCantidad.classList.add('campo-invalido');
+    inputCantidad.setAttribute('aria-invalid', 'true');
+  }
+
+  function limpiarError() {
+    avisoCantidad.textContent = '';
+    inputCantidad.classList.remove('campo-invalido');
+    inputCantidad.removeAttribute('aria-invalid');
+  }
+
+  inputCantidad.addEventListener('input', limpiarError);
 
   const botonAgregar = document.createElement('button');
   botonAgregar.type = 'button';
@@ -149,10 +171,23 @@ export function render(contenedor) {
   // ---- Agregar al carrito ----
   botonAgregar.addEventListener('click', () => {
     if (!productoSeleccionado) return;
-    const cantidad = parseInt(inputCantidad.value, 10);
-    if (!cantidad || cantidad < 1) return;
+    const texto = inputCantidad.value.trim();
+    const cantidad = Number(texto);
+    if (texto === '' || !Number.isInteger(cantidad) || cantidad < 1) {
+      marcarError('La cantidad debe ser mayor que cero.');
+      return;
+    }
 
     const existente = carrito.find((item) => item.id === productoSeleccionado.id);
+    const disponible = productoSeleccionado.stock_total - (existente ? existente.cantidad : 0);
+    if (cantidad > disponible) {
+      marcarError(disponible === 1
+        ? 'Solo hay 1 unidad disponible.'
+        : `Solo hay ${disponible} unidades disponibles.`);
+      return;
+    }
+
+    limpiarError();
     if (existente) {
       existente.cantidad += cantidad;
     } else {
@@ -203,6 +238,7 @@ export function render(contenedor) {
         );
         fila.addEventListener('click', () => {
           productoSeleccionado = p;
+          limpiarError();
           cuerpoResultados.querySelectorAll('tr').forEach((r) => r.classList.remove('fila-seleccionada'));
           fila.classList.add('fila-seleccionada');
           inputCantidad.focus();

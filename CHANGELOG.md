@@ -14,6 +14,7 @@ Categorías: **Added** (nuevo), **Changed** (cambios en algo existente), **Depre
 ## [Unreleased]
 
 ### Added
+- Aviso en W1 cuando la cantidad es inválida o supera el stock disponible, descontando lo que ya está en el carrito (#76).
 - Pantalla W1 Registrar venta en `w1-registrar-venta.js`: búsqueda por nombre con `GET /api/stock`, carrito con cantidad, precio por unidad, subtotal, botón Quitar y total en soles; agregar dos veces el mismo producto suma la cantidad en una sola línea (HU-01.4, #41).
 - Boceto W1 Registrar venta en `docs/diseno/w1-registrar-venta.html`: búsqueda de producto, cantidad y agregar, carrito con total S/ 9.80, confirmar y cancelar venta, aviso de stock insuficiente y estado vacío (HU-01.1, #37).
 - Pruebas de aceptación de la API de ventas en `test/ventas-aceptacion.test.js`: venta válida guardada completa (CA1), `409` con lo disponible (CA2), total de S/ 9.80 (CA3), transacción sin ventas parciales, precio inventado ignorado y la secuencia de `casos-sprint-3.md` paso a paso (#78).
