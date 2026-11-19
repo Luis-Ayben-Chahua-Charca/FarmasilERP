@@ -14,6 +14,7 @@ Categorías: **Added** (nuevo), **Changed** (cambios en algo existente), **Depre
 ## [Unreleased]
 
 ### Added
+- Boceto W1 Registrar venta en `docs/diseno/w1-registrar-venta.html`: búsqueda de producto, cantidad y agregar, carrito con total S/ 9.80, confirmar y cancelar venta, aviso de stock insuficiente y estado vacío (HU-01.1, #37).
 - Pruebas de aceptación de la API de ventas en `test/ventas-aceptacion.test.js`: venta válida guardada completa (CA1), `409` con lo disponible (CA2), total de S/ 9.80 (CA3), transacción sin ventas parciales, precio inventado ignorado y la secuencia de `casos-sprint-3.md` paso a paso (#78).
 - Rechazo de ventas por stock insuficiente con mensaje en español, producto y cantidad disponible, sin alterar ventas ni stock; incluye pruebas de cantidades repetidas y límites (#74).
 - API de registro de ventas en una sola transacción, con precios del servidor, agrupación de productos repetidos, fecha y hora local y descuento por lote; validaciones y pruebas de rollback (#73).

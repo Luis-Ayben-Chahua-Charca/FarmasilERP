@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Boceto W1 - Registrar venta</title>
+    <style>
+        /* Mismos colores y medidas que app/public/css/estilos.css */
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+            display: flex;
+            min-height: 100vh;
+            color: #1f2a30;
+            background: #f5f7f8
+        }
+
+        aside {
+            width: 230px;
+            flex-shrink: 0;
+            background: #14532d;
+            color: #e8f5ec
+        }
+
+        aside h2 {
+            margin: 0;
+            font-size: 1.4rem;
+            padding: 20px 20px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15)
+        }
+
+        aside a {
+            display: block;
+            padding: 12px 20px;
+            color: #e8f5ec;
+            text-decoration: none;
+            border-left: 4px solid transparent
+        }
+
+        aside a.activo {
+            background: #1d6b3c;
+            color: #fff;
+            font-weight: 600;
+            border-left-color: #16a34a
+        }
+
+        main {
+            flex: 1;
+            padding: 24px 32px;
+            max-width: 720px
+        }
+
+        h1 {
+            margin: 0 0 16px;
+            font-size: 1.6rem
+        }
+
+        h3 {
+            margin: 28px 0 8px;
+            font-size: 15px;
+            color: #555;
+            text-transform: uppercase
+        }
+
+        .campo {
+            margin-bottom: 12px
+        }
+
+        .campo label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 4px
+        }
+
+        .fila {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end
+        }
+
+        .fila .campo {
+            flex: 1
+        }
+
+        input,
+        select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 8px;
+            border: 1px solid #dde3e6;
+            border-radius: 4px;
+            background: #fff
+        }
+
+        button {
+            padding: 10px 16px;
+            border: 1px solid #14532d;
+            border-radius: 4px;
+            background: #14532d;
+            color: #fff;
+            font-size: 15px
+        }
+
+        button.sec {
+            background: #fff;
+            color: #14532d
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff
+        }
+
+        th,
+        td {
+            border: 1px solid #dde3e6;
+            padding: 8px;
+            text-align: left
+        }
+
+        th {
+            background: #eef2f3
+        }
+
+        .total {
+            text-align: right;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-top: 8px
+        }
+
+        .msj-campo {
+            color: #b42318;
+            font-size: 13px;
+            margin-top: 4px
+        }
+
+        .aviso {
+            padding: 10px 12px;
+            border-radius: 4px;
+            margin-bottom: 8px
+        }
+
+        .aviso.ok {
+            background: #e7f6ec;
+            border: 1px solid #2e7d32
+        }
+
+        .aviso.mal {
+            background: #fdecea;
+            border: 1px solid #b42318
+        }
+
+        .vacio {
+            border: 1px dashed #dde3e6;
+            border-radius: 8px;
+            padding: 32px;
+            color: #5b6b73;
+            text-align: center
+        }
+
+        .nota {
+            color: #5b6b73;
+            font-size: 13px;
+            margin-top: 12px
+        }
+
+        .quitar {
+            background: #fff;
+            color: #b42318;
+            border-color: #b42318;
+            font-size: 13px;
+            padding: 4px 10px
+        }
+    </style>
+</head>
+
+<body>
+    <aside>
+        <h2>Farmasil</h2>
+        <a href="#" class="activo">Registrar venta</a>
+        <a href="#">Consultar stock</a>
+        <a href="#">Ingreso de lotes</a>
+        <a href="#">Productos</a>
+        <a href="#">Reportes</a>
+    </aside>
+    <main>
+        <h1>Registrar venta</h1>
+
+        <h3>1. Búsqueda de producto</h3>
+        <div class="campo">
+            <label>Buscar producto por nombre</label>
+            <input type="text" placeholder="Ej.: Paracetamol" value="para">
+        </div>
+        <table>
+            <tr>
+                <th>Producto</th>
+                <th>Precio por unidad</th>
+                <th>Stock disponible</th>
+            </tr>
+            <tr>
+                <td>Paracetamol 500 mg</td>
+                <td>S/ 0.50</td>
+                <td>104</td>
+            </tr>
+        </table>
+
+        <h3>2. Cantidad y agregar</h3>
+        <div class="fila">
+            <div class="campo">
+                <label>Cantidad</label>
+                <input type="number" min="1" placeholder="0" value="10">
+            </div>
+            <div class="campo">
+                <button>Agregar</button>
+            </div>
+        </div>
+        <p class="nota">Ejemplo del aviso cuando la cantidad supera el stock (CA2):</p>
+        <div class="msj-campo">Solo hay 4 unidades disponibles.</div>
+
+        <h3>3. Carrito (CA3)</h3>
+        <table>
+            <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio por unidad</th>
+                <th>Subtotal</th>
+                <th></th>
+            </tr>
+            <tr>
+                <td>Paracetamol 500 mg</td>
+                <td>10</td>
+                <td>S/ 0.50</td>
+                <td>S/ 5.00</td>
+                <td><button class="quitar">Quitar</button></td>
+            </tr>
+            <tr>
+                <td>Amoxicilina 500 mg</td>
+                <td>4</td>
+                <td>S/ 1.20</td>
+                <td>S/ 4.80</td>
+                <td><button class="quitar">Quitar</button></td>
+            </tr>
+        </table>
+        <div class="total">Total: S/ 9.80</div>
+
+        <h3>4. Confirmar y cancelar (CA1, CA4)</h3>
+        <button>Confirmar venta</button> <button class="sec">Cancelar venta</button>
+
+        <h3>Mensajes</h3>
+        <div class="aviso ok">Venta registrada: S/ 9.80.</div>
+        <div class="aviso mal">Solo hay 4 unidades disponibles de Paracetamol 500 mg.</div>
+
+        <h3>5. Estado vacío</h3>
+        <div class="vacio">Agregue productos para iniciar la venta.</div>
+
+        <p class="nota">Los botones «Confirmar venta» y «Cancelar venta» están deshabilitados cuando el carrito está
+            vacío. Un doble clic en «Confirmar venta» registra una sola venta. Los precios se calculan en céntimos
+            enteros y se muestran como S/ 0.00.</p>
+    </main>
+</body>
+
+</html>
