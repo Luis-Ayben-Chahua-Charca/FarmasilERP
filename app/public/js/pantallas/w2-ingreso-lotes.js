@@ -48,6 +48,7 @@ function validarProducto(datos) {
   const errores = {};
   if (!datos.nombre) errores.nombre = 'Ingrese el nombre del producto.';
   if (!datos.accion_terapeutica) errores.accion_terapeutica = 'Ingrese la acción terapéutica.';
+  if (!datos.tipo) errores.tipo = 'Elija si el producto es genérico o comercial.';
   if (!datos.precio) {
     errores.precio = 'Ingrese el precio por unidad.';
   } else {
@@ -91,6 +92,17 @@ export function render(contenedor) {
   nuevoPrecio.inputMode = 'decimal';
   nuevoPrecio.autocomplete = 'off';
 
+  const nuevoTipo = document.createElement('select');
+  nuevoTipo.name = 'tipo';
+  const tipoPlaceholder = document.createElement('option');
+  tipoPlaceholder.value = '';
+  tipoPlaceholder.textContent = 'Elegir tipo...';
+  nuevoTipo.append(
+    tipoPlaceholder,
+    new Option('Genérico', 'generico'),
+    new Option('Comercial', 'comercial')
+  );
+
   const alta = document.createElement('div');
   alta.className = 'alta-producto';
   alta.hidden = true;
@@ -116,12 +128,16 @@ export function render(contenedor) {
   cancelarBoton.className = 'boton-secundario';
   cancelarBoton.textContent = 'Cancelar';
 
+  const filaBotonesAlta = document.createElement('div');
+  filaBotonesAlta.className = 'fila-campos';
+  filaBotonesAlta.append(guardarProductoBoton, cancelarBoton);
+
   alta.append(
     tituloAlta,
     crearCampo('w2-nuevo-nombre', 'Nombre', nuevoNombre),
     filaAlta,
-    guardarProductoBoton,
-    cancelarBoton
+    crearCampo('w2-nuevo-tipo', 'Tipo', nuevoTipo),
+    filaBotonesAlta
   );
 
   // Campos del lote
@@ -193,6 +209,7 @@ export function render(contenedor) {
     nombre: nuevoNombre,
     accion_terapeutica: nuevoAccion,
     precio: nuevoPrecio,
+    tipo: nuevoTipo,
   };
 
   function marcarError(entrada, texto) {
@@ -273,6 +290,7 @@ export function render(contenedor) {
       nombre: nuevoNombre.value.trim(),
       accion_terapeutica: nuevoAccion.value.trim(),
       precio: nuevoPrecio.value.trim(),
+      tipo: nuevoTipo.value,
     };
 
     const errores = validarProducto(datos);
