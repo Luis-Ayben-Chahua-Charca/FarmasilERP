@@ -14,6 +14,7 @@ Categorías: **Added** (nuevo), **Changed** (cambios en algo existente), **Depre
 ## [Unreleased]
 
 ### Added
+- Integración de HU-02 Descuento por lote más próximo a vencer: asignación por vencimiento con desempate por menor id, omisión de lotes agotados e integración con la API de ventas y sus pruebas; verificación final de aceptación a cargo de QA en #16, con resultados en `docs/pruebas/resultados-sprint-3.md` (#15).
 - Selector obligatorio de tipo (Genérico/Comercial) en el alta rápida de producto de W2; sin tipo elegido no se envía y aparece el aviso bajo el campo (HU-07.1, #80).
 - Botones «Confirmar venta» y «Cancelar venta» en W1: confirmar envía `POST /api/ventas`, muestra el monto y vacía el carrito; cancelar descarta sin llamar a la API; el botón se deshabilita durante el envío y un `409` se muestra junto a la línea afectada (HU-01.6, #77).
 - Aviso en W1 cuando la cantidad es inválida o supera el stock disponible, descontando lo que ya está en el carrito (#76).
