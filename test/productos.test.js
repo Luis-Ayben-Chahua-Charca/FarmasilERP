@@ -10,7 +10,7 @@ beforeEach(() => {
   app.locals.db = abrir(':memory:');
 });
 
-const valido = { nombre: 'Paracetamol 500 mg', accion_terapeutica: 'Analgésico', precio: '0.50' };
+const valido = { nombre: 'Paracetamol 500 mg', accion_terapeutica: 'Analgésico', precio: '0.50', tipo: 'generico' };
 
 const productos = () => app.locals.db.prepare('SELECT COUNT(*) n FROM producto').get().n;
 
@@ -27,7 +27,7 @@ test('crea un producto con los tres campos obligatorios y aparece en el listado'
   assert.strictEqual(res.status, 201);
   assert.strictEqual(res.body.nombre, 'Paracetamol 500 mg');
   assert.strictEqual(res.body.precio_centimos, 50, 'el precio en soles se guarda en céntimos');
-  assert.strictEqual(res.body.tipo, null);
+  assert.strictEqual(res.body.tipo, 'generico');
 
   const lista = await request(app).get('/api/productos');
   assert.strictEqual(lista.status, 200);
@@ -76,3 +76,16 @@ test('nombre o acción terapéutica que no son texto: responde 400', async () =>
 });
 
 test('tipo distinto de genérico o comercial: responde 400', () => rechaza({ tipo: 'otro' }, 'tipo'));
+
+test('sin tipo: responde 400 con campo tipo', () => rechaza({ tipo: undefined }, 'tipo'));
+test('tipo vacío: responde 400 con campo tipo', () => rechaza({ tipo: '  ' }, 'tipo'));
+
+test('con tipo genérico o comercial: responde 201', async () => {
+  for (const tipo of ['generico', 'comercial']) {
+    const res = await request(app)
+      .post('/api/productos')
+      .send({ ...valido, nombre: 'Prueba ' + tipo, tipo });
+    assert.strictEqual(res.status, 201);
+    assert.strictEqual(res.body.tipo, tipo);
+  }
+});
