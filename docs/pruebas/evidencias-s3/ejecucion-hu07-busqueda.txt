@@ -1,0 +1,25 @@
+CP-HU07-1, CP-HU07-2 y R-5 sobre datos/prueba-stock.db (W3 real), 20/11/2026.
+
+CP-HU07-1 Genérico: 150 productos; primero «Albendazol 1 g», último «Salbutamol 500 mg»; orden alfabético=true; filas de grupo=0; /api/stock?tipo=generico en 10.0 ms
+CP-HU07-2 Comercial: 150 productos en 12 grupos; productos ordenados dentro de cada grupo=true
+  Analgésico (11), Antiácido (13), Antibiótico (23), Antidiabético (12), Antidiarreico (7), Antiespasmódico (8), Antihipertensivo (11), Antihistamínico (17), Antiinflamatorio (16), Antiparasitario (14), Broncodilatador (7), Corticoide (11)
+  primero de Analgésico: «Metamizol 10 mg»; /api/stock?tipo=comercial en 10.0 ms
+  detalle por lote de «Metamizol 10 mg»: abre=true, cierra=true
+  Tipo = Todos: 300 productos, filas de grupo=0
+R-5 búsqueda «Paracetamol»: 12 productos; /api/stock?nombre=Paracetamol en 9.9 ms
+R-5 Analgésico + Comercial: 11 productos; grupos Analgésico; /api/stock?categoria=Analg%C3%A9sico&tipo=comercial en 10.0 ms
+Peor tiempo de /api/stock: 15.8 ms en 7 peticiones
+
+Medición de la API (npm run datos-prueba-stock):
+Base de prueba creada en datos/prueba-stock.db: 300 productos y 904 lotes.
+
+Medición de GET /api/stock (peor de 5 intentos por búsqueda):
+  Listado completo (al abrir W3)   300 productos     38.1 ms
+  Nombre «para»                     12 productos     16.1 ms
+  Categoría Antibiótico             48 productos     16.4 ms
+  Tipo genérico                    150 productos     16.5 ms
+  Nombre + categoría + tipo          4 productos     16.0 ms
+  Sin resultados                     0 productos     16.1 ms
+
+Peor tiempo: 38.1 ms (límite 2000 ms).
+CORRECTO: la búsqueda responde en menos de 2 s con este volumen.

@@ -1,0 +1,25 @@
+Ejecución de casos-sprint-3.md sobre la base «ventas» (W1 y W2 reales, API real), 20/11/2026, sin internet (127.0.0.1).
+
+PASO 0 base: Paracetamol 104 (L-2309=4, L-2411=100) | Amoxicilina 60 | Ibuprofeno 4 | Loratadina 40 (L-6001=20, L-6002=20) | Omeprazol 20 (L-7001=10, L-7002=10)
+PASO 1 CP-HU01-4: inicial: confirmar deshabilitado=true, cancelar deshabilitado=true, vacío visible=true «Agregue productos para iniciar la venta.»
+  con carrito: Total: S/ 9.80; tras Cancelar: filas=0, vacío visible=true, confirmar deshabilitado=true
+  POST /api/ventas nuevos=0; stock Paracetamol 104, Amoxicilina 60 → OK
+PASO 2 CP-HU02-1(a) 6 Paracetamol: 201, líneas L-2309:4 + L-2411:2, monto 300; «Venta registrada: S/ 3.00.»; stock 98 (L-2309=0, L-2411=98) → OK
+PASO 3 CP-HU02-2 3 Paracetamol: 201, líneas L-2411:3, monto 150; «Venta registrada: S/ 1.50.»; stock 95 (L-2309=0, L-2411=95) → OK
+PASO 4 CP-HU02-1(b) 5 Loratadina: 201, líneas L-6001:5, monto 150; «Venta registrada: S/ 1.50.»; stock 35 (L-6001=15, L-6002=20) → OK
+PASO 5 CP-HU02-1(c) 3 Omeprazol: 201, líneas L-7001:3, monto 120; «Venta registrada: S/ 1.20.»; stock 17 (L-7001=7, L-7002=10) → OK
+PASO 6 CP-HU01-3: carrito Paracetamol 500 mg · 10 · S/ 0.50 · S/ 5.00 | Amoxicilina 500 mg · 4 · S/ 1.20 · S/ 4.80
+  Total: S/ 9.80; quitando Amoxicilina: Total: S/ 5.00; al volver a agregar: Total: S/ 9.80
+  confirmar: 201, monto 980, «Venta registrada: S/ 9.80.»; stock Paracetamol 85 (L-2309=0, L-2411=85), Amoxicilina 56 → OK
+PASO 7 CP-HU01-1: POST /api/ventas con doble clic=1; 201; fecha_hora=2026-11-20 13:17:45 (hora local del navegador 2026-11-20 13h); líneas L-3001:5; monto 600; «Venta registrada: S/ 6.00.»; carrito vacío=true; stock Amoxicilina 51 → OK
+PASO 8 CP-HU01-2: (a) 5 → aviso «Solo hay 4 unidades disponibles.», filas en carrito=0, sigue escrito «5»
+  (b) 3 → aviso «»; luego 2 → «Solo hay 1 unidad disponible.»; carrito: Ibuprofeno 400 mg · 3 · S/ 0.80 · S/ 2.40
+  (c) «»→La cantidad debe ser mayor que cero. ; «0»→La cantidad debe ser mayor que cero. ; «-1»→La cantidad debe ser mayor que cero. ; «2.5»→La cantidad debe ser mayor que cero.
+  (d) tras Cancelar filas=0; stock Ibuprofeno 4 → OK
+R-2 ingreso L-3002 de Amoxicilina: 201; stock 61 → OK
+R-3 L-2309 duplicado: 409 «El lote L-2309 ya está registrado para este producto.»; stock Paracetamol 85 → OK
+CP-HU07-3: sin tipo → aviso «Elija si el producto es genérico o comercial.», POST /api/productos enviados=0, nombre conservado «Cetirizina 10 mg»
+  con Comercial → «Producto «Cetirizina 10 mg» guardado y seleccionado.», seleccionado «Cetirizina 10 mg»; comerciales: Cetirizina 10 mg (Antihistamínico), Ibuprofeno 400 mg (Antiinflamatorio), Loratadina 10 mg (Antihistamínico)
+  API sin tipo → 400 {"error":"Elija si el producto es genérico o comercial.","campo":"tipo"} → OK
+STOCK FINAL: Paracetamol 85 (L-2309=0, L-2411=85) | Amoxicilina 61 (L-3001=51, L-3002=10) | Ibuprofeno 4 (L-5001=4) | Loratadina 35 (L-6001=15, L-6002=20) | Omeprazol 17 (L-7001=7, L-7002=10)
+Peticiones desde las pantallas: 40; fuera de localhost: 0
