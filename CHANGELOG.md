@@ -26,6 +26,9 @@ Categorías: **Added** (nuevo), **Changed** (cambios en algo existente), **Depre
 - Preparación del Sprint 3: tareas de HU-01, HU-02 y HU-07 en `docs/planificacion/tablero/issues/`, asignación detallada con dependencias, contrato de `POST /api/ventas` en `docs/arquitectura/api-ventas.md` y decisiones del sprint en el README del tablero (#84).
 - Casos de prueba del Sprint 3 en `docs/pruebas/casos-sprint-3.md` (CP-HU01-1 a CP-HU07-3, regresión R-1 a R-5 y orden de ejecución con el stock esperado) y plantilla de resultados en `docs/pruebas/resultados-sprint-3.md` (#16).
 
+### Changed
+- El tipo (genérico o comercial) es obligatorio en la API de productos: sin tipo responde 400 con campo `tipo`. Los productos existentes sin tipo se conservan (#81).
+
 ## [0.2.0] - 2026-11-06
 
 Cierre del Sprint 2: HU-04 (registrar ingreso de lote), HU-05 (validar duplicidad de lote) y HU-08 (consultar stock). Incluye también lo del Sprint 1 (HT-01, estructura base e instalación), porque al cerrarlo no se publicó `v0.1.0` (#49).

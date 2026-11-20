@@ -39,7 +39,8 @@ function validarProducto(datos) {
     return { error: 'El precio no puede superar S/ 10 000 por unidad.', campo: 'precio' };
   }
 
-  if (!vacio(tipo) && !TIPOS.includes(tipo)) {
+  if (vacio(tipo)) return { error: 'Elija si el producto es genérico o comercial.', campo: 'tipo' };
+  if (!TIPOS.includes(tipo)) {
     return { error: 'El tipo debe ser genérico o comercial.', campo: 'tipo' };
   }
   return null;
@@ -65,7 +66,7 @@ router.post('/', (req, res) => {
     VALUES (?, ?, ?, ?)`).run(
     String(datos.nombre).trim(),
     String(datos.accion_terapeutica).trim(),
-    vacio(datos.tipo) ? null : datos.tipo,
+    datos.tipo,
     aCentimos(datos.precio)
   );
 
