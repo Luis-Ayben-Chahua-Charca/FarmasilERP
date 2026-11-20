@@ -14,6 +14,7 @@ Categorías: **Added** (nuevo), **Changed** (cambios en algo existente), **Depre
 ## [Unreleased]
 
 ### Added
+- HU-07 Clasificar productos completa: selector de tipo en el alta rápida de W2 (#98), tipo obligatorio en la API (#97) y orden por tipo en W3 (#89); genéricos de la A a la Z y comerciales agrupados por acción terapéutica (HU-07 CA1, CA2, CA3, #21).
 - Selector obligatorio de tipo (Genérico/Comercial) en el alta rápida de producto de W2; sin tipo elegido no se envía y aparece el aviso bajo el campo (HU-07.1, #80).
 - Botones «Confirmar venta» y «Cancelar venta» en W1: confirmar envía `POST /api/ventas`, muestra el monto y vacía el carrito; cancelar descarta sin llamar a la API; el botón se deshabilita durante el envío y un `409` se muestra junto a la línea afectada (HU-01.6, #77).
 - Aviso en W1 cuando la cantidad es inválida o supera el stock disponible, descontando lo que ya está en el carrito (#76).
