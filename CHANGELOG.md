@@ -14,6 +14,7 @@ Categorías: **Added** (nuevo), **Changed** (cambios en algo existente), **Depre
 ## [Unreleased]
 
 ### Added
+- Botones «Confirmar venta» y «Cancelar venta» en W1: confirmar envía `POST /api/ventas`, muestra el monto y vacía el carrito; cancelar descarta sin llamar a la API; el botón se deshabilita durante el envío y un `409` se muestra junto a la línea afectada (HU-01.6, #77).
 - Aviso en W1 cuando la cantidad es inválida o supera el stock disponible, descontando lo que ya está en el carrito (#76).
 - Pantalla W1 Registrar venta en `w1-registrar-venta.js`: búsqueda por nombre con `GET /api/stock`, carrito con cantidad, precio por unidad, subtotal, botón Quitar y total en soles; agregar dos veces el mismo producto suma la cantidad en una sola línea (HU-01.4, #41).
 - Boceto W1 Registrar venta en `docs/diseno/w1-registrar-venta.html`: búsqueda de producto, cantidad y agregar, carrito con total S/ 9.80, confirmar y cancelar venta, aviso de stock insuficiente y estado vacío (HU-01.1, #37).

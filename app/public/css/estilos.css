@@ -358,6 +358,14 @@ html, body {
 }
 
 /* ---- Registrar venta W1 (HU-01.4) ---- */
+.seccion-venta {
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: 8px;
+  padding: 24px;
+  max-width: 720px;
+}
+
 .fila-agregar {
   display: flex;
   gap: 12px;
@@ -387,4 +395,20 @@ html, body {
   font-weight: 700;
   font-size: 1.15rem;
   margin-top: 8px;
+}
+
+/* ---- Botones confirmar y cancelar W1 (HU-01.6) ---- */
+.botones-venta {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  justify-content: center;
+}
+
+.botones-venta .boton-principal,
+.botones-venta .boton-secundario {
+  min-height: auto;
+  width: auto;
+  padding: 10px 20px;
+  font-size: 0.95rem;
 }
