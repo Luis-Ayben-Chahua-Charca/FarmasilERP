@@ -339,7 +339,9 @@ export function render(contenedor) {
   });
 
   // ---- Montar en el contenedor ----
-  contenedor.append(
+  const seccion = document.createElement('div');
+  seccion.className = 'seccion-venta';
+  seccion.append(
     seccionBusqueda,
     estadoBusqueda,
     tablaResultados,
@@ -350,6 +352,7 @@ export function render(contenedor) {
     seccionBotones,
     mensajeVenta
   );
+  contenedor.append(seccion);
 
   dibujarCarrito();
   buscar();
