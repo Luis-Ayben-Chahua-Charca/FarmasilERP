@@ -1,7 +1,7 @@
-// W1 — Registrar venta (HU-01.4)
+// W1 — Registrar venta (HU-01.4, HU-01.5, HU-01.6)
 // Búsqueda de producto por nombre, carrito con cantidad, precio y total.
 // Valida la cantidad y el stock disponible al agregar (HU-01.5).
-// No llama a POST /api/ventas (HU-01.6).
+// Confirmar y cancelar la venta (HU-01.6).
 
 import { api } from '../api.js';
 
@@ -122,19 +122,47 @@ export function render(contenedor) {
   const divTotal = document.createElement('div');
   divTotal.className = 'total-venta';
 
+  // ---- Botones Confirmar y Cancelar (HU-01.6) ----
+  const seccionBotones = document.createElement('div');
+  seccionBotones.className = 'botones-venta';
+
+  const botonConfirmar = document.createElement('button');
+  botonConfirmar.type = 'button';
+  botonConfirmar.className = 'boton-principal';
+  botonConfirmar.textContent = 'Confirmar venta';
+  botonConfirmar.disabled = true;
+
+  const botonCancelar = document.createElement('button');
+  botonCancelar.type = 'button';
+  botonCancelar.className = 'boton-secundario';
+  botonCancelar.textContent = 'Cancelar venta';
+  botonCancelar.disabled = true;
+
+  seccionBotones.append(botonConfirmar, botonCancelar);
+
+  const mensajeVenta = document.createElement('p');
+  mensajeVenta.className = 'mensaje';
+  mensajeVenta.setAttribute('role', 'status');
+
   // ---- Dibujar carrito ----
   function dibujarCarrito() {
     cuerpoCarrito.replaceChildren();
+    mensajeVenta.textContent = '';
+    mensajeVenta.className = 'mensaje';
 
     if (carrito.length === 0) {
       tablaCarrito.hidden = true;
       divTotal.textContent = '';
       estadoVacio.hidden = false;
+      botonConfirmar.disabled = true;
+      botonCancelar.disabled = true;
       return;
     }
 
     tablaCarrito.hidden = false;
     estadoVacio.hidden = true;
+    botonConfirmar.disabled = false;
+    botonCancelar.disabled = false;
 
     let totalCentimos = 0;
     for (const item of carrito) {
@@ -162,6 +190,7 @@ export function render(contenedor) {
         celda('td', formatearPrecio(subtotal)),
         celdaQuitar
       );
+      fila.dataset.productoId = String(item.id);
       cuerpoCarrito.append(fila);
     }
 
@@ -259,6 +288,56 @@ export function render(contenedor) {
     temporizador = setTimeout(buscar, ESPERA_BUSQUEDA_MS);
   });
 
+  // ---- Confirmar venta (HU-01.6) ----
+  botonConfirmar.addEventListener('click', async () => {
+    botonConfirmar.disabled = true;
+    mensajeVenta.textContent = '';
+    mensajeVenta.className = 'mensaje';
+
+    const lineas = carrito.map((item) => ({
+      producto_id: item.id,
+      cantidad: item.cantidad,
+    }));
+
+    try {
+      const venta = await api.post('/ventas', { lineas });
+      carrito.length = 0;
+      dibujarCarrito();
+      mensajeVenta.textContent = 'Venta registrada: ' + formatearPrecio(venta.monto_total_centimos) + '.';
+      mensajeVenta.classList.add('mensaje-ok');
+      buscar();
+    } catch (error) {
+      if (error.status === 409 && error.producto_id != null) {
+        // Mostrar el error junto a la línea del producto afectado
+        const filaAfectada = cuerpoCarrito.querySelector(
+          `tr[data-producto-id="${error.producto_id}"]`
+        );
+        if (filaAfectada) {
+          const filaError = document.createElement('tr');
+          const celdaError = document.createElement('td');
+          celdaError.colSpan = 5;
+          celdaError.className = 'error-campo';
+          celdaError.textContent = error.message;
+          filaError.append(celdaError);
+          filaAfectada.after(filaError);
+        } else {
+          mensajeVenta.textContent = error.message;
+          mensajeVenta.classList.add('mensaje-error');
+        }
+      } else {
+        mensajeVenta.textContent = error.message;
+        mensajeVenta.classList.add('mensaje-error');
+      }
+      botonConfirmar.disabled = false;
+    }
+  });
+
+  // ---- Cancelar venta (HU-01.6) ----
+  botonCancelar.addEventListener('click', () => {
+    carrito.length = 0;
+    dibujarCarrito();
+  });
+
   // ---- Montar en el contenedor ----
   contenedor.append(
     seccionBusqueda,
@@ -267,7 +346,9 @@ export function render(contenedor) {
     seccionAgregar,
     estadoVacio,
     tablaCarrito,
-    divTotal
+    divTotal,
+    seccionBotones,
+    mensajeVenta
   );
 
   dibujarCarrito();

@@ -388,3 +388,10 @@ html, body {
   font-size: 1.15rem;
   margin-top: 8px;
 }
+
+/* ---- Botones confirmar y cancelar W1 (HU-01.6) ---- */
+.botones-venta {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}

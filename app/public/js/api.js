@@ -24,6 +24,7 @@ async function solicitar(metodo, ruta, cuerpo) {
     const error = new Error(mensaje);
     error.status = respuesta.status;
     error.campo = (datos && datos.campo) || null;
+    error.producto_id = (datos && datos.producto_id) ?? null;
     throw error;
   }
   return datos;
