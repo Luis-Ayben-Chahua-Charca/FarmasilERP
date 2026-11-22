@@ -75,4 +75,29 @@ router.post('/', (req, res) => {
   res.status(201).json(producto);
 });
 
+// PUT /api/productos/:id: edición desde W4 (HU-06 CA3), con la misma validación que el alta.
+// El precio nuevo rige solo para ventas futuras: cada linea_venta guarda el suyo.
+router.put('/:id', (req, res) => {
+  const db = req.app.locals.db;
+  const id = /^\d+$/.test(req.params.id) ? Number(req.params.id) : null;
+  const buscar = db.prepare(`SELECT id, nombre, accion_terapeutica, tipo, precio_centimos
+    FROM producto WHERE id = ?`);
+
+  if (id === null || !buscar.get(id)) return res.status(404).json({ error: 'El producto no existe.' });
+
+  const datos = req.body ?? {};
+  const invalido = validarProducto(datos);
+  if (invalido) return res.status(400).json(invalido);
+
+  db.prepare(`UPDATE producto SET nombre = ?, accion_terapeutica = ?, tipo = ?, precio_centimos = ?
+    WHERE id = ?`).run(
+    String(datos.nombre).trim(),
+    String(datos.accion_terapeutica).trim(),
+    datos.tipo,
+    aCentimos(datos.precio),
+    id
+  );
+  res.json(buscar.get(id));
+});
+
 module.exports = router;

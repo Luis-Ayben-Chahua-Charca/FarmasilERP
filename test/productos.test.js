@@ -89,3 +89,74 @@ test('con tipo genérico o comercial: responde 201', async () => {
     assert.strictEqual(res.body.tipo, tipo);
   }
 });
+
+// Edición de producto (#105, HU-06 CA3)
+
+async function crear(datos = valido) {
+  return (await request(app).post('/api/productos').send(datos)).body;
+}
+
+test('edita los cuatro campos y el cambio se ve en el listado', async () => {
+  const { id } = await crear();
+  const cambios = { nombre: ' Paracetamol 1 g ', accion_terapeutica: 'Antipirético', tipo: 'comercial', precio: '0,65' };
+
+  const res = await request(app).put(`/api/productos/${id}`).send(cambios);
+
+  assert.strictEqual(res.status, 200);
+  const esperado = { id, nombre: 'Paracetamol 1 g', accion_terapeutica: 'Antipirético', tipo: 'comercial', precio_centimos: 65 };
+  assert.deepStrictEqual(res.body, esperado);
+  const lista = await request(app).get('/api/productos');
+  assert.deepStrictEqual(lista.body, [esperado]);
+});
+
+test('un dato inválido al editar responde 400 con su campo y el producto no cambia', async () => {
+  const original = await crear();
+  const casos = [
+    [{ nombre: '' }, 'nombre'],
+    [{ accion_terapeutica: '  ' }, 'accion_terapeutica'],
+    [{ precio: '-1' }, 'precio'],
+    [{ precio: 'gratis' }, 'precio'],
+    [{ tipo: undefined }, 'tipo'],
+    [{ tipo: 'otro' }, 'tipo'],
+  ];
+
+  for (const [cambios, campo] of casos) {
+    const res = await request(app).put(`/api/productos/${original.id}`).send({ ...valido, ...cambios });
+    assert.strictEqual(res.status, 400, campo);
+    assert.strictEqual(res.body.campo, campo);
+    assert.ok(res.body.error);
+  }
+  const lista = await request(app).get('/api/productos');
+  assert.deepStrictEqual(lista.body, [original]);
+});
+
+test('editar un producto que no existe o con id no numérico responde 404', async () => {
+  await crear();
+  for (const id of ['999', 'abc', '1.5', '-1']) {
+    const res = await request(app).put(`/api/productos/${id}`).send(valido);
+    assert.strictEqual(res.status, 404, id);
+    assert.deepStrictEqual(res.body, { error: 'El producto no existe.' });
+  }
+  assert.strictEqual(productos(), 1, 'no se crea ningún producto nuevo');
+});
+
+test('el nuevo precio rige solo para ventas futuras (HU-06 CA3)', async () => {
+  const { id } = await crear();
+  app.locals.db.prepare(`INSERT INTO lote (producto_id, numero_lote, fecha_vencimiento, cantidad_recibida)
+    VALUES (?, 'L-2309', '2027-03-31', 100)`).run(id);
+  const vender = () => request(app).post('/api/ventas').send({ lineas: [{ producto_id: id, cantidad: 10 }] });
+
+  const anterior = await vender();
+  assert.strictEqual(anterior.body.monto_total_centimos, 500);
+
+  const edicion = await request(app).put(`/api/productos/${id}`).send({ ...valido, precio: '0.80' });
+  assert.strictEqual(edicion.body.precio_centimos, 80);
+
+  const nueva = await vender();
+  assert.strictEqual(nueva.body.monto_total_centimos, 800, 'la venta nueva usa el precio nuevo');
+
+  const guardadas = app.locals.db.prepare(`SELECT v.id, v.monto_total_centimos, lv.precio_unitario_centimos
+    FROM venta v JOIN linea_venta lv ON lv.venta_id = v.id ORDER BY v.id`).all();
+  assert.deepStrictEqual(guardadas.map((v) => [v.monto_total_centimos, v.precio_unitario_centimos]),
+    [[500, 50], [800, 80]], 'la venta anterior conserva su monto y su precio');
+});
