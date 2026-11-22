@@ -130,7 +130,63 @@ Carga: Luis 8.5 h (más el cierre de HU-01 y HU-02), Oscar 8 h, Jose 9 h, Kevin 
 - **En paralelo desde el primer día:** HU-01.1 → HU-01.4 (Oscar), HU-07.1 y HU-07.3 (Jose), y la redacción de casos de TQ-S3 (Kevin).
 - **Mismo archivo:** HU-01.4, HU-01.5 y HU-01.6 cambian `w1-registrar-venta.js` y se integran en ese orden.
 
-## 6. Sprints 2–4 — asignación por historia
+## 6. Sprint 4 (2 semanas) — asignación detallada
+
+Tareas creadas en el Sprint Planning del 22/11. El Scrum Master (Oscar) toma tareas de front-end de apoyo: el alta en W4, el boceto W5 y la pestaña «Por periodo». QA (Jose) escribe las pruebas automáticas de las APIs de reportes además de las de aceptación y finales. Igual que en los Sprints 2 y 3, **las tareas se asignan con esta tabla**, no filtrando por el campo Rol. HU-06 se reestima de 5 a 3 pts, porque el alta y la validación de productos ya existen desde HU-04 y HU-07; el sprint queda en 11 pts, frente a una velocidad de 14 en el Sprint 3. El contrato de la edición de productos y de los reportes está en [`../arquitectura/api-reportes.md`](../arquitectura/api-reportes.md).
+
+**Fechas clave:** todo el código en `main` el lunes 30/11; congelamiento el martes 1/12; pruebas finales, usabilidad e instalación el 1 y 2/12; Review y entrega del PMV el jueves 3/12.
+
+| Issue | Rol (tipo de trabajo) | Persona | Horas |
+|---|---|---|---|
+| #17 HU-06 Registrar y editar productos (dueño) | Front-end | Luis | — |
+| #104 HU-06.1 Boceto W4 Productos | Front-end | Luis | 1.5 |
+| #105 HU-06.2 API de edición de producto | Back-end | Kevin | 2 |
+| #106 HU-06.3 Pantalla W4: listado y búsqueda | Front-end | Luis | 2.5 |
+| #107 HU-06.4 W4: alta de producto con validación compartida | Front-end | **Oscar** (apoyo) | 1.5 |
+| #108 HU-06.5 W4: edición de datos y precio en tres acciones | Front-end | Luis | 2 |
+| #18 HU-03 Reporte diario de ventas (dueño) | Front-end | Luis | — |
+| #109 HU-03.1 Boceto W5 Reportes | Front-end | **Oscar** (apoyo) | 1.5 |
+| #110 HU-03.2 API del reporte diario | Back-end | Kevin | 2 |
+| #111 HU-03.3 W5: pestaña «Del día» | Front-end | Luis | 2 |
+| #19 HU-09 Reportes gerenciales (dueño) | Back-end | Kevin | — |
+| #112 HU-09.1 API de ingresos por periodo | Back-end | Kevin | 2 |
+| #113 HU-09.2 API de productos más vendidos | Back-end | Kevin | 1.5 |
+| #114 HU-09.3 W5: pestaña «Por periodo» | Front-end | **Oscar** (apoyo) | 2.5 |
+| #115 HU-09.4 Pruebas automatizadas de las APIs de reportes | QA | Jose | 2 |
+| #20 TQ-S4 Pruebas del sprint, finales, usabilidad e instalación | QA | Jose (con todo el equipo el 1–2/12) | 8 |
+| #116 SM-S4 Facilitación, cierre y entrega del PMV | Scrum Master | Oscar | 3 |
+| #117 CH-05 Preparar el entorno del Sprint 4 | Front-end | Luis | 1.5 |
+
+Carga: Luis 9.5 h (más el cierre de HU-06 y HU-03), Oscar 8.5 h, Kevin 7.5 h (más el cierre de HU-09 y unas 1.5 h en las pruebas finales), Jose 10 h, frente a 9.6 h netas por persona. Es el sprint más justo; por eso tiene orden de recorte.
+
+### 6.1 Dependencias del Sprint 4
+
+| Tarea | Depende de | Desbloquea | Notas |
+|---|---|---|---|
+| HU-06.1 Boceto W4 | — | HU-06.3 | Completa la DoR de HU-06 |
+| HU-06.2 API de edición | — | HU-06.5, HU-09.4 | |
+| HU-06.3 Listado W4 | HU-06.1 | HU-06.4, HU-06.5 | Usa `GET /api/productos`, que ya existe |
+| HU-06.4 Alta en W4 | HU-06.3 | HU-06.5 | Mueve `validarProducto` a `js/productos.js`; toca W2 |
+| HU-06.5 Edición en W4 | HU-06.3, HU-06.2 | cierre de HU-06 | Integrar después de HU-06.4 (mismo archivo) |
+| HU-03.1 Boceto W5 | — | HU-03.3, HU-09.3 | Completa la DoR de HU-03 y HU-09 |
+| HU-03.2 API diario | — | HU-03.3, HU-09.4 | Crea `app/rutas/reportes.js` |
+| HU-03.3 Pestaña «Del día» | HU-03.1, HU-03.2 | HU-09.3 | Crea las dos pestañas de W5 |
+| HU-09.1 API ingresos | — (después de HU-03.2 si comparten archivo) | HU-09.2, HU-09.3, HU-09.4 | |
+| HU-09.2 API más vendidos | HU-09.1 | HU-09.3 | Primera en recortarse |
+| HU-09.3 Pestaña «Por periodo» | HU-03.3, HU-09.1, HU-09.2 | cierre de HU-09 | Mismo archivo que HU-03.3 |
+| HU-09.4 Pruebas API reportes | HU-03.2, HU-09.1, HU-09.2, HU-06.2 | TQ-S4 | Se pueden escribir antes, contra el contrato |
+| TQ-S4 Pruebas finales | PR de HU-06, HU-03 y HU-09 | SM-S4 | 1–2/12, tras el congelamiento |
+| SM-S4 Cierre y entrega | TQ-S4 | PMV | 3/12 |
+| CH-05 Entorno del Sprint 4 | — | Todas | |
+
+**Orden de trabajo:**
+- **Ruta crítica:** HU-03.2 → HU-03.3 → HU-09.3 → TQ-S4 → SM-S4. En paralelo, HU-06.1 → HU-06.3 → HU-06.5.
+- **En paralelo desde el primer día:** los dos bocetos (Luis y Oscar), las APIs de Kevin y la redacción de casos de TQ-S4 (Jose).
+- **Mismo archivo:** HU-06.3, HU-06.4 y HU-06.5 cambian `w4-productos.js`; HU-03.3 y HU-09.3 cambian `w5-reportes.js`. Se integran en ese orden.
+
+**Orden de recorte (viernes 27/11):** primero HU-09.2 y su sección en W5 (más vendidos); después, el desglose mensual de HU-09.1. HU-06 y HU-03 son Must y no se recortan.
+
+## 7. Sprints 2–4 — asignación por historia
 
 Las tareas de estos sprints se crean en su Sprint Planning. Aquí va la dueña de cada historia según la rotación.
 
@@ -146,13 +202,13 @@ Las tareas de estos sprints se crean en su Sprint Planning. Aquí va la dueña d
 | 3 | HU-07 Clasificación (entró el 06/11) | Front-end | Oscar |
 | 3 | TQ-S3 Pruebas S3 | QA | Kevin |
 | 3 | Scrum Master (apoya HU-01, HU-02 y HU-07) | Scrum Master | Jose |
-| 4 | HU-06 Catálogo y edición de precios | Front-end | Luis |
+| 4 | HU-06 Catálogo y edición de precios (reestimada a 3 pts) | Front-end | Luis (edición en la API: Kevin) |
 | 4 | HU-03 Reporte diario | Front-end | Luis (consulta: Kevin) |
 | 4 | HU-09 Reportes gerenciales | Back-end | Kevin |
 | 4 | TQ-S4 Pruebas S4 y finales (1–2 dic) | QA | Jose (con todo el equipo) |
-| 4 | Scrum Master (apoya HU-03) | Scrum Master | Oscar |
+| 4 | Scrum Master (apoya HU-06, HU-03 y HU-09) | Scrum Master | Oscar |
 
-## 7. Cómo aplicarlo en GitHub
+## 8. Cómo aplicarlo en GitHub
 
 1. Abrir la vista **Tabla por sprint** del proyecto (creación descrita en `tablero/README.md`).
 2. Filtrar `sprint:"Sprint N" rol:Back-end`, seleccionar las filas y asignar (*Assignees*) a la persona de la tabla 1. Repetir con cada rol.
