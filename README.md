@@ -98,4 +98,13 @@ FarmasilERP/
 | [Jaita Chura, Jose Manuel] | Scrum Master |
 | [Yare Chulunquia, Kevin Pedro] | QA |
 
+## Equipo Sprint 4 (19 de noviembre – 3 de diciembre)
+
+| Integrante | Rol |
+|---|---|
+| [Chahua Charca, Luis Ayben] | Desarrollador front-end |
+| [Chilo Huillca, Oscar Raul] | Scrum Master |
+| [Jaita Chura, Jose Manuel] | QA |
+| [Yare Chulunquia, Kevin Pedro] | Desarrollador back-end |
+
 > Los roles rotan en cada sprint; esta tabla se actualiza al inicio de cada uno.
