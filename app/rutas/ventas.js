@@ -2,18 +2,13 @@
 
 const express = require('express');
 const { asignarLotes } = require('../ventas/asignar-lotes');
+const { fechaLocal } = require('../fechas');
 
 const router = express.Router();
 const entero = (valor) => (typeof valor === 'string' ? Number(valor.trim()) : valor);
 
 function rechazar(estado, cuerpo) {
   throw Object.assign(new Error(cuerpo.error), { estado, cuerpo });
-}
-
-function fechaLocal(fecha) {
-  const dos = (valor) => String(valor).padStart(2, '0');
-  return `${fecha.getFullYear()}-${dos(fecha.getMonth() + 1)}-${dos(fecha.getDate())} ` +
-    `${dos(fecha.getHours())}:${dos(fecha.getMinutes())}:${dos(fecha.getSeconds())}`;
 }
 
 router.post('/', (req, res, next) => {
