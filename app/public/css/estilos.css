@@ -234,6 +234,9 @@ html, body {
   font-size: 0.85rem;
 }
 
+/* ---- Productos (W4, #106): reutiliza el buscador y la tabla de W3 ---- */
+.tabla-stock .col-precio { text-align: right; }
+
 /* ---- Detalle por lote (W3, #46) ---- */
 .boton-lotes {
   background: none;
