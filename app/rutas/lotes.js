@@ -1,6 +1,7 @@
 'use strict';
 
 const express = require('express');
+const { fechaValida } = require('../fechas');
 
 const router = express.Router();
 
@@ -8,13 +9,6 @@ const vacio = (valor) => valor === undefined || valor === null || String(valor).
 
 // Acepta números o texto con dígitos (el formulario puede enviar el valor del campo tal cual)
 const entero = (valor) => (typeof valor === 'string' ? Number(valor.trim()) : valor);
-
-// AAAA-MM-DD y que la fecha exista (rechaza, por ejemplo, 2027-02-30)
-function fechaValida(texto) {
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(texto)) return false;
-  const fecha = new Date(`${texto}T00:00:00Z`);
-  return !Number.isNaN(fecha.getTime()) && fecha.toISOString().startsWith(texto);
-}
 
 // Valida antes de insertar (HU-04 CA3): devuelve { error, campo } o null si todo está bien
 function validarLote(db, datos) {

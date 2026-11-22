@@ -14,6 +14,7 @@ Categorías: **Added** (nuevo), **Changed** (cambios en algo existente), **Depre
 ## [Unreleased]
 
 ### Added
+- API del reporte diario `GET /api/reportes/diario?fecha=` en `app/rutas/reportes.js`: totales, productos ordenados por nombre y detalle por venta del día (hoy por defecto), con el precio guardado en cada línea, ceros sin ventas y `400` con fecha inválida; `fechaValida` y `fechaLocal` pasan a `app/fechas.js` (#110).
 - Preparación del Sprint 4: tareas de HU-06, HU-03 y HU-09 en `docs/planificacion/tablero/issues/`, contrato de la edición de productos y de los reportes en `docs/arquitectura/api-reportes.md`, asignación detallada con dependencias y decisiones del sprint en el README del tablero (#117).
 
 ## [0.3.0] - 2026-11-22
