@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Boceto W5 - Reportes</title>
+    <style>
+        /* Mismos colores y medidas que app/public/css/estilos.css */
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+            display: flex;
+            min-height: 100vh;
+            color: #1f2a30;
+            background: #f5f7f8
+        }
+
+        aside {
+            width: 230px;
+            flex-shrink: 0;
+            background: #14532d;
+            color: #e8f5ec
+        }
+
+        aside h2 {
+            margin: 0;
+            font-size: 1.4rem;
+            padding: 20px 20px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15)
+        }
+
+        aside a {
+            display: block;
+            padding: 12px 20px;
+            color: #e8f5ec;
+            text-decoration: none;
+            border-left: 4px solid transparent
+        }
+
+        aside a.activo {
+            background: #1d6b3c;
+            color: #fff;
+            font-weight: 600;
+            border-left-color: #16a34a
+        }
+
+        main {
+            flex: 1;
+            padding: 24px 32px;
+            max-width: 780px
+        }
+
+        h1 {
+            margin: 0 0 16px;
+            font-size: 1.6rem
+        }
+
+        h3 {
+            margin: 28px 0 8px;
+            font-size: 15px;
+            color: #555;
+            text-transform: uppercase
+        }
+
+        .campo {
+            margin-bottom: 12px
+        }
+
+        .campo label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 4px
+        }
+
+        .fila {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end
+        }
+
+        .fila .campo {
+            flex: 1
+        }
+
+        input,
+        select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 8px;
+            border: 1px solid #dde3e6;
+            border-radius: 4px;
+            background: #fff
+        }
+
+        button {
+            padding: 10px 16px;
+            border: 1px solid #14532d;
+            border-radius: 4px;
+            background: #14532d;
+            color: #fff;
+            font-size: 15px;
+            cursor: pointer
+        }
+
+        button.sec {
+            background: #fff;
+            color: #14532d
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff
+        }
+
+        th,
+        td {
+            border: 1px solid #dde3e6;
+            padding: 8px;
+            text-align: left
+        }
+
+        th {
+            background: #eef2f3
+        }
+
+        td.der,
+        th.der {
+            text-align: right
+        }
+
+        .vacio {
+            border: 1px dashed #dde3e6;
+            border-radius: 8px;
+            padding: 32px;
+            color: #5b6b73;
+            text-align: center;
+            margin-bottom: 8px
+        }
+
+        .nota {
+            color: #5b6b73;
+            font-size: 13px;
+            margin-top: 12px
+        }
+
+        /* Pestañas */
+        .pestanas {
+            display: flex;
+            gap: 0;
+            border-bottom: 2px solid #dde3e6
+        }
+
+        .pestana {
+            padding: 10px 24px;
+            font-size: 15px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            color: #5b6b73;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px
+        }
+
+        .pestana.activa {
+            color: #14532d;
+            font-weight: 600;
+            border-bottom-color: #14532d
+        }
+
+        .contenido-pestana {
+            display: none;
+            padding: 20px 0
+        }
+
+        .contenido-pestana.activo {
+            display: block
+        }
+
+        /* Resumen */
+        .resumen {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 20px
+        }
+
+        .resumen-item {
+            flex: 1;
+            background: #fff;
+            border: 1px solid #dde3e6;
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center
+        }
+
+        .resumen-item .valor {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #14532d
+        }
+
+        .resumen-item .etiqueta {
+            font-size: 13px;
+            color: #5b6b73;
+            margin-top: 4px
+        }
+
+        .subtitulo {
+            font-weight: bold;
+            margin: 20px 0 8px;
+            font-size: 15px
+        }
+
+        .barra-periodo {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+            margin-bottom: 20px
+        }
+
+        .barra-periodo .campo {
+            flex: 1;
+            margin-bottom: 0
+        }
+    </style>
+</head>
+
+<body>
+    <aside>
+        <h2>Farmasil</h2>
+        <a href="#">Registrar venta</a>
+        <a href="#">Consultar stock</a>
+        <a href="#">Ingreso de lotes</a>
+        <a href="#">Productos</a>
+        <a href="#" class="activo">Reportes</a>
+    </aside>
+    <main>
+        <h1>Reportes</h1>
+
+        <h3>1. Pantalla con pestañas</h3>
+        <p class="nota">Una sola pantalla con dos pestañas. La pestaña «Del día» se muestra por defecto; al presionar
+            «Por periodo» se alterna el contenido sin cambiar de pantalla.</p>
+
+        <div class="pestanas">
+            <div class="pestana activa" onclick="cambiarPestana('del-dia')">Del día</div>
+            <div class="pestana" onclick="cambiarPestana('por-periodo')">Por periodo</div>
+        </div>
+
+        <!-- Pestaña «Del día» (HU-03) -->
+        <div id="del-dia" class="contenido-pestana activo">
+            <div class="campo">
+                <label>Fecha</label>
+                <input type="date" value="2026-11-25" style="max-width: 220px">
+            </div>
+
+            <div class="resumen">
+                <div class="resumen-item">
+                    <div class="valor">2</div>
+                    <div class="etiqueta">Ventas</div>
+                </div>
+                <div class="resumen-item">
+                    <div class="valor">14</div>
+                    <div class="etiqueta">Unidades vendidas</div>
+                </div>
+                <div class="resumen-item">
+                    <div class="valor">S/ 9.80</div>
+                    <div class="etiqueta">Monto total</div>
+                </div>
+            </div>
+
+            <div class="subtitulo">Productos vendidos</div>
+            <table>
+                <tr>
+                    <th>Producto</th>
+                    <th class="der">Unidades</th>
+                    <th class="der">Monto</th>
+                </tr>
+                <tr>
+                    <td>Ibuprofeno 400 mg</td>
+                    <td class="der">4</td>
+                    <td class="der">S/ 4.80</td>
+                </tr>
+                <tr>
+                    <td>Paracetamol 500 mg</td>
+                    <td class="der">10</td>
+                    <td class="der">S/ 5.00</td>
+                </tr>
+            </table>
+
+            <div class="subtitulo">Detalle por venta</div>
+            <table>
+                <tr>
+                    <th>Hora</th>
+                    <th class="der">Monto</th>
+                    <th>Productos</th>
+                </tr>
+                <tr>
+                    <td>09:12</td>
+                    <td class="der">S/ 5.00</td>
+                    <td>Paracetamol 500 mg × 10 (S/ 0.50 c/u)</td>
+                </tr>
+                <tr>
+                    <td>18:42</td>
+                    <td class="der">S/ 4.80</td>
+                    <td>Ibuprofeno 400 mg × 4 (S/ 1.20 c/u)</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Pestaña «Por periodo» (HU-09) -->
+        <div id="por-periodo" class="contenido-pestana">
+            <div class="barra-periodo">
+                <div class="campo">
+                    <label>Fecha de inicio</label>
+                    <input type="date" value="2026-10-15">
+                </div>
+                <div class="campo">
+                    <label>Fecha de fin</label>
+                    <input type="date" value="2026-12-03">
+                </div>
+                <button>Generar</button>
+            </div>
+
+            <div class="subtitulo">Ingresos</div>
+            <div class="resumen">
+                <div class="resumen-item">
+                    <div class="valor">42</div>
+                    <div class="etiqueta">Ventas</div>
+                </div>
+                <div class="resumen-item">
+                    <div class="valor">S/ 1 254.30</div>
+                    <div class="etiqueta">Monto total</div>
+                </div>
+            </div>
+            <table>
+                <tr>
+                    <th>Mes</th>
+                    <th class="der">Ventas</th>
+                    <th class="der">Monto</th>
+                </tr>
+                <tr>
+                    <td>2026-10</td>
+                    <td class="der">0</td>
+                    <td class="der">S/ 0.00</td>
+                </tr>
+                <tr>
+                    <td>2026-11</td>
+                    <td class="der">40</td>
+                    <td class="der">S/ 1 200.00</td>
+                </tr>
+                <tr>
+                    <td>2026-12</td>
+                    <td class="der">2</td>
+                    <td class="der">S/ 54.30</td>
+                </tr>
+            </table>
+
+            <div class="subtitulo">Productos más vendidos</div>
+            <table>
+                <tr>
+                    <th>#</th>
+                    <th>Producto</th>
+                    <th class="der">Unidades</th>
+                    <th class="der">Monto</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>Paracetamol 500 mg</td>
+                    <td class="der">120</td>
+                    <td class="der">S/ 60.00</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Ibuprofeno 400 mg</td>
+                    <td class="der">40</td>
+                    <td class="der">S/ 48.00</td>
+                </tr>
+            </table>
+            <p class="nota">Se muestran los 10 productos más vendidos por unidades. En empate, se ordena por nombre.</p>
+        </div>
+
+        <h3>2. Estados vacíos</h3>
+        <p class="nota">Cuando no hay ventas, los totales quedan en 0 y se reemplazan las tablas por el mensaje
+            correspondiente.</p>
+
+        <div class="subtitulo">Del día — sin ventas</div>
+        <div class="resumen">
+            <div class="resumen-item">
+                <div class="valor">0</div>
+                <div class="etiqueta">Ventas</div>
+            </div>
+            <div class="resumen-item">
+                <div class="valor">0</div>
+                <div class="etiqueta">Unidades vendidas</div>
+            </div>
+            <div class="resumen-item">
+                <div class="valor">S/ 0.00</div>
+                <div class="etiqueta">Monto total</div>
+            </div>
+        </div>
+        <div class="vacio">No hay ventas registradas el 25/11/2026.</div>
+
+        <div class="subtitulo">Por periodo — sin ventas</div>
+        <div class="resumen">
+            <div class="resumen-item">
+                <div class="valor">0</div>
+                <div class="etiqueta">Ventas</div>
+            </div>
+            <div class="resumen-item">
+                <div class="valor">S/ 0.00</div>
+                <div class="etiqueta">Monto total</div>
+            </div>
+        </div>
+        <div class="vacio">No hay ventas en el periodo elegido.</div>
+
+    </main>
+
+    <script>
+        function cambiarPestana(id) {
+            document.querySelectorAll('.contenido-pestana').forEach(function (el) {
+                el.classList.remove('activo');
+            });
+            document.querySelectorAll('.pestana').forEach(function (el) {
+                el.classList.remove('activa');
+            });
+            document.getElementById(id).classList.add('activo');
+            var pestanas = document.querySelectorAll('.pestana');
+            if (id === 'del-dia') pestanas[0].classList.add('activa');
+            else pestanas[1].classList.add('activa');
+        }
+    </script>
+</body>
+
+</html>
