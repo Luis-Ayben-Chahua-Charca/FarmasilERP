@@ -15,6 +15,7 @@ Categorías: **Added** (nuevo), **Changed** (cambios en algo existente), **Depre
 
 ### Added
 - Pantalla W4 Productos con el listado de productos (nombre, acción terapéutica, tipo y precio por unidad) y búsqueda por nombre en la pantalla, con los mensajes de lista vacía y sin resultados (HU-06 CA1, #106).
+- Boceto W4 Productos en `docs/diseno/w4-productos.html`: listado con búsqueda, alta con avisos bajo cada campo, edición del precio en tres acciones, mensajes y estados vacíos (#104).
 - API de edición de producto `PUT /api/productos/:id`: mismos campos y validación que el alta, `400` con `campo` si un dato no es válido, `404` si el producto no existe, y el precio nuevo rige solo para ventas futuras (#105).
 - API del reporte diario `GET /api/reportes/diario?fecha=` en `app/rutas/reportes.js`: totales, productos ordenados por nombre y detalle por venta del día (hoy por defecto), con el precio guardado en cada línea, ceros sin ventas y `400` con fecha inválida; `fechaValida` y `fechaLocal` pasan a `app/fechas.js` (#110).
 - Preparación del Sprint 4: tareas de HU-06, HU-03 y HU-09 en `docs/planificacion/tablero/issues/`, contrato de la edición de productos y de los reportes en `docs/arquitectura/api-reportes.md`, asignación detallada con dependencias y decisiones del sprint en el README del tablero (#117).

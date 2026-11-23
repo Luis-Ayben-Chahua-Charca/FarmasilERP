@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Boceto W4 - Productos</title>
+    <style>
+        /* Mismos colores y medidas que app/public/css/estilos.css */
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+            display: flex;
+            min-height: 100vh;
+            color: #1f2a30;
+            background: #f5f7f8
+        }
+
+        aside {
+            width: 230px;
+            flex-shrink: 0;
+            background: #14532d;
+            color: #e8f5ec
+        }
+
+        aside h2 {
+            margin: 0;
+            font-size: 1.4rem;
+            padding: 20px 20px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15)
+        }
+
+        aside a {
+            display: block;
+            padding: 12px 20px;
+            color: #e8f5ec;
+            text-decoration: none;
+            border-left: 4px solid transparent
+        }
+
+        aside a.activo {
+            background: #1d6b3c;
+            color: #fff;
+            font-weight: 600;
+            border-left-color: #16a34a
+        }
+
+        main {
+            flex: 1;
+            padding: 24px 32px;
+            max-width: 780px
+        }
+
+        h1 {
+            margin: 0 0 16px;
+            font-size: 1.6rem
+        }
+
+        h3 {
+            margin: 28px 0 8px;
+            font-size: 15px;
+            color: #555;
+            text-transform: uppercase
+        }
+
+        .campo {
+            margin-bottom: 12px
+        }
+
+        .campo label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 4px
+        }
+
+        .fila {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end
+        }
+
+        .fila .campo {
+            flex: 1
+        }
+
+        input,
+        select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 8px;
+            border: 1px solid #dde3e6;
+            border-radius: 4px;
+            background: #fff
+        }
+
+        input.mal,
+        select.mal {
+            border-color: #b42318
+        }
+
+        button {
+            padding: 10px 16px;
+            border: 1px solid #14532d;
+            border-radius: 4px;
+            background: #14532d;
+            color: #fff;
+            font-size: 15px
+        }
+
+        button.sec {
+            background: #fff;
+            color: #14532d
+        }
+
+        button.chico {
+            font-size: 13px;
+            padding: 4px 10px
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff
+        }
+
+        th,
+        td {
+            border: 1px solid #dde3e6;
+            padding: 8px;
+            text-align: left
+        }
+
+        th {
+            background: #eef2f3
+        }
+
+        td.der,
+        th.der {
+            text-align: right
+        }
+
+        tr.editando td {
+            background: #f0f7f2
+        }
+
+        tr.editando input,
+        tr.editando select {
+            padding: 4px 6px
+        }
+
+        .msj-campo {
+            color: #b42318;
+            font-size: 13px;
+            margin-top: 4px
+        }
+
+        .aviso {
+            padding: 10px 12px;
+            border-radius: 4px;
+            margin-bottom: 8px
+        }
+
+        .aviso.ok {
+            background: #e7f6ec;
+            border: 1px solid #2e7d32
+        }
+
+        .aviso.mal {
+            background: #fdecea;
+            border: 1px solid #b42318
+        }
+
+        .vacio {
+            border: 1px dashed #dde3e6;
+            border-radius: 8px;
+            padding: 32px;
+            color: #5b6b73;
+            text-align: center;
+            margin-bottom: 8px
+        }
+
+        .nota {
+            color: #5b6b73;
+            font-size: 13px;
+            margin-top: 12px
+        }
+
+        .paso {
+            font-weight: bold;
+            margin: 16px 0 6px
+        }
+
+        .barra {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+            margin-bottom: 12px
+        }
+
+        .barra .campo {
+            flex: 1;
+            margin-bottom: 0
+        }
+
+        .caja {
+            background: #fff;
+            border: 1px solid #dde3e6;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 8px
+        }
+    </style>
+</head>
+
+<body>
+    <aside>
+        <h2>Farmasil</h2>
+        <a href="#">Registrar venta</a>
+        <a href="#">Consultar stock</a>
+        <a href="#">Ingreso de lotes</a>
+        <a href="#" class="activo">Productos</a>
+        <a href="#">Reportes</a>
+    </aside>
+    <main>
+        <h1>Productos</h1>
+
+        <h3>1. Listado y búsqueda</h3>
+        <div class="barra">
+            <div class="campo">
+                <label>Buscar producto por nombre</label>
+                <input type="text" placeholder="Ej.: Paracetamol" value="">
+            </div>
+            <button>+ Nuevo producto</button>
+        </div>
+        <table>
+            <tr>
+                <th>Producto</th>
+                <th>Acción terapéutica</th>
+                <th>Tipo</th>
+                <th class="der">Precio por unidad</th>
+                <th></th>
+            </tr>
+            <tr>
+                <td>Amoxicilina 500 mg</td>
+                <td>Antibiótico</td>
+                <td>Genérico</td>
+                <td class="der">S/ 1.20</td>
+                <td><button class="sec chico">Editar</button></td>
+            </tr>
+            <tr>
+                <td>Loratadina 10 mg</td>
+                <td>Antialérgico</td>
+                <td>Genérico</td>
+                <td class="der">S/ 0.35</td>
+                <td><button class="sec chico">Editar</button></td>
+            </tr>
+            <tr>
+                <td>Paracetamol 500 mg</td>
+                <td>Analgésico</td>
+                <td>Genérico</td>
+                <td class="der">S/ 0.50</td>
+                <td><button class="sec chico">Editar</button></td>
+            </tr>
+        </table>
+        <p class="nota">El listado va ordenado por nombre. La búsqueda filtra mientras se escribe, sin distinguir
+            mayúsculas.</p>
+
+        <h3>2. Nuevo producto (CA1 y CA2)</h3>
+        <p class="nota">Se despliega al presionar «+ Nuevo producto», sin salir de la pantalla. Así se ve con los
+            campos vacíos al presionar «Guardar producto»: no se guarda y cada aviso sale bajo su campo.</p>
+        <div class="caja">
+            <div class="fila">
+                <div class="campo">
+                    <label>Nombre</label>
+                    <input type="text" class="mal" placeholder="Ej.: Ibuprofeno 400 mg">
+                    <div class="msj-campo">Ingrese el nombre del producto.</div>
+                </div>
+                <div class="campo">
+                    <label>Acción terapéutica</label>
+                    <input type="text" class="mal" placeholder="Ej.: Analgésico">
+                    <div class="msj-campo">Ingrese la acción terapéutica.</div>
+                </div>
+            </div>
+            <div class="fila">
+                <div class="campo">
+                    <label>Tipo</label>
+                    <select class="mal">
+                        <option>Elegir tipo...</option>
+                        <option>Genérico</option>
+                        <option>Comercial</option>
+                    </select>
+                    <div class="msj-campo">Elija si el producto es genérico o comercial.</div>
+                </div>
+                <div class="campo">
+                    <label>Precio por unidad (S/)</label>
+                    <input type="text" class="mal" placeholder="0.00">
+                    <div class="msj-campo">Ingrese el precio por unidad.</div>
+                </div>
+            </div>
+            <button>Guardar producto</button> <button class="sec">Cancelar</button>
+        </div>
+        <p class="nota">Con los cuatro campos completos se guarda, el formulario se limpia y el producto aparece en
+            el listado.</p>
+        <div class="aviso ok">Producto «Ibuprofeno 400 mg» guardado.</div>
+
+        <h3>3. Editar el precio en tres acciones (CA3)</h3>
+        <p class="paso">Acción 1 de 3: presionar «Editar» en la fila del producto</p>
+        <table>
+            <tr>
+                <th>Producto</th>
+                <th>Acción terapéutica</th>
+                <th>Tipo</th>
+                <th class="der">Precio por unidad</th>
+                <th></th>
+            </tr>
+            <tr>
+                <td>Paracetamol 500 mg</td>
+                <td>Analgésico</td>
+                <td>Genérico</td>
+                <td class="der">S/ 0.50</td>
+                <td><button class="sec chico">Editar</button></td>
+            </tr>
+        </table>
+
+        <p class="paso">Acción 2 de 3: cambiar el precio (los otros tres campos ya vienen con sus datos)</p>
+        <table>
+            <tr>
+                <th>Producto</th>
+                <th>Acción terapéutica</th>
+                <th>Tipo</th>
+                <th class="der">Precio por unidad (S/)</th>
+                <th></th>
+            </tr>
+            <tr class="editando">
+                <td><input type="text" value="Paracetamol 500 mg"></td>
+                <td><input type="text" value="Analgésico"></td>
+                <td>
+                    <select>
+                        <option selected>Genérico</option>
+                        <option>Comercial</option>
+                    </select>
+                </td>
+                <td><input type="text" value="0.60"></td>
+                <td></td>
+            </tr>
+        </table>
+
+        <p class="paso">Acción 3 de 3: presionar «Guardar»</p>
+        <button>Guardar</button> <button class="sec">Cancelar</button>
+        <div class="aviso ok" style="margin-top: 12px">Precio actualizado: Paracetamol 500 mg, S/ 0.60. Rige para las
+            ventas nuevas.</div>
+        <table>
+            <tr>
+                <th>Producto</th>
+                <th>Acción terapéutica</th>
+                <th>Tipo</th>
+                <th class="der">Precio por unidad</th>
+                <th></th>
+            </tr>
+            <tr>
+                <td>Paracetamol 500 mg</td>
+                <td>Analgésico</td>
+                <td>Genérico</td>
+                <td class="der">S/ 0.60</td>
+                <td><button class="sec chico">Editar</button></td>
+            </tr>
+        </table>
+        <p class="nota">«Cancelar» deja la fila como estaba y no cambia nada. Si un dato no es válido, el aviso sale
+            bajo su campo y se conserva lo escrito. Las ventas ya registradas no cambian: solo las nuevas usan el
+            precio nuevo.</p>
+
+        <h3>Mensajes</h3>
+        <div class="aviso ok">Precio actualizado: Paracetamol 500 mg, S/ 0.60. Rige para las ventas nuevas.</div>
+        <div class="aviso ok">Producto «Ibuprofeno 400 mg» guardado.</div>
+        <div class="aviso mal">El precio no puede superar S/ 10 000 por unidad.</div>
+        <div class="aviso mal">El producto no existe.</div>
+
+        <h3>4. Estados vacíos</h3>
+        <div class="vacio">Aún no hay productos registrados.</div>
+        <div class="vacio">No se encontraron productos con esa búsqueda.</div>
+
+        <p class="nota">Todo precio va por unidad y se muestra como S/ 0.00; internamente se guarda en céntimos
+            enteros. El tipo se muestra como «Genérico» o «Comercial» (un producto antiguo sin tipo se muestra como
+            «Sin tipo» hasta que se edite).</p>
+    </main>
+</body>
+
+</html>
