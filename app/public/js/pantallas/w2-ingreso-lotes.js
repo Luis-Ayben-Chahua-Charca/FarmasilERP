@@ -4,29 +4,11 @@
 // Si el producto no existe, «+ Nuevo producto» permite crearlo sin salir de la pantalla.
 
 import { api } from '../api.js';
+import { validarProducto, crearCampo, marcarError, limpiarError } from '../productos.js';
 
 export const titulo = 'Ingreso de lotes';
 
 const OPCION_NUEVO = '__nuevo__';
-
-function crearCampo(id, etiqueta, entrada) {
-  const grupo = document.createElement('div');
-  grupo.className = 'campo';
-
-  const label = document.createElement('label');
-  label.htmlFor = id;
-  label.textContent = etiqueta;
-
-  // Aviso del campo (#41): vacío hasta que el dato sea inválido
-  const aviso = document.createElement('p');
-  aviso.className = 'error-campo';
-  aviso.id = id + '-error';
-
-  entrada.id = id;
-  entrada.setAttribute('aria-describedby', aviso.id);
-  grupo.append(label, entrada, aviso);
-  return grupo;
-}
 
 // Mismas reglas que el servidor (#38), para avisar sin enviar el formulario
 function validar(datos) {
@@ -39,21 +21,6 @@ function validar(datos) {
   } else {
     const n = Number(datos.cantidad_recibida);
     if (!Number.isInteger(n) || n <= 0) errores.cantidad_recibida = 'La cantidad debe ser mayor que cero.';
-  }
-  return errores;
-}
-
-// Reglas del alta rápida (mismas que POST /api/productos, #37)
-function validarProducto(datos) {
-  const errores = {};
-  if (!datos.nombre) errores.nombre = 'Ingrese el nombre del producto.';
-  if (!datos.accion_terapeutica) errores.accion_terapeutica = 'Ingrese la acción terapéutica.';
-  if (!datos.tipo) errores.tipo = 'Elija si el producto es genérico o comercial.';
-  if (!datos.precio) {
-    errores.precio = 'Ingrese el precio por unidad.';
-  } else {
-    const n = Number(datos.precio.replace(',', '.'));
-    if (!Number.isFinite(n) || n < 0) errores.precio = 'El precio debe ser un número, no negativo.';
   }
   return errores;
 }
@@ -211,18 +178,6 @@ export function render(contenedor) {
     precio: nuevoPrecio,
     tipo: nuevoTipo,
   };
-
-  function marcarError(entrada, texto) {
-    document.getElementById(entrada.id + '-error').textContent = texto;
-    entrada.classList.add('campo-invalido');
-    entrada.setAttribute('aria-invalid', 'true');
-  }
-
-  function limpiarError(entrada) {
-    document.getElementById(entrada.id + '-error').textContent = '';
-    entrada.classList.remove('campo-invalido');
-    entrada.removeAttribute('aria-invalid');
-  }
 
   // Al corregir un campo desaparece su aviso
   for (const entrada of [...Object.values(campos), ...Object.values(camposAlta)]) {
