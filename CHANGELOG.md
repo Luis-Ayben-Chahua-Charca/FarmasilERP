@@ -14,6 +14,7 @@ Categorías: **Added** (nuevo), **Changed** (cambios en algo existente), **Depre
 ## [Unreleased]
 
 ### Added
+- Pestaña Del día de W5 Reportes con fecha local, resumen, productos vendidos y detalle por venta; estado sin ventas, consulta de solo lectura y pestaña Por periodo vacía para su integración posterior (#111).
 - Boceto W5 Reportes en `docs/diseno/w5-reportes.html`: dos pestañas (Del día y Por periodo), resumen de ventas con totales, tabla de productos vendidos, detalle por venta, ingresos por mes, productos más vendidos y estados vacíos (#109).
 - Pantalla W4 Productos con el listado de productos (nombre, acción terapéutica, tipo y precio por unidad) y búsqueda por nombre en la pantalla, con los mensajes de lista vacía y sin resultados (HU-06 CA1, #106).
 - Boceto W4 Productos en `docs/diseno/w4-productos.html`: listado con búsqueda, alta con avisos bajo cada campo, edición del precio en tres acciones, mensajes y estados vacíos (#104).

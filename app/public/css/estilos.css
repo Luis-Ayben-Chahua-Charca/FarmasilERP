@@ -415,3 +415,70 @@ html, body {
   padding: 10px 20px;
   font-size: 0.95rem;
 }
+
+/* ---- Reportes W5: Del día (#111); Por periodo se completa en #114 ---- */
+.reportes { max-width: 716px; }
+.reportes [hidden] { display: none; }
+
+.reportes-pestanas {
+  display: flex;
+  border-bottom: 2px solid var(--color-borde);
+}
+
+.reportes-pestana {
+  padding: 10px 24px;
+  font: inherit;
+  font-size: 15px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: var(--color-texto-suave);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+}
+
+.reportes-pestana[aria-selected='true'] {
+  color: var(--color-menu);
+  font-weight: 600;
+  border-bottom-color: var(--color-menu);
+}
+
+.reportes-pestana:focus-visible,
+.reportes-panel:focus-visible {
+  outline: 2px solid var(--color-acento);
+  outline-offset: 2px;
+}
+
+.reportes-panel { padding: 20px 0; }
+.reportes-fecha { max-width: 220px; margin-bottom: 20px; }
+.reportes-fecha-visible { display: block; margin-top: 4px; color: var(--color-texto-suave); }
+.reportes-resumen { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 20px; }
+
+.reportes-resumen-item {
+  flex: 1;
+  min-width: 130px;
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+}
+
+.reportes-valor { font-size: 1.4rem; font-weight: bold; color: var(--color-menu); }
+.reportes-etiqueta { font-size: 13px; color: var(--color-texto-suave); margin-top: 4px; }
+.reportes-subtitulo { font-weight: bold; margin: 20px 0 8px; font-size: 15px; }
+.reportes-desplazamiento { overflow-x: auto; }
+.reportes-tabla { width: 100%; border-collapse: collapse; background: var(--color-superficie); }
+.reportes-tabla th, .reportes-tabla td { border: 1px solid var(--color-borde); padding: 8px; text-align: left; }
+.reportes-tabla th { background: #eef2f3; }
+.reportes-tabla .reportes-numero { text-align: right; white-space: nowrap; }
+.reportes-estado:empty { display: none; }
+
+.reportes-estado:not(:empty) {
+  border: 1px dashed var(--color-borde);
+  border-radius: 8px;
+  padding: 32px;
+  color: var(--color-texto-suave);
+  text-align: center;
+  margin: 0 0 8px;
+}
