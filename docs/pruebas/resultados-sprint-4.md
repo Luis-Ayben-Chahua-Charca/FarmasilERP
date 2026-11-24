@@ -8,14 +8,14 @@ Estados posibles: **Pendiente** (aún no se ejecuta), **Pasa**, **Falla** y **No
 
 | Campo | HU-06 | HU-03 | HU-09 |
 |---|---|---|---|
-| Fecha | Pendiente | Pendiente | Pendiente |
+| Fecha | 2026-11-24 | 2026-11-24 | Pendiente |
 | Probado por | Jose | Jose | Jose |
-| Rama o commit probado | Pendiente | Pendiente | Pendiente |
-| Equipo y sistema operativo | Pendiente | Pendiente | Pendiente |
-| Node.js | Node portátil de `iniciar.bat` (versión pendiente) | Igual que HU-06 | Igual que HU-06 |
-| Navegador | Pendiente | Pendiente | Pendiente |
+| Rama o commit probado | `main` en el commit `76f8eb6` | `main` en el commit `76f8eb6` | Pendiente |
+| Equipo y sistema operativo | Laptop con Windows; ejecutado en Linux WSL2 | Igual que HU-06 | Pendiente |
+| Node.js | Node v24.22.1 del sistema (WSL), no el portátil de `iniciar.bat` | Igual que HU-06 | Igual que HU-06 |
+| Navegador | Chrome 158.0.8127.37 | Igual que HU-06 | Pendiente |
 | Internet | Sin conexión | Sin conexión | Sin conexión |
-| Base de datos | Base «reportes» de `casos-sprint-4.md` | Base «reportes» | Base «reportes» |
+| Base de datos | Base «reportes» de `casos-sprint-4.md`, cargada con un script local de prueba (`datos/prueba-reportes.db`) | Igual que HU-06 | Base «reportes» |
 
 ## Resultados por criterio de aceptación
 
@@ -23,17 +23,17 @@ Estados posibles: **Pendiente** (aún no se ejecuta), **Pasa**, **Falla** y **No
 
 | Caso | Criterio | Resultado esperado | Resultado obtenido | Estado | Evidencia |
 |---|---|---|---|---|---|
-| CP-HU06-1 | CA1 — Alta de producto | Se guarda y aparece en el listado con S/ 0.70 | | Pendiente | |
-| CP-HU06-2 | CA2 — Falta un campo | No se guarda; se indica cada campo faltante | | Pendiente | |
+| CP-HU06-1 | CA1 — Alta de producto | Se guarda y aparece en el listado con S/ 0.70 | Coincide con el resultado esperado. | **Pasa** | [CP-HU06-1-alta](evidencias-s4/CP-HU06-1-alta.png), [CP-HU06-1-stock](evidencias-s4/CP-HU06-1-stock.png) |
+| CP-HU06-2 | CA2 — Falta un campo | No se guarda; se indica cada campo faltante | Coincide con el resultado esperado. | **Pasa** | [CP-HU06-2-campos-faltantes](evidencias-s4/CP-HU06-2-campos-faltantes.png) |
 | CP-HU06-3 | CA3 — Precio en 3 acciones e histórico | Precio nuevo en 3 acciones; la venta del 24/11 sigue en S/ 5.00 | | Pendiente | |
 
 ### HU-03 — Reporte diario de ventas
 
 | Caso | Criterio | Resultado esperado | Resultado obtenido | Estado | Evidencia |
 |---|---|---|---|---|---|
-| CP-HU03-1 | CA1 — Día con ventas | 24/11: 2 ventas, 16 unidades, S/ 11.40; Paracetamol en una sola fila | | Pendiente | |
-| CP-HU03-2 | CA2 — Día sin ventas | 23/11: aviso y totales en S/ 0.00 | | Pendiente | |
-| CP-HU03-3 | CA3 — Solo lectura | Sin controles de edición; solo peticiones GET | | Pendiente | |
+| CP-HU03-1 | CA1 — Día con ventas | 24/11: 2 ventas, 16 unidades, S/ 11.40; Paracetamol en una sola fila | 24/11: 2 ventas, 16 unidades y S/ 11.40 (API: numero_ventas 2, monto_total_centimos 1140); Paracetamol en una sola fila (10 u., S/ 5.00). Consola sin errores; Chrome muestra un aviso de accesibilidad (campo sin id ni name) que no afecta el criterio | **Pasa** | [CP-HU03-1-dia-con-ventas](evidencias-s4/CP-HU03-1-dia-con-ventas.png) |
+| CP-HU03-2 | CA2 — Día sin ventas | 23/11: aviso y totales en S/ 0.00 | Coincide con el resultado esperado. | **Pasa** | [CP-HU03-2-dia-sin-ventas](evidencias-s4/CP-HU03-2-dia-sin-ventas.png) |
+| CP-HU03-3 | CA3 — Solo lectura | Sin controles de edición; solo peticiones GET | Coincide con el resultado esperado. | **Pasa** | [CP-HU03-3-solo-lectura](evidencias-s4/CP-HU03-3-solo-lectura.png) |
 
 ### HU-09 — Reportes gerenciales
 
