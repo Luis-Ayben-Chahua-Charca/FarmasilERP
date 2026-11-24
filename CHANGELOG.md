@@ -14,6 +14,7 @@ Categorías: **Added** (nuevo), **Changed** (cambios en algo existente), **Depre
 ## [Unreleased]
 
 ### Added
+- Edición de datos y precio en W4 con formulario junto a la fila, precio enfocado para completar el cambio en tres acciones, validación compartida, cancelación sin cambios y confirmación de vigencia para ventas nuevas (#108).
 - Validación compartida de W2 y W4 para rechazar precios superiores a S/ 10 000 por unidad antes de enviar, con pruebas del límite y separador decimal (#107).
 - Alta de producto en W4 con los cuatro campos, validación compartida con W2, avisos junto a todos los campos faltantes, confirmación y actualización del listado; completa la interfaz pendiente del alta (#107).
 - Pestaña Del día de W5 Reportes con fecha local, resumen, productos vendidos y detalle por venta; estado sin ventas, consulta de solo lectura y pestaña Por periodo vacía para su integración posterior (#111).

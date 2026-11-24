@@ -108,6 +108,18 @@ html, body {
 }
 
 /* ---- Formularios (W2 Ingreso de lotes) ---- */
+/* W4: editor junto al producto; el precio recibe el foco al abrir. */
+.edicion-producto {
+  max-width: 640px;
+  padding: 16px;
+  border-left: 4px solid var(--color-acento);
+  background: var(--color-superficie);
+  text-align: left;
+}
+
+.edicion-producto h3 { margin: 0 0 16px; }
+.edicion-producto .boton-secundario { min-width: 100px; }
+
 .formulario-lote {
   background: var(--color-superficie);
   border: 1px solid var(--color-borde);
