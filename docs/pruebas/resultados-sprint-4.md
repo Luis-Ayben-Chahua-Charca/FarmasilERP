@@ -25,7 +25,7 @@ Estados posibles: **Pendiente** (aún no se ejecuta), **Pasa**, **Falla** y **No
 |---|---|---|---|---|---|
 | CP-HU06-1 | CA1 — Alta de producto | Se guarda y aparece en el listado con S/ 0.70 | Coincide con el resultado esperado. | **Pasa** | [CP-HU06-1-alta](evidencias-s4/CP-HU06-1-alta.png), [CP-HU06-1-stock](evidencias-s4/CP-HU06-1-stock.png) |
 | CP-HU06-2 | CA2 — Falta un campo | No se guarda; se indica cada campo faltante | Coincide con el resultado esperado. | **Pasa** | [CP-HU06-2-campos-faltantes](evidencias-s4/CP-HU06-2-campos-faltantes.png) |
-| CP-HU06-3 | CA3 — Precio en 3 acciones e histórico | Precio nuevo en 3 acciones; la venta del 24/11 sigue en S/ 5.00 | | Pendiente | |
+| CP-HU06-3 | CA3 — Precio en 3 acciones e histórico | Precio nuevo en 3 acciones; la venta del 24/11 sigue en S/ 5.00 | Editar, cambiar el precio a 0.60 y Guardar: completado en 3 acciones. La venta nueva de 10 unidades de Paracetamol sumó S/ 6.00. En el reporte del 24/11 la venta de las 09:12 sigue en S/ 5.00 con Paracetamol a S/ 0.50 c/u. Nota: la venta nueva cayó el mismo 24/11 (fecha del equipo), por lo que el total de ese día subió. | **Pasa** | [CP-HU06-3-edicion](evidencias-s4/CP-HU06-3-edicion.png), [CP-HU06-3-historico](evidencias-s4/CP-HU06-3-historico.png) |
 
 ### HU-03 — Reporte diario de ventas
 
