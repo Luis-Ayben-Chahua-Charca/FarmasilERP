@@ -12,6 +12,9 @@ export function validarProducto(datos) {
   } else {
     const n = Number(datos.precio.replace(',', '.'));
     if (!Number.isFinite(n) || n < 0) errores.precio = 'El precio debe ser un número, no negativo.';
+    else if (Math.round(n * 100) > 1_000_000) {
+      errores.precio = 'El precio no puede superar S/ 10 000 por unidad.';
+    }
   }
   return errores;
 }
