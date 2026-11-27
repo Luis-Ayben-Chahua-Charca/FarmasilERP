@@ -252,3 +252,88 @@ test('desde posterior a hasta: 400 con campo desde', async () => {
   assert.equal(res.status, 400);
   assert.deepEqual(res.body, { error: 'La fecha de inicio no puede ser posterior a la de fin.', campo: 'desde' });
 });
+
+// Productos más vendidos por periodo (#113, HU-09 CA2 y CA3)
+
+const masVendidos = (query) => request(app).get('/api/reportes/mas-vendidos').query(query);
+
+test('ordena los productos por unidades, sumando todos sus lotes (HU-09 CA2)', async () => {
+  venta('2026-11-10 10:00:00', [[1, 4, 50], [2, 2, 50], [3, 3, 120]]);
+  venta('2026-11-20 10:00:00', [[2, 10, 50], [4, 5, 30]]);
+
+  const res = await masVendidos({ desde: '2026-11-01', hasta: '2026-11-30' });
+
+  assert.equal(res.status, 200);
+  assert.deepEqual(res.body, {
+    desde: '2026-11-01',
+    hasta: '2026-11-30',
+    productos: [
+      { producto_id: 1, nombre: 'Paracetamol 500 mg', unidades: 16, monto_centimos: 800 },
+      { producto_id: 3, nombre: 'Ácido fólico 1 mg', unidades: 5, monto_centimos: 150 },
+      { producto_id: 2, nombre: 'Ibuprofeno 400 mg', unidades: 3, monto_centimos: 360 },
+    ],
+  });
+});
+
+test('en empate de unidades ordena por nombre en español', async () => {
+  venta('2026-11-10 10:00:00', [[2, 4, 50], [3, 4, 120], [4, 4, 30]]);
+
+  const res = await masVendidos({ desde: '2026-11-10', hasta: '2026-11-10' });
+
+  assert.deepEqual(res.body.productos.map((p) => p.nombre),
+    ['Ácido fólico 1 mg', 'Ibuprofeno 400 mg', 'Paracetamol 500 mg']);
+});
+
+test('usa el precio guardado de cada venta y respeta las fechas inclusivas', async () => {
+  venta('2026-10-31 23:59:59', [[2, 50, 50]]);
+  venta('2026-11-01 00:00:00', [[2, 2, 50]]);
+  db.prepare('UPDATE producto SET precio_centimos = 80 WHERE id = 1').run();
+  venta('2026-11-30 23:59:59', [[2, 3, 80]]);
+  venta('2026-12-01 00:00:00', [[2, 70, 80]]);
+
+  const res = await masVendidos({ desde: '2026-11-01', hasta: '2026-11-30' });
+
+  assert.deepEqual(res.body.productos,
+    [{ producto_id: 1, nombre: 'Paracetamol 500 mg', unidades: 5, monto_centimos: 2 * 50 + 3 * 80 }]);
+});
+
+test('no limita la lista: devuelve todos los productos vendidos', async () => {
+  const insertar = db.prepare(`INSERT INTO producto (id, nombre, accion_terapeutica, tipo, precio_centimos)
+    VALUES (?, ?, 'Prueba', 'generico', 10)`);
+  const lote = db.prepare(`INSERT INTO lote (id, producto_id, numero_lote, fecha_vencimiento, cantidad_recibida)
+    VALUES (?, ?, ?, '2028-01-01', 100)`);
+  const lineas = [];
+  for (let i = 0; i < 12; i++) {
+    insertar.run(100 + i, `Producto ${String(i).padStart(2, '0')}`);
+    lote.run(100 + i, 100 + i, `L-${i}`);
+    lineas.push([100 + i, i + 1, 10]);
+  }
+  venta('2026-11-15 10:00:00', lineas);
+
+  const res = await masVendidos({ desde: '2026-11-15', hasta: '2026-11-15' });
+
+  assert.equal(res.body.productos.length, 12);
+  assert.equal(res.body.productos[0].nombre, 'Producto 11');
+});
+
+test('un rango sin ventas devuelve productos vacío (HU-09 CA3)', async () => {
+  venta('2026-09-15 10:00:00', [[2, 5, 50]]);
+
+  const res = await masVendidos({ desde: '2026-11-01', hasta: '2026-11-30' });
+
+  assert.equal(res.status, 200);
+  assert.deepEqual(res.body, { desde: '2026-11-01', hasta: '2026-11-30', productos: [] });
+});
+
+test('valida el periodo igual que los ingresos', async () => {
+  const casos = [
+    [{ hasta: '2026-11-30' }, 'Elija la fecha de inicio y la de fin.', 'desde'],
+    [{ desde: '2026-11-01', hasta: '30/11/2026' }, 'La fecha debe tener el formato AAAA-MM-DD.', 'hasta'],
+    [{ desde: '2026-12-01', hasta: '2026-11-30' }, 'La fecha de inicio no puede ser posterior a la de fin.', 'desde'],
+  ];
+  for (const [query, error, campo] of casos) {
+    const res = await masVendidos(query);
+    assert.equal(res.status, 400);
+    assert.deepEqual(res.body, { error, campo });
+  }
+});

@@ -123,4 +123,28 @@ router.get('/ingresos', (req, res) => {
   });
 });
 
+// GET /api/reportes/mas-vendidos?desde=&hasta=: productos del periodo por unidades (HU-09 CA2).
+// Suma todos los lotes de cada producto; de mayor a menor y, en empate, por nombre. Sin límite:
+// W5 muestra los 10 primeros. Solo lectura.
+router.get('/mas-vendidos', (req, res) => {
+  const db = req.app.locals.db;
+  const invalido = validarPeriodo(req.query);
+  if (invalido) return res.status(400).json(invalido);
+
+  const { desde, hasta } = req.query;
+  const productos = db.prepare(`
+    SELECT p.id AS producto_id, p.nombre, SUM(lv.cantidad) AS unidades,
+      SUM(lv.cantidad * lv.precio_unitario_centimos) AS monto_centimos
+    FROM linea_venta lv
+    JOIN venta v ON v.id = lv.venta_id
+    JOIN lote l ON l.id = lv.lote_id
+    JOIN producto p ON p.id = l.producto_id
+    WHERE substr(v.fecha_hora, 1, 10) BETWEEN ? AND ?
+    GROUP BY p.id
+  `).all(desde, hasta);
+
+  productos.sort((a, b) => b.unidades - a.unidades || porNombre(a, b));
+  res.json({ desde, hasta, productos });
+});
+
 module.exports = router;
