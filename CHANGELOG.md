@@ -14,6 +14,7 @@ Categorías: **Added** (nuevo), **Changed** (cambios en algo existente), **Depre
 ## [Unreleased]
 
 ### Added
+- API de ingresos por periodo `GET /api/reportes/ingresos?desde=&hasta=`: total y una fila por cada mes del rango, incluidos los meses en 0, con fechas inclusivas y `400` si falta una fecha, tiene otro formato o el inicio es posterior al fin; la validación del periodo queda lista para #113 (#112).
 - Integración de HU-06 Registrar y editar productos: boceto W4, listado y búsqueda, alta con validación compartida y edición de datos y precio en tres acciones, con vigencia para ventas nuevas y conservación del precio histórico; verificación final de aceptación a cargo de QA en #20, con resultados en `docs/pruebas/resultados-sprint-4.md` (#17).
 - Edición de datos y precio en W4 con formulario junto a la fila, precio enfocado para completar el cambio en tres acciones, validación compartida, cancelación sin cambios y confirmación de vigencia para ventas nuevas (#108).
 - Validación compartida de W2 y W4 para rechazar precios superiores a S/ 10 000 por unidad antes de enviar, con pruebas del límite y separador decimal (#107).
