@@ -151,3 +151,104 @@ test('el reporte es de solo lectura: no cambia ventas ni stock', async () => {
 
   assert.deepEqual(contar(), antes);
 });
+
+// Ingresos por periodo con desglose mensual (#112, HU-09 CA1 y CA3)
+
+const ingresos = (query) => request(app).get('/api/reportes/ingresos').query(query);
+
+test('suma las ventas del periodo con una fila por mes, incluido un mes sin ventas (HU-09 CA1)', async () => {
+  venta('2026-10-20 10:00:00', [[2, 10, 50]]);
+  venta('2026-12-01 09:00:00', [[3, 2, 120]]);
+  venta('2026-12-02 18:00:00', [[2, 4, 50], [3, 1, 120]]);
+
+  const res = await ingresos({ desde: '2026-10-15', hasta: '2026-12-03' });
+
+  assert.equal(res.status, 200);
+  assert.deepEqual(res.body, {
+    desde: '2026-10-15',
+    hasta: '2026-12-03',
+    numero_ventas: 3,
+    monto_total_centimos: 500 + 240 + 320,
+    meses: [
+      { mes: '2026-10', numero_ventas: 1, monto_total_centimos: 500 },
+      { mes: '2026-11', numero_ventas: 0, monto_total_centimos: 0 },
+      { mes: '2026-12', numero_ventas: 2, monto_total_centimos: 560 },
+    ],
+  });
+});
+
+test('las fechas son inclusivas: entra el día desde y el día hasta completos', async () => {
+  venta('2026-11-09 23:59:59', [[2, 1, 50]]);
+  venta('2026-11-10 00:00:00', [[2, 2, 50]]);
+  venta('2026-11-20 23:59:59', [[2, 3, 50]]);
+  venta('2026-11-21 00:00:00', [[2, 4, 50]]);
+
+  const res = await ingresos({ desde: '2026-11-10', hasta: '2026-11-20' });
+
+  assert.equal(res.body.numero_ventas, 2);
+  assert.equal(res.body.monto_total_centimos, 250);
+});
+
+test('el total coincide con la suma de los meses y con la suma de los reportes diarios', async () => {
+  const dias = ['2026-11-28', '2026-11-30', '2026-12-01', '2026-12-03'];
+  venta(`${dias[0]} 10:00:00`, [[2, 3, 50]]);
+  venta(`${dias[1]} 11:00:00`, [[1, 4, 50], [2, 2, 50]]);
+  venta(`${dias[2]} 12:00:00`, [[3, 5, 120]]);
+  venta(`${dias[3]} 13:00:00`, [[4, 7, 30]]);
+  venta(`${dias[3]} 14:00:00`, [[2, 1, 50]]);
+
+  const periodo = (await ingresos({ desde: '2026-11-28', hasta: '2026-12-03' })).body;
+  let sumaDiarios = 0;
+  for (const dia of dias) sumaDiarios += (await diario(dia)).body.monto_total_centimos;
+
+  assert.equal(periodo.monto_total_centimos, periodo.meses.reduce((t, m) => t + m.monto_total_centimos, 0));
+  assert.equal(periodo.monto_total_centimos, sumaDiarios);
+  assert.equal(periodo.numero_ventas, 5);
+});
+
+test('un rango sin ventas devuelve ceros y sus meses en 0 (HU-09 CA3)', async () => {
+  venta('2026-09-15 10:00:00', [[2, 5, 50]]);
+
+  const res = await ingresos({ desde: '2026-11-15', hasta: '2027-01-10' });
+
+  assert.equal(res.status, 200);
+  assert.equal(res.body.numero_ventas, 0);
+  assert.equal(res.body.monto_total_centimos, 0);
+  assert.deepEqual(res.body.meses.map((m) => [m.mes, m.numero_ventas, m.monto_total_centimos]),
+    [['2026-11', 0, 0], ['2026-12', 0, 0], ['2027-01', 0, 0]]);
+});
+
+test('un periodo dentro de un solo mes trae una sola fila', async () => {
+  venta('2026-11-25 10:00:00', [[2, 2, 50]]);
+
+  const res = await ingresos({ desde: '2026-11-25', hasta: '2026-11-25' });
+
+  assert.deepEqual(res.body.meses, [{ mes: '2026-11', numero_ventas: 1, monto_total_centimos: 100 }]);
+});
+
+test('falta desde o hasta: 400 con el campo que falta', async () => {
+  const casos = [[{ hasta: '2026-11-30' }, 'desde'], [{ desde: '2026-11-01' }, 'hasta'],
+    [{ desde: '', hasta: '2026-11-30' }, 'desde'], [{}, 'desde']];
+  for (const [query, campo] of casos) {
+    const res = await ingresos(query);
+    assert.equal(res.status, 400);
+    assert.deepEqual(res.body, { error: 'Elija la fecha de inicio y la de fin.', campo });
+  }
+});
+
+test('una fecha con otro formato o que no existe: 400 con su campo', async () => {
+  const casos = [[{ desde: '01/11/2026', hasta: '2026-11-30' }, 'desde'],
+    [{ desde: '2026-11-01', hasta: '2026-02-30' }, 'hasta'], [{ desde: '2026-11', hasta: '2026-11-30' }, 'desde']];
+  for (const [query, campo] of casos) {
+    const res = await ingresos(query);
+    assert.equal(res.status, 400);
+    assert.deepEqual(res.body, { error: 'La fecha debe tener el formato AAAA-MM-DD.', campo });
+  }
+});
+
+test('desde posterior a hasta: 400 con campo desde', async () => {
+  const res = await ingresos({ desde: '2026-12-01', hasta: '2026-11-30' });
+
+  assert.equal(res.status, 400);
+  assert.deepEqual(res.body, { error: 'La fecha de inicio no puede ser posterior a la de fin.', campo: 'desde' });
+});

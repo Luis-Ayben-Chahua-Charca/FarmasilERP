@@ -64,4 +64,63 @@ router.get('/diario', (req, res) => {
   });
 });
 
+// Valida desde y hasta de los reportes por periodo (#112; la reutiliza #113).
+// Devuelve { error, campo } o null si el periodo es válido.
+function validarPeriodo({ desde, hasta }) {
+  for (const [campo, valor] of [['desde', desde], ['hasta', hasta]]) {
+    if (valor === undefined || valor === '') return { error: 'Elija la fecha de inicio y la de fin.', campo };
+  }
+  for (const [campo, valor] of [['desde', desde], ['hasta', hasta]]) {
+    if (typeof valor !== 'string' || !fechaValida(valor)) {
+      return { error: 'La fecha debe tener el formato AAAA-MM-DD.', campo };
+    }
+  }
+  if (desde > hasta) return { error: 'La fecha de inicio no puede ser posterior a la de fin.', campo: 'desde' };
+  return null;
+}
+
+// Meses AAAA-MM del rango, en orden, incluidos el primero y el último
+function mesesDelRango(desde, hasta) {
+  const meses = [];
+  let [anio, mes] = desde.slice(0, 7).split('-').map(Number);
+  const ultimo = hasta.slice(0, 7);
+  for (;;) {
+    const actual = `${anio}-${String(mes).padStart(2, '0')}`;
+    meses.push(actual);
+    if (actual >= ultimo) return meses;
+    mes += 1;
+    if (mes === 13) { mes = 1; anio += 1; }
+  }
+}
+
+// GET /api/reportes/ingresos?desde=&hasta=: ingresos del periodo con una fila por mes (HU-09 CA1).
+// Fechas inclusivas; los meses sin ventas van con 0 para que se note el hueco. Solo lectura.
+router.get('/ingresos', (req, res) => {
+  const db = req.app.locals.db;
+  const invalido = validarPeriodo(req.query);
+  if (invalido) return res.status(400).json(invalido);
+
+  const { desde, hasta } = req.query;
+  const porMes = new Map(db.prepare(`
+    SELECT substr(fecha_hora, 1, 7) AS mes, COUNT(*) AS numero_ventas,
+      SUM(monto_total_centimos) AS monto_total_centimos
+    FROM venta WHERE substr(fecha_hora, 1, 10) BETWEEN ? AND ?
+    GROUP BY mes
+  `).all(desde, hasta).map((fila) => [fila.mes, fila]));
+
+  const meses = mesesDelRango(desde, hasta).map((mes) => ({
+    mes,
+    numero_ventas: porMes.get(mes)?.numero_ventas ?? 0,
+    monto_total_centimos: porMes.get(mes)?.monto_total_centimos ?? 0,
+  }));
+
+  res.json({
+    desde,
+    hasta,
+    numero_ventas: meses.reduce((total, m) => total + m.numero_ventas, 0),
+    monto_total_centimos: meses.reduce((total, m) => total + m.monto_total_centimos, 0),
+    meses,
+  });
+});
+
 module.exports = router;
